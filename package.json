@@ -1,0 +1,15 @@
+{
+  "name": "elevator-servis-web",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Staticky web ELEVATOR SERVIS, s.r.o. - HTML/CSS/vanilla JS, build-time generovanie z centralnej datovej vrstvy.",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "build": "node build.mjs",
+    "build:prod": "node build.mjs --prod",
+    "dev": "node build.mjs && node serve.mjs",
+    "serve": "node serve.mjs",
+    "check": "node build.mjs --prod --dry"
+  }
+}

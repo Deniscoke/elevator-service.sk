@@ -1,0 +1,142 @@
+/* ==================================================================
+   01 · DESIGN TOKENS
+   Jediné miesto, kde sú definované hodnoty. Nikde inde v CSS
+   nesmie byť „náhodná" farba, medzera ani veľkosť písma.
+
+   Paleta je DOČASNÁ — firemné farby zatiaľ nemáme (docs/MISSING_DATA.md).
+   Po ich dodaní sa mení len tento súbor.
+   ================================================================== */
+
+:root {
+  /* ---- farby: neutrálna os (grafit s modrým nádychom) ------------- */
+  --color-ink-900: #0b0f14;
+  --color-ink-800: #121820;
+  --color-ink-700: #1b232c;
+  --color-ink-600: #2a3542;
+  --color-steel-500: #54646f;
+  --color-steel-400: #7a8895;
+  --color-steel-300: #a9b4be;
+  --color-steel-200: #cbd3da;
+
+  --color-line: #e2e7ec;
+  --color-line-strong: #cdd5dd;
+  --color-line-invert: rgba(255, 255, 255, 0.14);
+
+  --color-surface: #ffffff;
+  --color-surface-alt: #f4f6f8;
+  --color-surface-sunk: #eceff3;
+  --color-surface-dark: var(--color-ink-900);
+
+  /* ---- farby: akcent (signálna oranžová – technická, nie SaaS) ---- */
+  --color-accent-700: #8f3708;
+  --color-accent-600: #bb4b0a;   /* pozadie tlačidiel, kontrast 5.1:1 na bielej */
+  --color-accent-500: #d9600f;
+  --color-accent-400: #f2812f;   /* text na tmavom podklade */
+  --color-accent-100: #fdf1e7;
+  --color-accent-text: #a8410a;  /* akcentový text na bielej, kontrast 6.1:1 */
+
+  /* ---- farby: havária -------------------------------------------- */
+  --color-danger-600: #b3200f;
+  --color-danger-500: #d92c1a;
+  --color-danger-400: #ff6a55;
+
+  /* ---- sémantické aliasy ----------------------------------------- */
+  --color-primary: var(--color-ink-900);
+  --color-secondary: var(--color-steel-500);
+  --color-accent: var(--color-accent-600);
+  --color-background: var(--color-surface);
+  --color-text: var(--color-ink-800);
+  --color-text-muted: var(--color-steel-500);
+  --color-text-invert: #eef2f6;
+  --color-text-invert-muted: #a9b7c4;
+  --color-focus: #1f6feb;
+
+  /* ---- typografia ------------------------------------------------- */
+  /* Systémový stack = nula font requestov. Miesto pre firemný font
+     je pripravené: stačí doplniť @font-face a prepísať --font-display. */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --font-display: var(--font-sans);
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-md: clamp(1.0625rem, 0.99rem + 0.35vw, 1.1875rem);
+  --text-lg: clamp(1.1875rem, 1.07rem + 0.55vw, 1.4375rem);
+  --text-xl: clamp(1.375rem, 1.18rem + 0.9vw, 1.875rem);
+  --text-2xl: clamp(1.625rem, 1.3rem + 1.5vw, 2.5rem);
+  --text-3xl: clamp(2rem, 1.45rem + 2.5vw, 3.25rem);
+  --text-4xl: clamp(2.25rem, 1.5rem + 3.4vw, 4rem);
+
+  --leading-tight: 1.1;
+  --leading-snug: 1.25;
+  --leading-normal: 1.6;
+  --leading-relaxed: 1.75;
+
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.06em;
+  --tracking-wider: 0.14em;
+
+  --weight-normal: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* ---- spacing (4px základ) --------------------------------------- */
+  --space-3xs: 0.25rem;   /*  4px */
+  --space-2xs: 0.5rem;    /*  8px */
+  --space-xs: 0.75rem;    /* 12px */
+  --space-sm: 1rem;       /* 16px */
+  --space-md: 1.5rem;     /* 24px */
+  --space-lg: 2rem;       /* 32px */
+  --space-xl: 3rem;       /* 48px */
+  --space-2xl: 4rem;      /* 64px */
+  --space-3xl: 6rem;      /* 96px */
+  --space-4xl: 8rem;      /* 128px */
+
+  --section-y: clamp(3.5rem, 2.2rem + 5vw, 7rem);
+  --section-y-tight: clamp(2.5rem, 1.8rem + 3vw, 4rem);
+
+  /* ---- rozmery ----------------------------------------------------- */
+  --container: 75rem;      /* 1200px */
+  --container-narrow: 48rem;
+  --gutter: clamp(1.25rem, 0.9rem + 1.4vw, 2.5rem);
+  --header-h: 4.5rem;
+  --tap-target: 2.75rem;   /* 44px minimum */
+
+  /* ---- rádiusy (tesné = technický charakter) ---------------------- */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+  --radius-pill: 999px;
+
+  /* ---- tiene (striedmo, prednosť majú linky) ---------------------- */
+  --shadow-sm: 0 1px 2px rgba(11, 15, 20, 0.06);
+  --shadow-md: 0 6px 20px -6px rgba(11, 15, 20, 0.14);
+  --shadow-lg: 0 24px 48px -24px rgba(11, 15, 20, 0.3);
+
+  /* ---- pohyb ------------------------------------------------------- */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 140ms;
+  --dur-base: 240ms;
+  --dur-slow: 420ms;
+
+  /* ---- vrstvenie ---------------------------------------------------- */
+  --z-sticky-bar: 40;
+  --z-header: 50;
+  --z-menu: 60;
+  --z-skip: 100;
+}
+
+/* Užívateľ si vypol animácie — rešpektujeme to globálne. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 1ms;
+    --dur-base: 1ms;
+    --dur-slow: 1ms;
+  }
+}

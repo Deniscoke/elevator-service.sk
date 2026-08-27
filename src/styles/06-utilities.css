@@ -1,0 +1,128 @@
+/* ==================================================================
+   06 · UTILITY A ANIMÁCIE
+   ================================================================== */
+
+/* ------------------------------------------------------------------
+   REVEAL PRI SCROLLOVANÍ
+
+   Dôležité: efekt sa aplikuje LEN keď beží JavaScript (.js na <html>).
+   Bez JS je obsah normálne viditeľný — nikdy sa nestane, že by sa
+   stránka bez JS zobrazila prázdna.
+   ------------------------------------------------------------------ */
+
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity var(--dur-slow) var(--ease-out),
+    transform var(--dur-slow) var(--ease-out);
+}
+
+.js [data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Postupné oneskorenie pre položky v mriežke. */
+.js [data-reveal][style*="--reveal-delay"] {
+  transition-delay: var(--reveal-delay);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ------------------------------------------------------------------
+   ZAMKNUTIE SCROLLU (otvorené mobilné menu)
+   ------------------------------------------------------------------ */
+
+body.is-locked {
+  overflow: hidden;
+}
+
+/* ------------------------------------------------------------------
+   TEXTOVÉ UTILITY
+   ------------------------------------------------------------------ */
+
+.text-mono {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  letter-spacing: var(--tracking-wide);
+}
+
+.text-muted {
+  color: var(--color-text-muted);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.lead {
+  font-size: var(--text-lg);
+  color: var(--color-text-muted);
+  max-width: 46ch;
+}
+
+/* ------------------------------------------------------------------
+   ROZOSTUPY
+   ------------------------------------------------------------------ */
+
+.stack > * + * {
+  margin-top: var(--space-md);
+}
+
+.stack-lg > * + * {
+  margin-top: var(--space-lg);
+}
+
+.mt-lg {
+  margin-top: var(--space-lg);
+}
+
+.mt-xl {
+  margin-top: var(--space-xl);
+}
+
+/* ------------------------------------------------------------------
+   TLAČ
+   ------------------------------------------------------------------ */
+
+@media print {
+  .site-header,
+  .sticky-bar,
+  .mobile-menu,
+  .skip-link,
+  .breadcrumbs,
+  .btn {
+    display: none !important;
+  }
+
+  body {
+    color: #000;
+    background: #fff;
+    font-size: 11pt;
+  }
+
+  .hero,
+  .section--emergency,
+  .acquisition {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  .hero__title,
+  .acquisition__title,
+  .emergency__title {
+    color: #000 !important;
+  }
+
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 9pt;
+    color: #555;
+  }
+}

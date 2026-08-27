@@ -1,0 +1,19 @@
+{
+  "name": "ELEVÁTOR SERVIS, s.r.o.",
+  "short_name": "ELEVÁTOR SERVIS",
+  "description": "Servis, opravy a modernizácia výťahov v Banskej Bystrici a okolí.",
+  "lang": "sk",
+  "start_url": "/",
+  "scope": "/",
+  "display": "browser",
+  "background_color": "#ffffff",
+  "theme_color": "#0b0f14",
+  "icons": [
+    {
+      "src": "/assets/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
