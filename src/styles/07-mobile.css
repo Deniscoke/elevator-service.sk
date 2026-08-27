@@ -1,0 +1,304 @@
+/* ==================================================================
+   07 · MOBILNÁ OPTIMALIZÁCIA
+
+   Táto vrstva sa načítava posledná, takže bezpečne prepisuje predchádzajúce
+   pravidlá bez toho, aby sa do nich muselo zasahovať.
+
+   Rieši veci, ktoré sa prejavia až na reálnom telefóne:
+   - výrez displeja a home indicator na iPhone
+   - dynamickú výšku okna pri skrývaní lišty prehliadača
+   - zamknutie scrollu na iOS Safari
+   - dlhé slovenské slová na 320 px
+   - dotykové ciele a odozvu na dotyk
+   ================================================================== */
+
+/* ------------------------------------------------------------------
+   1. DYNAMICKÁ VÝŠKA OKNA
+
+   100vh je na mobile klamlivá — počíta so skrytou lištou prehliadača,
+   takže stránka „poskakuje" pri scrollovaní. 100dvh je presná.
+   Poradie je dôležité: staršie prehliadače použijú prvý riadok.
+   ------------------------------------------------------------------ */
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* ------------------------------------------------------------------
+   2. DLHÉ SLOVÁ
+
+   Slovenčina má slová ako „vyslobodzovanie" alebo „modernizácia".
+   Pri 320 px a veľkom nadpise vedia pretiecť z kontajnera.
+   Zalomenie vnútri slova je poistka, ktorá sa použije až vtedy,
+   keď slovo naozaj nemá kam ísť.
+   ------------------------------------------------------------------ */
+
+body {
+  overflow-wrap: break-word;
+}
+
+h1,
+h2,
+h3,
+.card__title,
+.steps__title,
+.segments__title,
+.accordion__summary {
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+/* Adresy, čísla a e-maily sa nesmú zalomiť v strede. */
+.contact-list__value,
+.sticky-bar__btn,
+.btn {
+  overflow-wrap: normal;
+  hyphens: none;
+}
+
+/* ------------------------------------------------------------------
+   3. DOTYK
+
+   touch-action: manipulation odstráni čakanie na dvojklik,
+   takže tlačidlá reagujú okamžite. Zvýraznenie pri ťuknutí
+   necháme jemné, nie systémové modré.
+   ------------------------------------------------------------------ */
+
+a,
+button,
+summary,
+label,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: rgba(187, 75, 10, 0.12);
+  touch-action: manipulation;
+}
+
+/* ------------------------------------------------------------------
+   4. ZAMKNUTIE SCROLLU PRI OTVORENOM MENU
+
+   overflow: hidden na <body> nestačí — iOS Safari cez neho scrolluje ďalej.
+   Spoľahlivé je position: fixed. Skript si zapamätá pozíciu a po zavretí
+   ju vráti, aby používateľ neskončil na začiatku stránky.
+   ------------------------------------------------------------------ */
+
+body.is-locked {
+  position: fixed;
+  left: 0;
+  right: 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* ------------------------------------------------------------------
+   5. VÝREZ DISPLEJA (safe area)
+
+   Funguje len vďaka viewport-fit=cover v meta viewport.
+   Bez toho sú hodnoty env() nulové.
+   ------------------------------------------------------------------ */
+
+@supports (padding: max(0px)) {
+  .container {
+    padding-left: max(0px, env(safe-area-inset-left));
+    padding-right: max(0px, env(safe-area-inset-right));
+  }
+
+  .sticky-bar {
+    padding-bottom: max(0px, env(safe-area-inset-bottom));
+  }
+
+  .mobile-menu__panel {
+    padding-top: max(var(--space-md), env(safe-area-inset-top));
+    padding-bottom: max(var(--space-xl), env(safe-area-inset-bottom));
+  }
+}
+
+/* ------------------------------------------------------------------
+   6. STICKY LIŠTA
+
+   Na kontaktnej stránke je formulár priamo na obrazovke, takže lišta
+   s tlačidlom „Nezáväzný dopyt" by len zaberala miesto a viedla
+   na tú istú stránku.
+   ------------------------------------------------------------------ */
+
+.page-contact .sticky-bar {
+  display: none;
+}
+
+/* Bez sticky lišty netreba ani odsadenie pätičky. */
+.page-contact .site-footer {
+  padding-bottom: var(--space-lg);
+}
+
+/* Text v lište sa nesmie zalomiť do dvoch riadkov. */
+.sticky-bar__btn span {
+  white-space: nowrap;
+}
+
+/* ------------------------------------------------------------------
+   7. ÚPRAVY POD 48em
+   ------------------------------------------------------------------ */
+
+@media (max-width: 47.99em) {
+  /* Kroky postupu mali odsadenie 4rem — na 320 px zostalo na text
+     necelých 200 px. Číslo posunieme nad text. */
+  .steps__item {
+    padding-left: 0;
+    padding-block: var(--space-md);
+  }
+
+  .steps__num {
+    position: static;
+    display: block;
+    margin-bottom: var(--space-3xs);
+  }
+
+  /* Pohodlnejšie dotykové ciele v pätičke. */
+  .site-footer__list a {
+    display: inline-block;
+    padding-block: var(--space-3xs);
+  }
+
+  .site-footer__bottom {
+    gap: var(--space-sm);
+  }
+
+  /* Tlačidlá v hero a v CTA na plnú šírku — palcom sa trafia vždy. */
+  .hero__actions .btn,
+  .page-hero__actions .btn,
+  .cta-band__actions .btn,
+  .emergency__actions .btn,
+  .acquisition__actions .btn,
+  .empty-state .btn {
+    width: 100%;
+  }
+
+  /* Menšie medzery medzi kartami, aby sa ich na obrazovku zmestilo viac. */
+  .card-grid {
+    gap: var(--space-xs);
+  }
+
+  .card {
+    padding: var(--space-sm);
+  }
+
+  /* Akordeón: väčšia dotyková plocha a menší odstup ikony. */
+  .accordion__summary {
+    gap: var(--space-sm);
+    padding-block: var(--space-sm);
+  }
+
+  /* Drobčeky na jeden riadok s možnosťou posunu, nie na tri riadky. */
+  .breadcrumbs__list {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .breadcrumbs__list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .breadcrumbs__item {
+    white-space: nowrap;
+  }
+
+  /* Trust layer: dve dlaždice vedľa seba namiesto štyroch stiesnených. */
+  .trust__list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .trust__item:nth-child(2n + 1) {
+    border-left: 0;
+  }
+}
+
+/* ------------------------------------------------------------------
+   8. ÚPRAVY POD 23em (320–360 px)
+
+   Najmenšie bežné displeje. Nadpisy sú tu inak neúmerne veľké
+   voči šírke riadku.
+   ------------------------------------------------------------------ */
+
+@media (max-width: 22.99em) {
+  :root {
+    --text-4xl: 2rem;
+    --text-3xl: 1.75rem;
+    --text-2xl: 1.5rem;
+    --gutter: 1rem;
+  }
+
+  .hero__meta {
+    gap: var(--space-2xs) var(--space-md);
+  }
+
+  .hero__meta li {
+    font-size: var(--text-xs);
+  }
+
+  .form {
+    padding: var(--space-sm);
+  }
+
+  .sticky-bar__btn {
+    font-size: var(--text-xs);
+    gap: var(--space-3xs);
+  }
+}
+
+/* ------------------------------------------------------------------
+   9. TELEFÓN NA ŠÍRKU
+
+   Nízka výška okna — hero by inak zabral celú obrazovku bez toho,
+   aby bolo vidieť, že stránka pokračuje.
+   ------------------------------------------------------------------ */
+
+@media (max-height: 30em) and (orientation: landscape) {
+  .hero {
+    padding-block: var(--space-lg);
+  }
+
+  .page-hero {
+    padding-block: var(--space-lg);
+  }
+
+  .mobile-menu__panel {
+    padding-block: var(--space-sm);
+  }
+}
+
+/* ------------------------------------------------------------------
+   10. ZARIADENIA BEZ PRESNÉHO UKAZOVATEĽA
+
+   Na dotykových zariadeniach nemá hover zmysel — stav by ostal
+   „zaseknutý" po ťuknutí. Efekty preto necháme len tam,
+   kde je myš alebo trackpad.
+   ------------------------------------------------------------------ */
+
+@media (hover: none) {
+  .btn:hover {
+    transform: none;
+  }
+
+  .card--service:hover,
+  .card--problem:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .btn:hover .icon,
+  .card--service:hover .card__cta .icon,
+  .card__inline-link:hover .icon,
+  .related__link:hover > .icon {
+    transform: none;
+  }
+
+  /* Karta služby má na dotyku plnú hornú linku hneď — bez hoveru
+     by inak zostala len krátka pomlčka. */
+  .card--service::before {
+    width: calc(100% + 2px);
+    opacity: 0.35;
+  }
+}

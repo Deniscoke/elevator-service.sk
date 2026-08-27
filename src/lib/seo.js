@@ -32,7 +32,7 @@ export function renderHead({ company, title, description, path, noindex = false,
 
   return `
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>${esc(title)}</title>
   <meta name="description" content="${esc(desc)}">
   <link rel="canonical" href="${esc(canonical)}">

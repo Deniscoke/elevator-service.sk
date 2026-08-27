@@ -27,12 +27,41 @@
     var focusableSelector =
       'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])';
 
+    var lockedAt = 0;
+
+    /**
+     * Zamknutie scrollu pod otvoreným menu.
+     * `overflow: hidden` na <body> na iOS Safari nestačí — stránka sa pod
+     * prekrytím scrolluje ďalej. Spoľahlivé je `position: fixed`, ale to
+     * skočí na začiatok stránky, takže si pozíciu musíme zapamätať a vrátiť.
+     */
+    function lockScroll() {
+      lockedAt = window.scrollY;
+      document.body.style.top = -lockedAt + 'px';
+      document.body.classList.add('is-locked');
+    }
+
+    function unlockScroll() {
+      /* Stránka má scroll-behavior: smooth, takže by sa aj návrat na pôvodné
+         miesto animoval — používateľ by po zavretí menu sledoval, ako sa
+         stránka niekam plazí. Obnovenie pozície musí byť okamžité. */
+      var root = document.documentElement;
+      var previousBehavior = root.style.scrollBehavior;
+      root.style.scrollBehavior = 'auto';
+
+      document.body.classList.remove('is-locked');
+      document.body.style.top = '';
+      window.scrollTo(0, lockedAt);
+
+      root.style.scrollBehavior = previousBehavior;
+    }
+
     function openMenu() {
       lastFocused = document.activeElement;
       menu.hidden = false;
       burger.setAttribute('aria-expanded', 'true');
       burger.setAttribute('aria-label', 'Zavrieť menu');
-      document.body.classList.add('is-locked');
+      lockScroll();
       var first = panel.querySelector(focusableSelector);
       if (first) first.focus();
       document.addEventListener('keydown', onMenuKeydown);
@@ -42,7 +71,7 @@
       menu.hidden = true;
       burger.setAttribute('aria-expanded', 'false');
       burger.setAttribute('aria-label', 'Otvoriť menu');
-      document.body.classList.remove('is-locked');
+      unlockScroll();
       document.removeEventListener('keydown', onMenuKeydown);
       if (lastFocused) lastFocused.focus();
     }
@@ -162,7 +191,6 @@
 
   if (header || stickyBar) {
     var ticking = false;
-    var lastY = window.scrollY;
 
     function onScroll() {
       var y = window.scrollY;
@@ -170,15 +198,14 @@
       if (header) header.classList.toggle('is-scrolled', y > 8);
 
       if (stickyBar) {
-        // Lišta sa objaví, až keď používateľ prejde hero sekciu.
-        // Hneď na začiatku by len zaberala miesto.
-        var showAfter = 320;
-        var scrollingUp = y < lastY;
-        var nearBottom = y + window.innerHeight > document.body.scrollHeight - 120;
-        stickyBar.classList.toggle('is-visible', y > showAfter && (scrollingUp || nearBottom || y > showAfter * 2));
+        /* Lišta sa objaví, keď používateľ prejde úvodnú obrazovku,
+           a potom zostane. Pôvodne sa skrývala pri scrollovaní nadol —
+           lenže nadol sa scrolluje väčšinu času, takže hlavné CTA
+           nebolo vidieť práve vtedy, keď ho človek číta. */
+        stickyBar.classList.toggle('is-visible', y > Math.min(window.innerHeight * 0.6, 400));
       }
 
-      lastY = y;
+
       ticking = false;
     }
 

@@ -1,6 +1,6 @@
 # Build report
 
-Vygenerované: 2026-08-27 08:07
+Vygenerované: 2026-08-27 08:25
 Režim: náhľadový
 Doména: https://www.elevatorservis.sk
 Servisná oblasť: Banská Bystrica a okolie (nepotvrdená)
@@ -25,7 +25,7 @@ Servisná oblasť: Banská Bystrica a okolie (nepotvrdená)
 | /ochrana-osobnych-udajov/ | ochrana-osobnych-udajov/index.html | 16.1 kB | áno |
 | /404.html | 404.html | 19.3 kB | nie |
 
-CSS: 6 vrstiev → `css/main.css` (57.7 kB)
+CSS: 7 vrstiev → `css/main.css` (65.5 kB)
 Sitemap: 12 URL
 
 ## Komponenty skryté pre chýbajúce dáta
