@@ -40,7 +40,11 @@ export default function page(ctx) {
   const { company, serviceAreaLabel } = ctx;
 
   const hero = `
-  <section class="hero">
+  <section class="hero on-dark">
+    <div class="hero__bg" aria-hidden="true">
+      <img src="/assets/foto/servis-rozvadzac.jpg" width="1400" height="1032"
+           alt="" fetchpriority="high" decoding="async">
+    </div>
     <div class="container hero__inner">
       <div class="hero__content" data-reveal>
         <p class="hero__eyebrow">${icon('pin')}<span>${esc(serviceAreaLabel)}</span></p>
@@ -60,11 +64,6 @@ export default function page(ctx) {
           <li>${icon('upgrade')}<span>Modernizácia a rekonštrukcia</span></li>
         </ul>
       </div>
-      <figure class="hero__visual">
-        <img src="/assets/foto/servis-rozvadzac.jpg" width="1400" height="1032"
-             alt="Servisný technik nastavuje rozvádzač výťahu v strojovni bytového domu"
-             fetchpriority="high" decoding="async">
-      </figure>
     </div>
   </section>`;
 

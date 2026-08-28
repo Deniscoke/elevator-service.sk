@@ -138,6 +138,10 @@ export function acquisition({ index = '03' } = {}) {
   <section class="section section--acquisition" id="novy-servis">
     <div class="container">
       <div class="acquisition on-dark">
+        <div class="acquisition__bg" aria-hidden="true">
+          <img src="/assets/foto/servis-strojovna.jpg" width="1400" height="910"
+               alt="" loading="lazy" decoding="async">
+        </div>
         <div class="acquisition__content">
           <p class="eyebrow"><span class="eyebrow__num">${esc(index)}</span>Nový servisný partner</p>
           <h2 class="acquisition__title">Hľadáte nového servisného partnera pre váš výťah?</h2>
@@ -157,11 +161,6 @@ export function acquisition({ index = '03' } = {}) {
             ${btn('Ako prebieha prevzatie', '/servis-vytahov/#ako-to-prebieha', { variant: 'ghost-invert' })}
           </div>
         </div>
-        <figure class="acquisition__aside">
-          <img src="/assets/foto/servis-strojovna.jpg" width="1400" height="910"
-               alt="Strojovňa výťahu s trakčným strojom a nosnými lanami"
-               loading="lazy" decoding="async">
-        </figure>
       </div>
     </div>
   </section>`;
