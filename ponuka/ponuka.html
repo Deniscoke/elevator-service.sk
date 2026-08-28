@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="utf-8">
+<title>Cenová ponuka</title>
+<!--
+  Zdroj cenovej ponuky pre klienta. Renderuje sa do PNG:
+    cp ponuka/ponuka.html dist/  &&  screenshot http://localhost:4173/ponuka.html
+  Ceny sa menia tu, nikde inde.
+-->
+<style>
+  @font-face{font-family:"Archivo";font-weight:400 700;font-display:block;
+    src:url("/assets/fonts/archivo-latin.woff2") format("woff2");
+    unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+2000-206F,U+20AC,U+2122;}
+  @font-face{font-family:"Archivo";font-weight:400 700;font-display:block;
+    src:url("/assets/fonts/archivo-latin-ext.woff2") format("woff2");
+    unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+1E00-1E9F,U+2C60-2C7F;}
+
+  :root{
+    --ink:#12161c; --text:#23292f; --muted:#5b6670;
+    --bg:#fbfaf8; --alt:#f3f1ec; --line:#e6e2da; --line2:#d2cdc2;
+    --yellow:#ffc61a; --accent:#7a5600;
+    --mono:ui-monospace,"SF Mono",Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0}
+  body{width:1120px;background:var(--bg);color:var(--text);
+    font-family:"Archivo",Arial,sans-serif;font-size:15px;line-height:1.6;
+    -webkit-font-smoothing:antialiased}
+  .page{padding:56px 60px 44px}
+  h1,h2,h3{color:var(--ink);letter-spacing:-.025em;line-height:1.1}
+
+  .label{font-family:var(--mono);font-size:11px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted)}
+
+  header{padding-bottom:26px;border-bottom:2px solid var(--ink)}
+  h1{font-size:38px;font-weight:700;margin:10px 0 12px}
+  .lede{font-size:16px;color:var(--muted);max-width:62ch}
+  .meta{display:flex;gap:38px;margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}
+  .meta div{display:grid;gap:2px}
+  .meta b{color:var(--ink);font-weight:600;font-size:14px}
+
+  section{margin-top:38px}
+  h2{font-size:22px;font-weight:700;margin-bottom:18px}
+
+  .tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+    background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .tier{background:#fff;padding:24px 22px}
+  .tier-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+  h3{font-size:19px;font-weight:700}
+  .pick{font-family:var(--mono);font-size:10px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--yellow);background:rgba(255,198,26,.16);
+    padding:3px 7px;border-radius:3px}
+  .price{font-size:40px;font-weight:700;letter-spacing:-.04em;color:var(--ink);
+    margin:10px 0 8px;line-height:1}
+  .for{font-size:13.5px;color:var(--muted);min-height:56px}
+  .sep{height:1px;background:var(--line);margin:14px 0}
+  .tier ul{list-style:none;padding:0;display:grid;gap:8px;font-size:13.5px}
+  .tier li{position:relative;padding-left:16px;color:var(--text)}
+  .tier li::before{content:"";position:absolute;left:0;top:.62em;
+    width:8px;height:2px;background:var(--yellow)}
+  .plus{font-weight:700;color:var(--accent)}
+
+  /* Tmavý balík. Zdvojená trieda kvôli špecificite — s jednou by tieto
+     pravidlá prebilo všeobecnejšie .tier li vyššie a text by zostal
+     tmavý na tmavom. */
+  .tier.tier--pick{background:var(--ink)}
+  .tier.tier--pick h3,.tier.tier--pick .price{color:#fff}
+  .tier.tier--pick .for{color:#b9c1c9}
+  .tier.tier--pick li{color:#ced5db}
+  .tier.tier--pick .sep{background:rgba(255,255,255,.18)}
+  .tier.tier--pick .plus{color:var(--yellow)}
+
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+  .box{background:var(--alt);border-radius:8px;padding:20px}
+  .box .label{margin-bottom:12px}
+  .box ul{list-style:none;padding:0;display:grid;gap:7px;font-size:13px;color:var(--muted)}
+  .box li{position:relative;padding-left:14px}
+  .box li::before{content:"";position:absolute;left:0;top:.62em;
+    width:7px;height:2px;background:var(--line2)}
+  .row{display:flex;justify-content:space-between;gap:12px;padding:6px 0;
+    border-bottom:1px solid var(--line);font-size:13px}
+  .row:last-child{border-bottom:0}
+  .row b{font-family:var(--mono);color:var(--ink);font-weight:600;white-space:nowrap}
+  .fine{font-size:12px;color:#7c8791;margin-top:8px}
+
+  .note{margin-top:34px;background:var(--ink);border-radius:8px;padding:24px 26px;
+    display:grid;gap:8px}
+  .note .label{color:#98a3ad}
+  .note p{color:#ced5db;font-size:14px;max-width:88ch}
+  .note strong{color:#fff}
+
+  footer{margin-top:30px;padding-top:16px;border-top:1px solid var(--line);
+    display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted)}
+  .bar{height:4px;background:var(--yellow);border-radius:2px;width:64px;margin-bottom:22px}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div class="bar"></div>
+    <p class="label">Cenová ponuka · firemný web</p>
+    <h1>Web pre ELEVÁTOR SERVIS, s.r.o.</h1>
+    <p class="lede">
+      Tri varianty dokončenia a spustenia webu. Líšia sa rozsahom toho, čo okolo webu
+      nastavíme — samotná stránka je vo všetkých rovnaká.
+    </p>
+    <div class="meta">
+      <div><span class="label">Predmet</span><b>Firemný web, Banská Bystrica</b></div>
+      <div><span class="label">Doména</span><b>elevatorservis.sk</b></div>
+      <div><span class="label">Platnosť ponuky</span><b>30 dní od doručenia</b></div>
+    </div>
+  </header>
+
+  <section>
+    <h2>Tri varianty</h2>
+    <div class="tiers">
+
+      <article class="tier">
+        <div class="tier-top"><h3>Štart</h3></div>
+        <p class="price">500&nbsp;€</p>
+        <p class="for">Web je online, funguje a dá sa cezeň dopytovať. Bez ďalšieho nastavovania okolo.</p>
+        <div class="sep"></div>
+        <ul>
+          <li>12 stránok vrátane samostatnej stránky pre každú službu</li>
+          <li>Mobilná verzia a rýchle načítanie</li>
+          <li>Technické SEO, sitemap, údaje pre Google</li>
+          <li>Dopytový formulár napojený na váš e-mail</li>
+          <li>Nasadenie a napojenie domény</li>
+          <li>Jedno kolo pripomienok, 30 dní na opravu chýb</li>
+        </ul>
+      </article>
+
+      <article class="tier tier--pick">
+        <div class="tier-top"><h3>Rast</h3><span class="pick">Odporúčam</span></div>
+        <p class="price">800&nbsp;€</p>
+        <p class="for">Web plus to, čo rozhoduje o tom, či vás ľudia nájdu — Google a použiteľný dopyt.</p>
+        <div class="sep"></div>
+        <ul>
+          <li><span class="plus">Všetko zo Štartu, plus:</span></li>
+          <li>Google firemný profil — založenie a prepojenie s mapou</li>
+          <li>Google Search Console a odoslanie na indexovanie</li>
+          <li>Prehľad návštevnosti bez cookies</li>
+          <li>Prílohy vo formulári — foto výťahu a výrobného štítku</li>
+          <li>Automatická odpoveď zákazníkovi</li>
+          <li>Naplnenie referencií a spracovanie fotografií</li>
+          <li>Dve kolá pripomienok, 3 mesiace podpory</li>
+        </ul>
+      </article>
+
+      <article class="tier">
+        <div class="tier-top"><h3>Komplet</h3></div>
+        <p class="price">1 000&nbsp;€</p>
+        <p class="for">Web pripravený získavať zákazníkov aj zamestnancov z vyhľadávania dlhodobo.</p>
+        <div class="sep"></div>
+        <ul>
+          <li><span class="plus">Všetko z Rastu, plus:</span></li>
+          <li>Poradňa — 4 odborné články podľa vášho know-how</li>
+          <li>Dve lokalitné stránky, napríklad Zvolen a Brezno</li>
+          <li>Pracovné pozície v Google ponukách práce</li>
+          <li>Meranie rýchlosti na ostrej doméne a doladenie</li>
+          <li>Zaškolenie a písomné odovzdanie</li>
+          <li>6 mesiacov podpory</li>
+        </ul>
+      </article>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="grid4">
+      <div class="box">
+        <p class="label">Nie je v cene</p>
+        <ul>
+          <li>Návrh loga a grafickej identity</li>
+          <li>Profesionálne fotografovanie</li>
+          <li>Platená reklama a jej správa</li>
+          <li>Posúdenie technických tvrdení odborníkom</li>
+        </ul>
+      </div>
+      <div class="box">
+        <p class="label">Prevádzka po spustení</p>
+        <div class="row"><span>Hosting</span><b>0 € / rok</b></div>
+        <div class="row"><span>Doména</span><b>máte vlastnú</b></div>
+        <div class="row"><span>Licencie a pluginy</span><b>0 € / rok</b></div>
+        <div class="row"><span>Úpravy po podpore</span><b>dohodou</b></div>
+      </div>
+      <div class="box">
+        <p class="label">Harmonogram</p>
+        <div class="row"><span>Štart</span><b>2–3 týždne</b></div>
+        <div class="row"><span>Rast</span><b>3–4 týždne</b></div>
+        <div class="row"><span>Komplet</span><b>4–6 týždňov</b></div>
+        <p class="fine">Od dodania kompletných podkladov.</p>
+      </div>
+      <div class="box">
+        <p class="label">Platobné podmienky</p>
+        <div class="row"><span>Pri objednávke</span><b>50 %</b></div>
+        <div class="row"><span>Pri spustení webu</span><b>50 %</b></div>
+        <p class="fine">Nie som platiteľ DPH — uvedené ceny sú konečné.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="note">
+    <p class="label">Čo ešte potrebujem od vás</p>
+    <p>
+      <strong>Adresu a IČO</strong> (povinné údaje na webe), <strong>logo v elektronickej podobe</strong>,
+      <strong>fotografie</strong> firmy a prác a <strong>súhlas zákazníkov</strong> so zverejnením referencií.
+      Web zámerne nezobrazuje nič, čo nie je potvrdené — kým údaj nedodáte, príslušná časť stránky sa
+      jednoducho nezobrazí. Je to poistka proti tomu, aby na webe stálo niečo, za čím si neviete stáť
+      pred zákazníkom.
+    </p>
+  </div>
+
+  <footer>
+    <span>Ponuka je nezáväzná a platí 30 dní od doručenia.</span>
+    <span>Balík sa dá kedykoľvek rozšíriť — doplácate len rozdiel.</span>
+  </footer>
+
+</div>
+</body>
+</html>

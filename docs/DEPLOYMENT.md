@@ -148,3 +148,48 @@ Funguje, ale je to najhoršia varianta pre konverzie — používaj len dočasne
 - [ ] Skontrolovať náhľad odkazu na Facebooku a LinkedIne (potrebuje PNG OG obrázok)
 - [ ] Prepojiť Google Business Profile
 - [ ] Zmerať Core Web Vitals na reálnej doméne
+
+---
+
+## Napojenie domény elevatorservis.sk
+
+**Overený stav (28. 8. 2026):** doména je registrovaná a patrí klientovi.
+Beží na Websupporte (`ns1–ns3.websupport.sk`, A záznam `37.9.175.12`),
+má funkčnú poštu (MX `mailin1/2.elevatorservis.sk`) a na webe je len
+parkovacia stránka Websupportu — **žiadny web tam nebeží**.
+
+### Prečo ju Vercel „neponúka"
+
+Vercel **nepredáva .sk domény**. To ale nie je prekážka: doménu netreba
+od Vercelu kupovať. Stačí ju vo Verceli pridať ako *custom domain*
+a nasmerovať na ňu DNS u súčasného registrátora.
+
+### Postup (odporúčaný — DNS zostáva na Websupporte)
+
+Nameservery sa **nemenia**, takže pošta beží ďalej bez zásahu.
+
+1. Vercel → projekt → Settings → Domains → pridať `elevatorservis.sk`
+   aj `www.elevatorservis.sk`.
+2. V administrácii Websupportu upraviť DNS:
+
+   | Typ | Názov | Hodnota |
+   |---|---|---|
+   | A | `@` | `76.76.21.21` |
+   | CNAME | `www` | `cname.vercel-dns.com` |
+
+3. MX a ostatné záznamy **nechať bez zmeny** — inak prestane chodiť pošta.
+4. Vercel vydá certifikát sám (Let's Encrypt), zvyčajne do pár minút.
+5. Po nábehu doplniť `SITE_URL=https://www.elevatorservis.sk`
+   do Environment Variables a prebuildovať, aby canonical a sitemap
+   ukazovali na ostrú doménu.
+
+### Čo nerobiť
+
+**Neprepínať nameservery na Vercel.** Prevzal by celý DNS vrátane MX
+a pošta na `elevator@elevatorservis.sk` by prestala fungovať, kým by sa
+MX záznamy ručne nevytvorili znova. Pre tento projekt to nemá výhodu.
+
+### Čo potrebuješ od klienta
+
+Prístup do administrácie Websupportu — alebo mu poslať tie dva riadky
+z tabuľky vyššie, sú to dve zmeny na päť minút.
