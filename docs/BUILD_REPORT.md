@@ -1,6 +1,6 @@
 # Build report
 
-Vygenerované: 2026-08-28 10:55
+Vygenerované: 2026-08-28 10:57
 Režim: náhľadový
 Doména: https://www.elevatorservis.sk
 Servisná oblasť: Banská Bystrica a okolie do 80 km
