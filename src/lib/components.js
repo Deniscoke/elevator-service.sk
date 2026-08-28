@@ -92,8 +92,9 @@ export function trustBar(company, serviceAreaLabel) {
           items,
           (it) => `
         <li class="trust__item">
-          <span class="trust__icon">${icon(it.icon)}</span>
-          <span class="trust__value">${esc(it.value !== null && it.value !== undefined ? it.value : it.text)}</span>
+          <span class="trust__value${it.value === null || it.value === undefined ? ' trust__value--text' : ''}">${esc(
+            it.value !== null && it.value !== undefined ? it.value : it.text
+          )}</span>
           <span class="trust__label">${esc(it.label)}</span>
         </li>`
         )}

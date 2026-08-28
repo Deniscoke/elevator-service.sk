@@ -281,6 +281,38 @@
 
 
   /* ================================================================
+     VÝŤAH — indikátor pozície
+
+     Iba prepočet pomeru do CSS premennej. Samotný pohyb rieši CSS,
+     takže sa nič neanimuje v JavaScripte.
+     ================================================================ */
+
+  var lift = document.querySelector('[data-lift]');
+
+  if (lift) {
+    var liftTicking = false;
+    var updateLift = function () {
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      var p = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+      lift.style.setProperty('--lift-progress', p.toFixed(4));
+      liftTicking = false;
+    };
+
+    window.addEventListener(
+      'scroll',
+      function () {
+        if (!liftTicking) {
+          window.requestAnimationFrame(updateLift);
+          liftTicking = true;
+        }
+      },
+      { passive: true }
+    );
+    window.addEventListener('resize', updateLift, { passive: true });
+    updateLift();
+  }
+
+  /* ================================================================
      PREDVYPLNENIE TYPU DOPYTU Z URL
      /kontakt/?typ=oprava#dopyt
      ================================================================ */

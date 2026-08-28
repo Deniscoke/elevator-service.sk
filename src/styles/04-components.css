@@ -190,8 +190,8 @@
   z-index: -1;
   background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(14, 18, 23, 0.96) 0%, rgba(14, 18, 23, 0.93) 56%,
-      rgba(14, 18, 23, 0.6) 78%, rgba(14, 18, 23, 0.4) 100%);
+    linear-gradient(90deg, rgba(14, 18, 23, 0.96) 0%, rgba(14, 18, 23, 0.92) 48%,
+      rgba(14, 18, 23, 0.42) 72%, rgba(14, 18, 23, 0.16) 100%);
   background-size: 88px 88px, 88px 88px, 100% 100%;
   pointer-events: none;
 }
@@ -349,15 +349,30 @@
   grid-template-columns: repeat(2, 1fr);
   gap: var(--space-6) var(--space-5);
   padding-block: var(--space-7);
+  align-items: stretch;
 }
 
+/* Hodnota rastie zhora, popisok je pribitý na spodok — tak sedia
+   popisky všetkých dlaždíc na jednej linke aj pri rôzne dlhých
+   hodnotách. Bez toho sa riadok rozsype. */
 .trust__item {
   display: grid;
-  gap: 0.15rem;
+  grid-template-rows: 1fr auto;
+  gap: var(--space-3);
 }
 
 .trust__icon {
   display: none;
+}
+
+/* Veta nie je číslo a nesmie mať jeho veľkosť.
+   Zdvojená trieda zvyšuje špecificitu — inak by ju prebilo
+   všeobecnejšie .trust__value, ktoré nasleduje nižšie. */
+.trust__value.trust__value--text {
+  font-size: var(--fs-h3);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--ls-tight);
+  align-self: start;
 }
 
 .trust__value {
@@ -1392,5 +1407,70 @@
 
   .qa-index {
     grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+
+/* ------------------------------------------------------------------
+   VÝŤAH — indikátor pozície na stránke
+
+   Zámerne minimálny: vlásková šachta pri pravom okraji a kabína,
+   ktorá v nej klesá podľa toho, koľko stránky je za nami.
+   Je to dekorácia, preto aria-hidden a žiadna interakcia — orientáciu
+   nesie obsah, toto je len značkový detail.
+
+   Zobrazuje sa až od 90em, kde je pri okraji naozaj voľné miesto.
+   ------------------------------------------------------------------ */
+
+.lift {
+  display: none;
+}
+
+@media (min-width: 90em) {
+  .lift {
+    position: fixed;
+    top: calc(var(--header-h) + var(--space-7));
+    bottom: var(--space-7);
+    right: clamp(1rem, calc((100vw - var(--container)) / 2 - 2rem), 2.5rem);
+    z-index: var(--z-sticky-bar);
+    display: block;
+    width: 10px;
+    pointer-events: none;
+  }
+
+  /* Vodiace lišty šachty. */
+  .lift::before,
+  .lift::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--border-strong);
+    opacity: 0.7;
+  }
+  .lift::before { left: 0; }
+  .lift::after { right: 0; }
+
+  /* Kabína. Delená linka naznačuje dvere. */
+  .lift__car {
+    position: absolute;
+    left: -3px;
+    right: -3px;
+    height: 18px;
+    background: var(--yellow);
+    border-radius: 1px;
+    /* --lift-progress nastavuje site.js; bez JS stojí na prízemí. */
+    top: calc(var(--lift-progress, 0) * (100% - 18px));
+  }
+
+  .lift__car::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    bottom: 3px;
+    left: 50%;
+    width: 1px;
+    background: rgba(18, 22, 28, 0.4);
   }
 }

@@ -51,7 +51,7 @@ const css = readFileSync(path.join(DIST, 'css', cssFile), 'utf8');
 const defined = new Set([...css.matchAll(/(--[a-z0-9-]+)\s*:/g)].map((m) => m[1]));
 const used = new Set([...css.matchAll(/var\((--[a-z0-9-]+)/g)].map((m) => m[1]));
 for (const v of used) {
-  if (!defined.has(v) && !['--sticky-bar-h', '--reveal-delay', '--btn-bg', '--btn-fg', '--btn-border'].includes(v))
+  if (!defined.has(v) && !['--sticky-bar-h', '--reveal-delay', '--lift-progress', '--btn-bg', '--btn-fg', '--btn-border'].includes(v))
     issues.push(`CSS: nedefinovaný token ${v}`);
 }
 

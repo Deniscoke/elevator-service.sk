@@ -27,11 +27,11 @@ function logo(company, { inverse = false } = {}) {
   }
   return `
     <span class="logo__mark" aria-hidden="true">
-      <svg width="54" height="25" viewBox="0 0 132 62" fill="none">
-        <path d="M100 0 L 34 38 L 0 38 L 46 18 Z" class="logo__wing logo__wing--accent"
-              transform="translate(0 24) scale(0.5)"/>
-        <path d="M100 0 L 34 38 L 0 38 L 46 18 Z" class="logo__wing logo__wing--ink"
-              transform="translate(32 0)"/>
+      <svg width="62" height="26" viewBox="0 0 160 64" fill="none">
+        <path d="M100 2 L 63 30 L 96 44 L 26 44 Z" class="logo__wing logo__wing--accent"
+              transform="translate(0 28) scale(0.44)"/>
+        <path d="M100 2 L 63 30 L 96 44 L 26 44 Z" class="logo__wing logo__wing--ink"
+              transform="translate(52 6) scale(0.98)"/>
       </svg></span>
     <span class="logo__text">
       <span class="logo__name">ELEVÁTOR</span><span class="logo__name logo__name--accent">SERVIS</span>
@@ -313,6 +313,9 @@ ${renderSchemas(company, schemas)}
   <a class="skip-link" href="#obsah">Preskočiť na obsah</a>
 ${header(company, path)}
 ${breadcrumbs(crumbs)}
+  <div class="lift" aria-hidden="true" data-lift>
+    <span class="lift__car"></span>
+  </div>
   <main id="obsah">
 ${main}
   </main>
