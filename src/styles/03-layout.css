@@ -95,7 +95,7 @@
 
 .eyebrow--invert .eyebrow__num,
 .eyebrow--danger .eyebrow__num {
-  color: var(--color-accent-400);
+  color: var(--color-yellow-500);
 }
 
 .eyebrow--danger .eyebrow__num {
@@ -149,9 +149,23 @@
 }
 
 .logo__mark {
-  color: var(--color-accent-600);
   display: grid;
   place-items: center;
+}
+
+/* Značka je prekreslená z dodaného loga: menšia žltá šípka a väčšia
+   grafitová. Na tmavom podklade sa grafitová prepína na bielu. */
+.logo__wing--accent {
+  fill: var(--color-yellow-500);
+}
+
+.logo__wing--ink {
+  fill: var(--color-ink-900);
+}
+
+.site-footer .logo__wing--ink,
+.page-hero--emergency .logo__wing--ink {
+  fill: #ffffff;
 }
 
 .logo__text {
@@ -263,8 +277,8 @@
   place-items: center;
   width: 2.25rem;
   height: 2.25rem;
-  color: var(--color-accent-600);
-  background: var(--color-accent-100);
+  color: var(--color-accent-text);
+  background: var(--color-yellow-100);
   border-radius: var(--radius-sm);
 }
 
@@ -483,11 +497,11 @@
 }
 
 .site-footer .logo__mark {
-  color: var(--color-accent-400);
+  color: var(--color-yellow-500);
 }
 
 .site-footer .logo__name--accent {
-  color: var(--color-accent-400);
+  color: var(--color-yellow-500);
 }
 
 .site-footer__claim {
@@ -518,7 +532,7 @@
 }
 
 .site-footer__list a:hover {
-  color: var(--color-accent-400);
+  color: var(--color-yellow-500);
   text-decoration: underline;
 }
 
@@ -597,8 +611,8 @@
 }
 
 .sticky-bar__btn--primary {
-  background: var(--color-accent-600);
-  color: #fff;
+  background: var(--color-yellow-500);
+  color: var(--color-ink-900);
 }
 
 .sticky-bar__btn--emergency {

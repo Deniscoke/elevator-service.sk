@@ -52,12 +52,13 @@
 }
 
 .btn--primary {
-  --btn-bg: var(--color-accent-600);
-  --btn-border: var(--color-accent-600);
+  --btn-bg: var(--color-yellow-500);
+  --btn-border: var(--color-yellow-500);
+  --btn-fg: var(--color-ink-900); /* tmavy text na zltej: kontrast 12:1 */
 }
 .btn--primary:hover {
-  --btn-bg: var(--color-accent-700);
-  --btn-border: var(--color-accent-700);
+  --btn-bg: var(--color-yellow-600);
+  --btn-border: var(--color-yellow-600);
 }
 
 .btn--secondary {
@@ -161,7 +162,7 @@
 .hero__eyebrow .icon {
   width: 14px;
   height: 14px;
-  color: var(--color-accent-400);
+  color: var(--color-yellow-500);
 }
 
 .hero__title {
@@ -172,7 +173,7 @@
 
 .hero__title em {
   font-style: normal;
-  color: var(--color-accent-400);
+  color: var(--color-yellow-500);
 }
 
 .hero__lead {
@@ -210,7 +211,7 @@
 .hero__meta .icon {
   width: 16px;
   height: 16px;
-  color: var(--color-accent-400);
+  color: var(--color-yellow-500);
 }
 
 /* ---- vizuál šachty v hero ----------------------------------------- */
@@ -269,8 +270,8 @@
   left: 22%;
   right: 22%;
   height: 18%;
-  border: 1.5px solid var(--color-accent-400);
-  background: rgba(242, 129, 47, 0.08);
+  border: 1.5px solid var(--color-yellow-500);
+  background: rgba(255, 198, 26, 0.1);
   animation: ride 9s var(--ease-in-out) infinite;
 }
 
@@ -366,7 +367,7 @@
 
 .trust__icon {
   justify-self: center;
-  color: var(--color-accent-600);
+  color: var(--color-accent-text);
 }
 
 .trust__icon .icon {
@@ -417,7 +418,7 @@
   left: -1px;
   width: 2.5rem;
   height: 2px;
-  background: var(--color-accent-600);
+  background: var(--color-yellow-500);
   transition: width var(--dur-slow) var(--ease-out);
 }
 
@@ -440,7 +441,7 @@
 }
 
 .card__icon {
-  color: var(--color-accent-600);
+  color: var(--color-accent-text);
   margin-bottom: var(--space-3xs);
 }
 
@@ -616,7 +617,7 @@
   top: 0.6em;
   width: 8px;
   height: 1px;
-  background: var(--color-accent-400);
+  background: var(--color-yellow-500);
 }
 
 .acquisition__actions {
@@ -653,7 +654,7 @@
   font-family: var(--font-mono);
   font-size: var(--text-sm);
   font-weight: var(--weight-bold);
-  color: var(--color-accent-600);
+  color: var(--color-accent-text);
 }
 
 .steps__title {
@@ -690,8 +691,8 @@
   width: 1.5rem;
   height: 1.5rem;
   margin-top: 1px;
-  color: var(--color-accent-600);
-  background: var(--color-accent-100);
+  color: var(--color-accent-text);
+  background: var(--color-yellow-100);
   border-radius: var(--radius-sm);
 }
 
@@ -883,7 +884,7 @@
   padding: clamp(2rem, 1.5rem + 2.5vw, 3rem);
   background: var(--color-surface-alt);
   border: 1px solid var(--color-line);
-  border-left: 3px solid var(--color-accent-600);
+  border-left: 3px solid var(--color-yellow-500);
   border-radius: var(--radius-md);
 }
 
@@ -940,12 +941,12 @@
 }
 
 .related__link:hover {
-  border-color: var(--color-accent-600);
+  border-color: var(--color-yellow-500);
   color: var(--color-ink-900);
 }
 
 .related__icon {
-  color: var(--color-accent-600);
+  color: var(--color-accent-text);
 }
 
 .related__icon .icon {
@@ -966,7 +967,7 @@
 
 .related__link:hover > .icon {
   transform: translateX(3px);
-  color: var(--color-accent-600);
+  color: var(--color-accent-text);
 }
 
 /* ------------------------------------------------------------------
@@ -1027,7 +1028,7 @@
   top: 0.7em;
   width: 8px;
   height: 1px;
-  background: var(--color-accent-600);
+  background: var(--color-yellow-500);
 }
 
 .prose ol {
@@ -1048,7 +1049,7 @@
   left: 0;
   font-family: var(--font-mono);
   font-size: var(--text-sm);
-  color: var(--color-accent-600);
+  color: var(--color-accent-text);
 }
 
 /* Zvýraznený blok — používa sa na bezpečnostné pokyny. */
@@ -1057,7 +1058,7 @@
   gap: var(--space-2xs);
   padding: var(--space-md);
   background: var(--color-surface-alt);
-  border-left: 3px solid var(--color-accent-600);
+  border-left: 3px solid var(--color-yellow-500);
   border-radius: var(--radius-sm);
 }
 
@@ -1126,7 +1127,7 @@
   top: 0.65em;
   width: 8px;
   height: 1px;
-  background: var(--color-accent-600);
+  background: var(--color-yellow-500);
 }
 
 /* ------------------------------------------------------------------
@@ -1265,7 +1266,7 @@
 }
 
 .qa-index__icon {
-  color: var(--color-accent-600);
+  color: var(--color-accent-text);
   display: grid;
   place-items: center;
 }
@@ -1305,7 +1306,7 @@
 }
 
 .qa-index__list a:hover::before {
-  background: var(--color-accent-600);
+  background: var(--color-yellow-500);
 }
 
 @media (min-width: 48em) {

@@ -223,9 +223,29 @@ const LEAK_PATTERNS = [
   [/\bXXX+\b/, 'XXX'],
   [/\bnull\b(?![^<]*<\/script>)/, 'reťazec „null" vo viditeľnom obsahu'],
   [/undefined/, 'reťazec „undefined"'],
-  [/24\s*\/\s*7/, 'tvrdenie 24/7 (nepotvrdený režim havarijnej služby)'],
-  [/\b\d{3,}\s*\+\s*výťahov/i, 'nepodložený počet výťahov'],
 ];
+
+/**
+ * Podmienené kontroly.
+ *
+ * Tvrdenie „24/7" ani počet výťahov nie sú samy osebe chybou — chybou sú
+ * len vtedy, keď za nimi v dátach nestojí potvrdený údaj od klienta.
+ * Vzor sa preto do kontroly pridá iba vtedy, keď podklad chýba.
+ *
+ * Presne toto sa stalo po dodaní dotazníka: klient potvrdil nonstop
+ * havarijnú službu aj vyše 300 servisovaných zariadení, takže obe
+ * tvrdenia sú odteraz legitímne.
+ */
+function conditionalLeakPatterns() {
+  const extra = [];
+  if (!company.emergency.enabled) {
+    extra.push([/24\s*\/\s*7/, 'tvrdenie 24/7 bez potvrdeného režimu havarijnej služby']);
+  }
+  if (!isSet(company.stats.servicedLifts)) {
+    extra.push([/\b\d{3,}\s*\+?\s*výťahov/i, 'počet výťahov bez podkladu v dátach']);
+  }
+  return extra;
+}
 
 function checkLeaks(pages) {
   const found = [];
@@ -235,7 +255,7 @@ function checkLeaks(pages) {
       .replace(/<script[\s\S]*?<\/script>/gi, '')
       .replace(/<!--[\s\S]*?-->/g, '');
 
-    for (const [re, label] of LEAK_PATTERNS) {
+    for (const [re, label] of [...LEAK_PATTERNS, ...conditionalLeakPatterns()]) {
       if (re.test(visible)) found.push({ file: p.file, label });
     }
   }

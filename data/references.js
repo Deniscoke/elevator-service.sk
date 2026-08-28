@@ -1,34 +1,64 @@
 /**
  * CENTRÁLNA DÁTOVÁ VRSTVA — referencie a segmenty zákazníkov
  *
- * references[] je ZÁMERNE PRÁZDNE.
- * Kým klient nedodá reálne realizácie so súhlasom na zverejnenie,
- * sekcia referencií sa na webe nevykreslí.
+ * ⚠ DÔLEŽITÉ — SÚHLAS
+ * Klient v dotazníku uviedol: „Pri každej referencii sa treba najskôr dohodnúť."
+ * To NIE JE súhlas so zverejnením. Všetky tri referencie majú preto
+ * consent: false a na webe sa NEZOBRAZUJÚ.
+ *
+ * Sú tu pripravené, aby ich po dohode so zákazníkom stačilo prepnúť
+ * na consent: true a doplniť popis. Nič iné meniť netreba.
  */
 
-/**
- * Tvar jednej referencie (pre budúce doplnenie):
- * {
- *   id: 'bd-tulska',
- *   title: 'Výmena riadenia, bytový dom',
- *   objectType: 'bytovy-dom',
- *   city: 'Banská Bystrica',
- *   year: 2024,
- *   serviceId: 'modernizacia',
- *   summary: 'Čo sa robilo a prečo.',
- *   image: { src: '/assets/referencie/...', alt: '...', width: 800, height: 600 },
- *   consent: true,            // POVINNÉ — súhlas so zverejnením
- *   clientName: null,         // len ak je súhlas s uvedením mena
- * }
- */
-export const references = [];
+export const references = [
+  {
+    id: 'sbd-banska-bystrica',
+    title: 'Nové výťahy, rekonštrukcie a modernizácie',
+    objectType: 'sprava',
+    city: 'Banská Bystrica',
+    year: null,
+    serviceId: 'modernizacia',
+    clientName: 'SBD Banská Bystrica',
+    summary: null,          // doplniť po dohode so zákazníkom
+    image: null,
+    consent: false,         // ⚠ ČAKÁ NA SÚHLAS ZÁKAZNÍKA
+  },
+  {
+    id: 'realbyt-vk',
+    title: 'Nové výťahy, rekonštrukcie a modernizácie',
+    objectType: 'sprava',
+    city: null,
+    year: null,
+    serviceId: 'modernizacia',
+    clientName: 'REALBYT V. K.',
+    summary: null,
+    image: null,
+    consent: false,         // ⚠ ČAKÁ NA SÚHLAS ZÁKAZNÍKA
+  },
+  {
+    id: 'filbyt-filakovo',
+    title: 'Nové výťahy, rekonštrukcie a modernizácie',
+    objectType: 'sprava',
+    city: 'Fiľakovo',
+    year: null,
+    serviceId: 'modernizacia',
+    clientName: 'FILBYT Fiľakovo',
+    summary: null,
+    image: null,
+    consent: false,         // ⚠ ČAKÁ NA SÚHLAS ZÁKAZNÍKA
+  },
+];
 
-export const testimonials = []; // ČAKÁ NA KLIENTA — žiadne vymyslené hodnotenia
+export const testimonials = []; // ČAKÁ NA KLIENTA
 
 /**
  * Segmenty, pre ktoré sú služby určené.
+ * Poradie zodpovedá odpovedi klienta na otázku, aký typ zákazníkov
+ * chce získavať najviac: bytové domy/SVB, správcovia, firmy,
+ * verejné inštitúcie, developeri.
+ *
  * POZOR: toto NIE SÚ existujúci klienti. Formulácie na webe musia znieť
- * "komu je služba určená", nie "naši klienti".
+ * „komu je služba určená", nie „naši klienti".
  */
 export const segments = [
   {
@@ -47,13 +77,13 @@ export const segments = [
     text: 'Objekty, kde je výťah súčasťou každodennej prevádzky a porucha zdržuje ľudí aj tovar.',
   },
   {
-    id: 'skoly',
-    title: 'Školy a inštitúcie',
-    text: 'Verejné budovy, kde je výťah často jedinou bezbariérovou cestou medzi podlažiami.',
+    id: 'institucie',
+    title: 'Verejné inštitúcie',
+    text: 'Úrady, školy a zdravotnícke zariadenia, kde je výťah často jedinou bezbariérovou cestou medzi podlažiami.',
   },
   {
-    id: 'priemysel',
-    title: 'Priemyselné objekty',
-    text: 'Nákladné a osobno-nákladné zariadenia s náročnejšou prevádzkou a vyššou záťažou.',
+    id: 'developeri',
+    title: 'Developeri a nové objekty',
+    text: 'Prevzatie nových zariadení do servisu vrátane nastavenia harmonogramu od prvého dňa prevádzky.',
   },
 ];

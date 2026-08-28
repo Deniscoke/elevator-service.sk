@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 150" width="420" height="150" role="img" aria-label="ELEVÁTOR SERVIS, s.r.o. Banská Bystrica">
+  <!--
+    Logo prekreslené do vektoru podľa dodaného rastrového podkladu (PNG).
+    Tvar šípok aj proporcie treba pred použitím odsúhlasiť s klientom.
+    Žltá #FFC61A je prevzatá z menšej šípky v origináli.
+  -->
+  <title>ELEVÁTOR SERVIS, s.r.o.</title>
+
+  <!-- menšia šípka — žltá -->
+  <path d="M138 84 L 66 84 L 92 68 L 150 68 Z" fill="#FFC61A"/>
+  <path d="M150 68 L 92 68 L 138 84 Z" fill="#FFC61A"/>
+
+  <!-- väčšia šípka — grafitová -->
+  <path d="M300 20 L 232 78 L 160 78 L 196 56 Z" fill="#12161B"/>
+  <path d="M232 78 L 300 20 L 268 78 Z" fill="#12161B"/>
+
+  <text x="66" y="112" font-family="Arial Black, Arial, Helvetica, sans-serif" font-weight="900"
+        font-size="25" letter-spacing="1.4" fill="#12161B">ELEVÁTOR SERVIS</text>
+  <text x="322" y="112" font-family="Arial, Helvetica, sans-serif" font-weight="700"
+        font-size="15" letter-spacing=".6" fill="#12161B">s.r.o.</text>
+  <text x="66" y="139" font-family="Arial Black, Arial, Helvetica, sans-serif" font-weight="900"
+        font-size="25" letter-spacing="1.4" fill="#12161B">BANSKÁ BYSTRICA</text>
+</svg>

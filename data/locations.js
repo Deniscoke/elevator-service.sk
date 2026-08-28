@@ -1,20 +1,19 @@
 /**
  * CENTRÁLNA DÁTOVÁ VRSTVA — lokality a servisná oblasť
  *
- * ZÁMERNE NEGENERUJEME doorway stránky pre každé mesto.
- * Lokalitná stránka vznikne až vtedy, keď k nej budeme mať reálny obsah
- * (referencie z mesta, konkrétne zariadenia, dostupnosť technika).
- * Architektúra je pripravená: stačí prepnúť `published: true`.
+ * Servisná oblasť je POTVRDENÁ klientom v dotazníku (28. 8. 2026):
+ * „Banská Bystrica + približne 80 km" — áno.
+ *
+ * Lokalitné stránky sa napriek tomu negenerujú automaticky.
+ * Vzniknú až vtedy, keď k nim bude reálny obsah — inak by šlo
+ * o prázdne doorway stránky, ktoré SEO skôr uškodia.
  */
 
 export const serviceArea = {
   centerCity: 'Banská Bystrica',
   radiusKm: 80,
-  // false = na webe sa polomer NEUVÁDZA ako fakt, len sa spomína región.
-  confirmed: false,
-  // Text, ktorý sa zobrazí, kým nie je oblasť potvrdená.
+  confirmed: true,
   provisionalLabel: 'Banská Bystrica a okolie',
-  // Text, ktorý sa použije po potvrdení (radiusKm sa doplní automaticky).
   confirmedLabelTemplate: 'Banská Bystrica a okolie do {radius} km',
 };
 
@@ -29,15 +28,16 @@ export const primaryLocation = {
 };
 
 /**
- * Plánované lokalitné stránky — /servis-vytahov/<slug>/
+ * Mestá, ktoré chce klient prioritne komunikovať (podľa dotazníka).
  * published: false → stránka sa negeneruje a nie je v sitemap.
  */
 export const plannedLocations = [
-  { name: 'Zvolen',           slug: 'zvolen',            locative: 'vo Zvolene',           published: false },
-  { name: 'Brezno',           slug: 'brezno',            locative: 'v Brezne',             published: false },
-  { name: 'Žiar nad Hronom',  slug: 'ziar-nad-hronom',   locative: 'v Žiari nad Hronom',   published: false },
-  { name: 'Detva',            slug: 'detva',             locative: 'v Detve',              published: false },
-  { name: 'Banská Štiavnica', slug: 'banska-stiavnica',  locative: 'v Banskej Štiavnici',  published: false },
+  { name: 'Zvolen',          slug: 'zvolen',          locative: 'vo Zvolene',         published: false },
+  { name: 'Brezno',          slug: 'brezno',          locative: 'v Brezne',           published: false },
+  { name: 'Žiar nad Hronom', slug: 'ziar-nad-hronom', locative: 'v Žiari nad Hronom', published: false },
+  { name: 'Detva',           slug: 'detva',           locative: 'v Detve',            published: false },
+  { name: 'Tisovec',         slug: 'tisovec',         locative: 'v Tisovci',          published: false },
+  { name: 'Hnúšťa',          slug: 'hnusta',          locative: 'v Hnúšti',           published: false },
 ];
 
 export const publishedLocations = plannedLocations.filter((l) => l.published);

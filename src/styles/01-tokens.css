@@ -27,15 +27,31 @@
   --color-surface-sunk: #eceff3;
   --color-surface-dark: var(--color-ink-900);
 
-  /* ---- farby: akcent (signálna oranžová – technická, nie SaaS) ---- */
-  --color-accent-700: #8f3708;
-  --color-accent-600: #bb4b0a;   /* pozadie tlačidiel, kontrast 5.1:1 na bielej */
-  --color-accent-500: #d9600f;
-  --color-accent-400: #f2812f;   /* text na tmavom podklade */
-  --color-accent-100: #fdf1e7;
-  --color-accent-text: #a8410a;  /* akcentový text na bielej, kontrast 6.1:1 */
+  /* ---- farby: akcent (žltá z loga) --------------------------------
 
-  /* ---- farby: havária -------------------------------------------- */
+     Žltá je prevzatá z logotypu — malá šípka vľavo.
+
+     POZOR na rolu tejto farby. Žltá #FFC61A má na bielej kontrast 1,6:1,
+     takže sa NIKDY nepoužíva ako farba textu na svetlom podklade.
+     Používa sa ako PLOCHA: žlté tlačidlo s tmavým textom má kontrast 12:1.
+     Na tmavom podklade žltá ako text funguje (11,9:1) a používa sa.
+
+     Ak treba akcentový TEXT na bielej, slúži na to --color-accent-text
+     (tmavý jantár, kontrast 5,6:1). Nikdy nie čistá žltá.
+     ---------------------------------------------------------------- */
+  --color-yellow-500: #ffc61a;   /* značková žltá — plochy, nie text */
+  --color-yellow-600: #e8ad00;   /* hover žltej plochy */
+  --color-yellow-400: #ffd75e;   /* svetlejšia, na tmavom podklade */
+  --color-yellow-200: #ffe9a8;
+  --color-yellow-100: #fff8e3;   /* jemné tónovanie pozadia */
+  --color-accent-text: #8a6100;  /* akcentový TEXT na bielej, 5,6:1 */
+
+  /* ---- farby: havária ---------------------------------------------
+
+     Červená zostáva vyhradená výhradne pre naliehavosť. Žltá je značka,
+     červená je stav — keby sa role zliali, havarijné tlačidlo by prestalo
+     byť rozoznateľné od bežného CTA.
+     ---------------------------------------------------------------- */
   --color-danger-600: #b3200f;
   --color-danger-500: #d92c1a;
   --color-danger-400: #ff6a55;
@@ -43,7 +59,8 @@
   /* ---- sémantické aliasy ----------------------------------------- */
   --color-primary: var(--color-ink-900);
   --color-secondary: var(--color-steel-500);
-  --color-accent: var(--color-accent-600);
+  --color-accent: var(--color-yellow-500);
+  --color-on-accent: var(--color-ink-900);
   --color-background: var(--color-surface);
   --color-text: var(--color-ink-800);
   --color-text-muted: var(--color-steel-500);
