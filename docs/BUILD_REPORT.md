@@ -1,6 +1,6 @@
 # Build report
 
-Vygenerované: 2026-08-28 08:03
+Vygenerované: 2026-08-28 08:16
 Režim: náhľadový
 Doména: https://www.elevatorservis.sk
 Servisná oblasť: Banská Bystrica a okolie do 80 km
@@ -11,21 +11,21 @@ Servisná oblasť: Banská Bystrica a okolie do 80 km
 
 | Stránka | Súbor | Veľkosť | V sitemap |
 | --- | --- | ---: | :---: |
-| / | index.html | 46.8 kB | áno |
-| /servis-vytahov/ | servis-vytahov/index.html | 38.3 kB | áno |
-| /opravy-vytahov/ | opravy-vytahov/index.html | 36.5 kB | áno |
-| /odborne-prehliadky-a-skusky/ | odborne-prehliadky-a-skusky/index.html | 36.6 kB | áno |
-| /modernizacia-vytahov/ | modernizacia-vytahov/index.html | 36.9 kB | áno |
-| /havarijna-sluzba/ | havarijna-sluzba/index.html | 32.1 kB | áno |
-| /o-nas/ | o-nas/index.html | 28.4 kB | áno |
-| /referencie/ | referencie/index.html | 22.5 kB | áno |
-| /kariera/ | kariera/index.html | 19.9 kB | áno |
-| /kontakt/ | kontakt/index.html | 27.4 kB | áno |
-| /poradna/ | poradna/index.html | 28.5 kB | áno |
-| /ochrana-osobnych-udajov/ | ochrana-osobnych-udajov/index.html | 18.5 kB | áno |
-| /404.html | 404.html | 21.5 kB | nie |
+| / | index.html | 47.0 kB | áno |
+| /servis-vytahov/ | servis-vytahov/index.html | 38.4 kB | áno |
+| /opravy-vytahov/ | opravy-vytahov/index.html | 36.7 kB | áno |
+| /odborne-prehliadky-a-skusky/ | odborne-prehliadky-a-skusky/index.html | 36.8 kB | áno |
+| /modernizacia-vytahov/ | modernizacia-vytahov/index.html | 37.1 kB | áno |
+| /havarijna-sluzba/ | havarijna-sluzba/index.html | 32.3 kB | áno |
+| /o-nas/ | o-nas/index.html | 28.6 kB | áno |
+| /referencie/ | referencie/index.html | 22.7 kB | áno |
+| /kariera/ | kariera/index.html | 20.1 kB | áno |
+| /kontakt/ | kontakt/index.html | 27.6 kB | áno |
+| /poradna/ | poradna/index.html | 28.7 kB | áno |
+| /ochrana-osobnych-udajov/ | ochrana-osobnych-udajov/index.html | 18.7 kB | áno |
+| /404.html | 404.html | 21.7 kB | nie |
 
-CSS: 7 vrstiev → `css/main.css` (69.9 kB)
+CSS: 7 vrstiev → `css/main.css` (72.3 kB)
 Sitemap: 12 URL
 
 ## Komponenty skryté pre chýbajúce dáta

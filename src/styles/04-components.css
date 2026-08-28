@@ -77,14 +77,16 @@
   --btn-border: var(--color-line-strong);
 }
 
+/* Sekundárne tlačidlo na farebnej ploche. Farby berie z lokálne
+   prepnutých tokenov, takže funguje na žltej aj na červenkastej. */
 .btn--ghost-invert {
   --btn-bg: transparent;
   --btn-fg: var(--color-text-invert);
-  --btn-border: rgba(255, 255, 255, 0.28);
+  --btn-border: var(--color-line-invert);
 }
 .btn--ghost-invert:hover {
-  --btn-bg: rgba(255, 255, 255, 0.08);
-  --btn-border: rgba(255, 255, 255, 0.5);
+  --btn-bg: rgba(11, 15, 20, 0.06);
+  --btn-border: var(--color-ink-900);
 }
 
 .btn--emergency {
@@ -120,8 +122,16 @@
 .hero {
   position: relative;
   overflow: hidden;
-  background: var(--color-ink-900);
-  color: var(--color-text-invert);
+  background: var(--color-hero-bg);
+  color: var(--color-text);
+  border-bottom: 1px solid var(--color-line);
+
+  /* Sekcia bola pôvodne tmavá. Namiesto prepisovania desiatok pravidiel
+     vnútri prepneme „invertované" tokeny na svetlý povrch — potomkovia
+     sa prispôsobia sami. */
+  --color-text-invert: var(--color-ink-900);
+  --color-text-invert-muted: var(--color-steel-500);
+  --color-line-invert: var(--color-line-strong);
   padding-block: clamp(3rem, 2rem + 5vw, 6rem) clamp(3.5rem, 2.5rem + 5vw, 6.5rem);
 }
 
@@ -130,8 +140,8 @@
   content: "";
   position: absolute;
   inset: 0;
-  background-image: linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-image: linear-gradient(rgba(11, 15, 20, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(11, 15, 20, 0.055) 1px, transparent 1px);
   background-size: 72px 72px;
   mask-image: radial-gradient(ellipse 80% 70% at 70% 30%, #000 30%, transparent 100%);
   pointer-events: none;
@@ -166,14 +176,22 @@
 }
 
 .hero__title {
-  color: #fff;
+  color: var(--color-ink-900);
   font-size: var(--text-4xl);
   max-width: 16ch;
 }
 
+/* Zvýraznená časť nadpisu.
+   Žltý TEXT na svetlom podklade by mal kontrast 1,6:1, preto je žltá
+   POD textom ako zvýrazňovač — tmavý text na žltej má 11,5:1. */
 .hero__title em {
   font-style: normal;
-  color: var(--color-yellow-500);
+  color: var(--color-ink-900);
+  background: var(--color-yellow-500);
+  padding: 0 0.14em;
+  margin: 0 -0.04em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
 }
 
 .hero__lead {
@@ -270,8 +288,8 @@
   left: 22%;
   right: 22%;
   height: 18%;
-  border: 1.5px solid var(--color-yellow-500);
-  background: rgba(255, 198, 26, 0.1);
+  border: 1.5px solid var(--color-yellow-600);
+  background: var(--color-yellow-500);
   animation: ride 9s var(--ease-in-out) infinite;
 }
 
@@ -326,13 +344,17 @@
 }
 
 .page-hero--emergency {
-  background: var(--color-ink-900);
-  color: var(--color-text-invert);
-  border-bottom: 0;
+  background: var(--color-danger-tint);
+  color: var(--color-text);
+  border-bottom: 1px solid var(--color-danger-line);
+
+  --color-text-invert: var(--color-ink-900);
+  --color-text-invert-muted: #7d3a30;
+  --color-line-invert: var(--color-danger-line);
 }
 
 .page-hero--emergency .page-hero__title {
-  color: #fff;
+  color: var(--color-ink-900);
 }
 
 .page-hero--emergency .page-hero__lead {
@@ -491,7 +513,7 @@
   font-size: var(--text-xs);
   letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
-  color: var(--color-steel-400);
+  color: var(--color-steel-500);
 }
 
 .card__cta {
@@ -560,22 +582,29 @@
   padding: 0;
 }
 
+/* Najhodnotnejšia konverzia na webe. Pôvodne to bola tmavá plocha —
+   teraz je to plná značková žltá, takže sekcia zostáva najvýraznejším
+   blokom stránky aj bez čierneho podkladu. */
 .acquisition {
   position: relative;
   display: grid;
   gap: var(--space-xl);
   padding: clamp(2.5rem, 1.8rem + 4vw, 4.5rem) clamp(1.5rem, 1rem + 3vw, 4rem);
-  background: var(--color-ink-800);
-  color: var(--color-text-invert);
+  background: var(--color-yellow-500);
+  color: var(--color-ink-900);
   border-radius: var(--radius-lg);
   overflow: hidden;
+
+  --color-text-invert: var(--color-ink-900);
+  --color-text-invert-muted: #5a4200;      /* na žltej, kontrast 6:1 */
+  --color-line-invert: rgba(11, 15, 20, 0.28);
 }
 
 .acquisition::before {
   content: "";
   position: absolute;
   inset: 0;
-  background-image: linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-image: linear-gradient(90deg, rgba(11, 15, 20, 0.06) 1px, transparent 1px);
   background-size: 56px 100%;
   pointer-events: none;
 }
@@ -586,7 +615,7 @@
 }
 
 .acquisition__title {
-  color: #fff;
+  color: var(--color-ink-900);
   font-size: var(--text-2xl);
   max-width: 18ch;
 }
@@ -616,8 +645,8 @@
   left: 0;
   top: 0.6em;
   width: 8px;
-  height: 1px;
-  background: var(--color-yellow-500);
+  height: 2px;
+  background: var(--color-ink-900);
 }
 
 .acquisition__actions {
@@ -740,9 +769,15 @@
    HAVARIJNÁ SEKCIA
    ------------------------------------------------------------------ */
 
+/* Naliehavosť nesie červená, nie tmavé pozadie. */
 .section--emergency {
-  background: var(--color-ink-900);
-  color: var(--color-text-invert);
+  background: var(--color-danger-tint);
+  color: var(--color-text);
+  border-block: 1px solid var(--color-danger-line);
+
+  --color-text-invert: var(--color-ink-900);
+  --color-text-invert-muted: #7d3a30;
+  --color-line-invert: var(--color-danger-line);
 }
 
 .emergency {
@@ -752,7 +787,7 @@
 }
 
 .emergency__title {
-  color: #fff;
+  color: var(--color-ink-900);
   font-size: var(--text-xl);
   max-width: 24ch;
 }
@@ -777,9 +812,8 @@
   background: repeating-linear-gradient(
     -45deg,
     var(--color-danger-500) 0 10px,
-    var(--color-ink-900) 10px 20px
+    transparent 10px 20px
   );
-  opacity: 0.85;
 }
 
 /* ------------------------------------------------------------------
@@ -961,7 +995,7 @@
 .related__link > .icon {
   width: 16px;
   height: 16px;
-  color: var(--color-steel-400);
+  color: var(--color-steel-500);
   transition: transform var(--dur-base) var(--ease-out);
 }
 

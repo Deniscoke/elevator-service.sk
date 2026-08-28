@@ -93,13 +93,14 @@
   background: var(--color-line-invert);
 }
 
-.eyebrow--invert .eyebrow__num,
-.eyebrow--danger .eyebrow__num {
-  color: var(--color-yellow-500);
+/* Číslo sekcie na farebnej ploche. Berie farbu z lokálne prepnutých
+   tokenov, takže na žltej je tmavé a nezmizne v podklade. */
+.eyebrow--invert .eyebrow__num {
+  color: var(--color-text-invert);
 }
 
 .eyebrow--danger .eyebrow__num {
-  color: var(--color-danger-400);
+  color: var(--color-danger-600);
 }
 
 .section__more {
@@ -163,10 +164,7 @@
   fill: var(--color-ink-900);
 }
 
-.site-footer .logo__wing--ink,
-.page-hero--emergency .logo__wing--ink {
-  fill: #ffffff;
-}
+/* Značka je na svetlom podklade všade rovnaká. */
 
 .logo__text {
   display: flex;
@@ -413,7 +411,7 @@
   font-size: var(--text-xs);
   letter-spacing: var(--tracking-wider);
   text-transform: uppercase;
-  color: var(--color-steel-400);
+  color: var(--color-steel-500);
 }
 
 .mobile-menu__list a {
@@ -478,8 +476,15 @@
 
 .site-footer {
   padding-block: var(--space-2xl) var(--space-lg);
-  background: var(--color-ink-900);
-  color: var(--color-text-invert-muted);
+  background: var(--color-footer-bg);
+  color: var(--color-text-muted);
+  border-top: 1px solid var(--color-line);
+
+  /* Pätička bola tmavá — prepnutím tokenov sa všetko vnútri
+     prispôsobí svetlému povrchu bez zásahu do jednotlivých pravidiel. */
+  --color-text-invert: var(--color-ink-900);
+  --color-text-invert-muted: var(--color-steel-500);
+  --color-line-invert: var(--color-line-strong);
   /* Aby sticky lišta na mobile neprekryla poslednú položku. */
   padding-bottom: calc(var(--space-lg) + var(--sticky-bar-h, 0px));
 }
@@ -493,15 +498,11 @@
 
 .site-footer .logo,
 .site-footer .logo__name {
-  color: var(--color-text-invert);
-}
-
-.site-footer .logo__mark {
-  color: var(--color-yellow-500);
+  color: var(--color-ink-900);
 }
 
 .site-footer .logo__name--accent {
-  color: var(--color-yellow-500);
+  color: var(--color-accent-text);
 }
 
 .site-footer__claim {
@@ -517,7 +518,7 @@
   font-weight: var(--weight-medium);
   letter-spacing: var(--tracking-wider);
   text-transform: uppercase;
-  color: var(--color-steel-400);
+  color: var(--color-steel-500);
 }
 
 .site-footer__list {
@@ -547,7 +548,7 @@
   width: 18px;
   height: 18px;
   margin-top: 3px;
-  color: var(--color-steel-400);
+  color: var(--color-steel-500);
 }
 
 .site-footer__bottom {
@@ -618,6 +619,14 @@
 .sticky-bar__btn--emergency {
   background: var(--color-danger-600);
   color: #fff;
+}
+
+/* Žltý pás nad pätičkou — nesie váhu, ktorú predtým držal tmavý podklad. */
+.site-footer::before {
+  content: "";
+  display: block;
+  height: 4px;
+  background: var(--color-yellow-500);
 }
 
 .sticky-bar__btn--full {

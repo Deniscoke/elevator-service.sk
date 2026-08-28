@@ -87,7 +87,7 @@
 }
 
 .input:hover {
-  border-color: var(--color-steel-400);
+  border-color: var(--color-steel-500);
 }
 
 .input:focus {
@@ -276,7 +276,7 @@
 
 .form__status--info {
   background: var(--color-surface-alt);
-  border-color: var(--color-steel-400);
+  border-color: var(--color-steel-500);
   color: var(--color-text);
 }
 

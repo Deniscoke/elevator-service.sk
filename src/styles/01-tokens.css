@@ -27,6 +27,11 @@
   --color-surface-sunk: #eceff3;
   --color-surface-dark: var(--color-ink-900);
 
+  /* Povrchy, ktoré boli pôvodne tmavé. Klient si vyžiadal svetlý web,
+     takže vizuálnu váhu nesie typografia a žlté plochy, nie čierne pozadie. */
+  --color-hero-bg: #f2f5f7;
+  --color-footer-bg: #eef1f4;
+
   /* ---- farby: akcent (žltá z loga) --------------------------------
 
      Žltá je prevzatá z logotypu — malá šípka vľavo.
@@ -53,6 +58,8 @@
      byť rozoznateľné od bežného CTA.
      ---------------------------------------------------------------- */
   --color-danger-600: #b3200f;
+  --color-danger-tint: #fdf3f1;  /* svetlý podklad havarijnej sekcie */
+  --color-danger-line: #f2d3cd;
   --color-danger-500: #d92c1a;
   --color-danger-400: #ff6a55;
 

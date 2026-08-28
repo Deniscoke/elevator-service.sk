@@ -124,13 +124,8 @@ b {
   border-radius: var(--radius-sm);
 }
 
-/* Na tmavom podklade potrebuje fokus svetlejšiu farbu. */
-.section--emergency :focus-visible,
-.acquisition :focus-visible,
-.site-footer :focus-visible,
-.hero :focus-visible {
-  outline-color: #8ab4ff;
-}
+/* Povrchy sú svetlé, takže fokus si vystačí s jednou farbou.
+   (Historicky tu bol svetlejší variant pre tmavé sekcie.) */
 
 /* ---- prístupnostné pomôcky --------------------------------------- */
 

@@ -27,9 +27,11 @@ function logo(company, { inverse = false } = {}) {
   }
   return `
     <span class="logo__mark" aria-hidden="true">
-      <svg width="42" height="26" viewBox="0 0 84 52" fill="none">
-        <path d="M40 40 L 8 40 L 20 30 L 52 30 Z" class="logo__wing logo__wing--accent"/>
-        <path d="M78 6 L 46 36 L 14 36 L 34 22 Z" class="logo__wing logo__wing--ink"/>
+      <svg width="54" height="25" viewBox="0 0 132 62" fill="none">
+        <path d="M100 0 L 34 38 L 0 38 L 46 18 Z" class="logo__wing logo__wing--accent"
+              transform="translate(0 24) scale(0.5)"/>
+        <path d="M100 0 L 34 38 L 0 38 L 46 18 Z" class="logo__wing logo__wing--ink"
+              transform="translate(32 0)"/>
       </svg></span>
     <span class="logo__text">
       <span class="logo__name">ELEVÁTOR</span><span class="logo__name logo__name--accent">SERVIS</span>
