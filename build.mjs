@@ -137,6 +137,7 @@ async function buildPages() {
       crumbs: page.crumbs,
       schemas: page.schemas,
       main: page.main,
+      floors: page.floors || null,
       noindex: page.noindex,
       extraHead: page.extraHead || '',
       extraScripts: page.extraScripts || '',

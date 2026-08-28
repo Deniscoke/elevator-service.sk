@@ -1,6 +1,6 @@
 # Build report
 
-Vygenerované: 2026-08-28 08:16
+Vygenerované: 2026-08-28 08:42
 Režim: náhľadový
 Doména: https://www.elevatorservis.sk
 Servisná oblasť: Banská Bystrica a okolie do 80 km
@@ -11,11 +11,11 @@ Servisná oblasť: Banská Bystrica a okolie do 80 km
 
 | Stránka | Súbor | Veľkosť | V sitemap |
 | --- | --- | ---: | :---: |
-| / | index.html | 47.0 kB | áno |
-| /servis-vytahov/ | servis-vytahov/index.html | 38.4 kB | áno |
-| /opravy-vytahov/ | opravy-vytahov/index.html | 36.7 kB | áno |
-| /odborne-prehliadky-a-skusky/ | odborne-prehliadky-a-skusky/index.html | 36.8 kB | áno |
-| /modernizacia-vytahov/ | modernizacia-vytahov/index.html | 37.1 kB | áno |
+| / | index.html | 49.1 kB | áno |
+| /servis-vytahov/ | servis-vytahov/index.html | 40.0 kB | áno |
+| /opravy-vytahov/ | opravy-vytahov/index.html | 38.3 kB | áno |
+| /odborne-prehliadky-a-skusky/ | odborne-prehliadky-a-skusky/index.html | 38.4 kB | áno |
+| /modernizacia-vytahov/ | modernizacia-vytahov/index.html | 38.7 kB | áno |
 | /havarijna-sluzba/ | havarijna-sluzba/index.html | 32.3 kB | áno |
 | /o-nas/ | o-nas/index.html | 28.6 kB | áno |
 | /referencie/ | referencie/index.html | 22.7 kB | áno |
@@ -25,7 +25,7 @@ Servisná oblasť: Banská Bystrica a okolie do 80 km
 | /ochrana-osobnych-udajov/ | ochrana-osobnych-udajov/index.html | 18.7 kB | áno |
 | /404.html | 404.html | 21.7 kB | nie |
 
-CSS: 7 vrstiev → `css/main.css` (72.3 kB)
+CSS: 7 vrstiev → `css/main.css` (75.4 kB)
 Sitemap: 12 URL
 
 ## Komponenty skryté pre chýbajúce dáta

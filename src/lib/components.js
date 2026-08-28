@@ -157,14 +157,11 @@ export function acquisition({ index = '03' } = {}) {
             ${btn('Ako prebieha prevzatie', '/servis-vytahov/#ako-to-prebieha', { variant: 'ghost-invert' })}
           </div>
         </div>
-        <div class="acquisition__aside" aria-hidden="true">
-          <div class="shaft">
-            <span class="shaft__rail"></span><span class="shaft__rail"></span>
-            <span class="shaft__car"></span>
-            <span class="shaft__floor"></span><span class="shaft__floor"></span>
-            <span class="shaft__floor"></span><span class="shaft__floor"></span>
-          </div>
-        </div>
+        <figure class="acquisition__aside">
+          <img src="/assets/foto/servis-strojovna.jpg" width="1400" height="910"
+               alt="Strojovňa výťahu s trakčným strojom a nosnými lanami"
+               loading="lazy" decoding="async">
+        </figure>
       </div>
     </div>
   </section>`;
@@ -508,4 +505,43 @@ export function relatedServices(currentId, { heading = 'Súvisiace služby' } = 
       </ul>
     </div>
   </section>`;
+}
+
+
+/* ------------------------------------------------------------------ */
+/*  Výťah ako navigácia po sekciách                                    */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Bočný indikátor pozície na stránke v podobe výťahu.
+ *
+ * Nie je to dekorácia — je to skutočná navigácia. Každá sekcia je
+ * poschodie, kabína medzi nimi cestuje podľa toho, kde sa čitateľ
+ * nachádza, a dá sa na ne klikať aj prechádzať klávesnicou.
+ *
+ * Poschodia dodáva stránka, nie komponent, aby zoznam vždy zodpovedal
+ * sekciám, ktoré sa naozaj vykreslili (napr. referencie sa skrývajú).
+ */
+export function floorNav(floors) {
+  if (!isSet(floors) || floors.length < 3) return '';
+
+  return `
+  <nav class="floors" aria-label="Sekcie stránky" data-floors>
+    <span class="floors__display" data-floor-display aria-hidden="true">P</span>
+    <div class="floors__shaft">
+      <span class="floors__car" data-floor-car aria-hidden="true"></span>
+      <ul class="floors__list">
+        ${map(
+          floors,
+          (f) => `
+        <li class="floors__item">
+          <a class="floors__link" href="#${esc(f.id)}" data-floor="${esc(f.num)}">
+            <span class="floors__tick" aria-hidden="true"></span>
+            <span class="floors__label">${esc(f.num)} · ${esc(f.label)}</span>
+          </a>
+        </li>`
+        )}
+      </ul>
+    </div>
+  </nav>`;
 }

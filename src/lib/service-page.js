@@ -200,8 +200,17 @@ export function buildServicePage(ctx, spec) {
     }),
   ].join('\n');
 
+  const floors = [
+    { num: '02', id: 'kedy',            label: 'Kedy to riešiť' },
+    { num: '03', id: 'rozsah',          label: 'Rozsah' },
+    { num: '04', id: 'ako-to-prebieha', label: 'Postup' },
+    { num: '05', id: 'pre-koho',        label: 'Pre koho' },
+    { num: '06', id: 'faq',             label: 'Otázky' },
+  ];
+
   return {
     path: s.path,
+    floors,
     title: s.metaTitle,
     description: s.metaDescription,
     crumbs,

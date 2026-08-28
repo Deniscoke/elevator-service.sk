@@ -60,14 +60,11 @@ export default function page(ctx) {
           <li>${icon('upgrade')}<span>Modernizácia a rekonštrukcia</span></li>
         </ul>
       </div>
-      <div class="hero__visual" aria-hidden="true">
-        <div class="shaft">
-          <span class="shaft__rail"></span><span class="shaft__rail"></span>
-          <span class="shaft__car"></span>
-          <span class="shaft__floor"></span><span class="shaft__floor"></span>
-          <span class="shaft__floor"></span><span class="shaft__floor"></span>
-        </div>
-      </div>
+      <figure class="hero__visual">
+        <img src="/assets/foto/servis-rozvadzac.jpg" width="1400" height="1032"
+             alt="Servisný technik nastavuje rozvádzač výťahu v strojovni bytového domu"
+             fetchpriority="high" decoding="async">
+      </figure>
     </div>
   </section>`;
 
@@ -98,8 +95,22 @@ export default function page(ctx) {
     }),
   ].join('\n');
 
+  /* Poschodia pre bočnú navigáciu. Čísla musia zodpovedať číslam
+     sekcií v obsahu — 06 chýba, lebo referencie sú zatiaľ skryté. */
+  const floors = [
+    { num: '01', id: 'problemy',        label: 'Situácie' },
+    { num: '02', id: 'sluzby',          label: 'Služby' },
+    { num: '03', id: 'novy-servis',     label: 'Nový servis' },
+    { num: '04', id: 'ako-to-prebieha', label: 'Postup' },
+    { num: '05', id: 'pre-koho',        label: 'Pre koho' },
+    { num: '07', id: 'havaria',         label: 'Havária' },
+    { num: '08', id: 'kariera',         label: 'Kariéra' },
+    { num: '09', id: 'faq',             label: 'Otázky' },
+  ];
+
   return {
     path: '/',
+    floors,
     title: `Servis výťahov Banská Bystrica | ${company.legalName}`,
     description:
       'Servis, opravy, odborné prehliadky a modernizácia výťahov v Banskej Bystrici a okolí. Pre bytové domy, správcov aj firmy. Vyžiadajte si nezáväznú ponuku.',

@@ -8,6 +8,7 @@
 
 import { esc, isSet, when, map, telHref, absoluteUrl } from './html.js';
 import { icon } from './icons.js';
+import { floorNav } from './components.js';
 import { renderHead, renderSchemas } from './seo.js';
 import { services } from '../../data/services.js';
 
@@ -301,6 +302,7 @@ export function renderPage({
   crumbs = null,
   schemas = [],
   main,
+  floors = null,
   noindex = false,
   extraHead = '',
   extraScripts = '',
@@ -316,6 +318,7 @@ ${renderSchemas(company, schemas)}
   <a class="skip-link" href="#obsah">Preskočiť na obsah</a>
 ${header(company, path)}
 ${breadcrumbs(crumbs)}
+${floorNav(floors)}
   <main id="obsah">
 ${main}
   </main>

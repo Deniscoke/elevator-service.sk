@@ -53,7 +53,7 @@ Aktuálny stav generuje build → [BUILD_REPORT.md](./BUILD_REPORT.md).
 | | Údaj | Kam | Stav podľa dotazníka |
 |---|---|---|---|
 | ⚪ | **Súhlasy s referenciami** | `references.js` → `consent: true` | „Pri každej referencii sa treba najskôr dohodnúť" — pripravené sú SBD BB, REALBYT V. K., FILBYT Fiľakovo |
-| ⚪ | Fotografie firmy a prác | `assets/` | „Pravdepodobne áno" |
+| ⚪ | **Reálne fotografie firmy a prác** | `static/assets/foto/` | „Pravdepodobne áno". ⚠️ Web momentálne používa **AI generované ilustračné fotografie** — nie sú to zábery tejto firmy. Treba ich nahradiť reálnymi, viď poznámku nižšie |
 | ⚪ | Počet technikov | `stats.technicians` | Nebolo v dotazníku |
 | ⚪ | Rok založenia | `stats.foundedYear` | Nebolo v dotazníku |
 | ⚪ | Pracovné hodiny kancelárie | `openingHours` | Havarijná linka je nonstop, kancelária neuvedená |
@@ -63,6 +63,20 @@ Aktuálny stav generuje build → [BUILD_REPORT.md](./BUILD_REPORT.md).
 | ⚪ | DIČ / IČ DPH | `legal.dic`, `legal.icDph` | — |
 | ⚪ | Doba uchovávania údajov z formulára | `ochrana-osobnych-udajov.js` | Sekcia sa nevykreslí, kým nie je odpoveď |
 | ⚪ | Príjemcovia osobných údajov | tamtiež | — |
+
+---
+
+## ⚠️ Ilustračné fotografie
+
+V `static/assets/foto/` sú štyri **AI generované** fotografie (strojovňa,
+rozvádzač, ruky technika, kabína). Slúžia ako ilustrácia, aby web nebol
+prázdny — nezobrazujú túto firmu, jej zamestnancov ani jej realizácie
+a nikde sa netvrdí, že áno.
+
+Pred spustením webu ich odporúčam nahradiť reálnymi zábermi. Stačia
+fotky z mobilu: strojovňa, rozvádzač, technik pri práci, hotová kabína.
+Rozmery a orezy sú v kóde nastavené, takže výmena je len o nahradení
+súborov rovnakých názvov.
 
 ---
 
