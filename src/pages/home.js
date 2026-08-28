@@ -95,22 +95,8 @@ export default function page(ctx) {
     }),
   ].join('\n');
 
-  /* Poschodia pre bočnú navigáciu. Čísla musia zodpovedať číslam
-     sekcií v obsahu — 06 chýba, lebo referencie sú zatiaľ skryté. */
-  const floors = [
-    { num: '01', id: 'problemy',        label: 'Situácie' },
-    { num: '02', id: 'sluzby',          label: 'Služby' },
-    { num: '03', id: 'novy-servis',     label: 'Nový servis' },
-    { num: '04', id: 'ako-to-prebieha', label: 'Postup' },
-    { num: '05', id: 'pre-koho',        label: 'Pre koho' },
-    { num: '07', id: 'havaria',         label: 'Havária' },
-    { num: '08', id: 'kariera',         label: 'Kariéra' },
-    { num: '09', id: 'faq',             label: 'Otázky' },
-  ];
-
   return {
     path: '/',
-    floors,
     title: `Servis výťahov Banská Bystrica | ${company.legalName}`,
     description:
       'Servis, opravy, odborné prehliadky a modernizácia výťahov v Banskej Bystrici a okolí. Pre bytové domy, správcov aj firmy. Vyžiadajte si nezáväznú ponuku.',

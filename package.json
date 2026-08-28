@@ -8,8 +8,10 @@
   "scripts": {
     "build": "node build.mjs",
     "build:prod": "node build.mjs --prod",
+    "build:dev": "node build.mjs --dev",
     "dev": "node build.mjs && node serve.mjs",
     "serve": "node serve.mjs",
-    "check": "node build.mjs --prod --dry"
+    "check": "node build.mjs --prod --dry",
+    "qa": "node build.mjs && node qa.mjs"
   }
 }

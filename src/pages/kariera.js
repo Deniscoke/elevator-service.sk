@@ -19,7 +19,7 @@ import { organizationSchema, breadcrumbSchema } from '../lib/seo.js';
 import { positions, benefits, acceptsOpenApplications, whatWePublish } from '../../data/careers.js';
 
 export default function page(ctx) {
-  const { company } = ctx;
+  const { company, isDev } = ctx;
   const open = isSet(positions);
 
   const crumbs = [
@@ -121,7 +121,7 @@ export default function page(ctx) {
         title: 'Nenašli ste vhodnú pozíciu?',
         lead: 'Ozvite sa aj tak. Ak nás oslovíte, ozveme sa, keď sa niečo otvorí.',
       })}
-      ${inquiryForm(company, { context: 'kariera' })}
+      ${inquiryForm(company, { context: 'kariera', isDev })}
     </div>
   </section>`
   );

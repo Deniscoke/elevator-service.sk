@@ -48,10 +48,11 @@ export function renderHead({ company, title, description, path, noindex = false,
   <meta name="twitter:card" content="summary_large_image">
 
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-  <link rel="mask-icon" href="/assets/favicon.svg" color="#0b0f14">
+  <link rel="mask-icon" href="/assets/favicon.svg" color="#12161c">
   <link rel="manifest" href="/site.webmanifest">
-  <meta name="theme-color" content="#0b0f14">
+  <meta name="theme-color" content="#fbfaf8">
 
+  <link rel="preload" href="/assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/css/main.css" as="style">
   <link rel="stylesheet" href="/css/main.css">
 ${extraHead}`.trim();

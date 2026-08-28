@@ -117,8 +117,14 @@ vznikol by odkaz do prázdna alebo falošný údaj. S `null` sa komponent
 Jeden HTTP request, žiadny `@import` reťazec, žiadny build nástroj.
 V produkcii sa odstránia komentáre a odsadenie; zvyšok vyrieši gzip.
 
-**Farby sú dočasné** — firemné farby zatiaľ nemáme. Po ich dodaní sa mení
-iba `01-tokens.css`.
+Farby vychádzajú zo značky: žltá `#FFC61A` z loga a grafit `#12161C`.
+Po dodaní presných firemných farieb sa mení iba `01-tokens.css`.
+
+**Tmavé sekcie** používajú triedu `.on-dark`, ktorá lokálne prepne tokeny
+(`--text`, `--border`, `--accent-text`…). Potomkovia sa prispôsobia sami,
+takže žiadne pravidlo netreba písať dvakrát. Pozadie berie zo samostatného
+tokenu `--surface-dark` — `--ink-900` je vnútri `.on-dark` prepísaná na bielu
+a pozadie by z nej vyšlo biele.
 
 ---
 

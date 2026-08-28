@@ -21,6 +21,8 @@ Zbuilduje web a spustí náhľad na `http://localhost:4173`.
 | `npm run build` | Náhľadový build → `dist/`. Chýbajúce údaje hlási ako varovania. |
 | `npm run build:prod` | Produkčný build. **Zlyhá**, ak chýbajú kritické údaje. |
 | `npm run check` | Kontrola pripravenosti bez zápisu na disk. |
+| `npm run build:dev` | Build s internými upozorneniami pre vývojára (nie pre klienta). |
+| `npm run qa` | Build + statická kontrola SEO, odkazov, obrázkov a CSS tokenov. |
 | `npm run dev` | Build + lokálny náhľad. |
 | `npm run serve` | Len náhľad už zbuildovaného `dist/`. |
 
@@ -105,10 +107,11 @@ je web plne čitateľný.
 
 ## Prístupnosť a výkon
 
+- typografia: Archivo (variabilný rez 400–700), hostovaná lokálne, 68 kB
 - semantické HTML, jeden `H1` na stránku, drobčeková navigácia
 - skip link, viditeľný fokus, pasca fokusu v mobilnom menu
 - dotykové ciele min. 44 px, veľkosť písma v poliach 16 px (bez zoomu na iOS)
-- žiadne externé fonty, skripty ani sledovacie nástroje
+- žiadne externé skripty, CDN ani sledovacie nástroje
 - jeden CSS súbor, dva malé JS súbory, obe `defer`
 - `prefers-reduced-motion` sa rešpektuje globálne
 - bez horizontálneho scrollu od 320 px vyššie

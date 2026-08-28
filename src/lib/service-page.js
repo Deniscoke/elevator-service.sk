@@ -52,7 +52,7 @@ export function buildServicePage(ctx, spec) {
   <section class="page-hero${spec.heroVariant ? ' page-hero--' + esc(spec.heroVariant) : ''}">
     <div class="container">
       <div class="page-hero__inner">
-        <p class="eyebrow${spec.heroVariant === 'emergency' ? ' eyebrow--danger' : ''}">
+        <p class="eyebrow">
           <span class="eyebrow__num">${esc(s.icon === 'alert' ? '!' : '01')}</span>${esc(s.navLabel)}
         </p>
         <h1 class="page-hero__title">${esc(s.h1)}</h1>
@@ -200,17 +200,8 @@ export function buildServicePage(ctx, spec) {
     }),
   ].join('\n');
 
-  const floors = [
-    { num: '02', id: 'kedy',            label: 'Kedy to riešiť' },
-    { num: '03', id: 'rozsah',          label: 'Rozsah' },
-    { num: '04', id: 'ako-to-prebieha', label: 'Postup' },
-    { num: '05', id: 'pre-koho',        label: 'Pre koho' },
-    { num: '06', id: 'faq',             label: 'Otázky' },
-  ];
-
   return {
     path: s.path,
-    floors,
     title: s.metaTitle,
     description: s.metaDescription,
     crumbs,

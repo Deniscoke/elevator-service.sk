@@ -21,7 +21,7 @@ import {
 import { serviceArea } from '../../data/locations.js';
 
 export default function page(ctx) {
-  const { company, serviceAreaLabel } = ctx;
+  const { company, serviceAreaLabel, isDev } = ctx;
 
   const crumbs = [
     { label: 'Domov', path: '/' },
@@ -127,7 +127,7 @@ export default function page(ctx) {
           </div>
           ${when(
             !serviceArea.confirmed,
-            () => `<p class="text-muted" style="font-size:var(--text-sm)">
+            () => `<p class="contact-card__note">
             Ak je váš objekt mimo Banskej Bystrice, napíšte nám aj tak — dostupnosť
             posúdime podľa konkrétnej lokality.
           </p>`
@@ -146,7 +146,7 @@ export default function page(ctx) {
             title: 'Povedzte nám o zariadení',
             lead: 'Vyplnenie zaberie približne minútu.',
           })}
-          ${inquiryForm(company, { context: 'dopyt' })}
+          ${inquiryForm(company, { context: 'dopyt', isDev })}
         </div>
         ${contactCard}${areaCard}
       </div>
@@ -158,7 +158,7 @@ export default function page(ctx) {
     <div class="container">
       <div class="emergency emergency--compact">
         <div class="emergency__content">
-          <p class="eyebrow eyebrow--danger"><span class="eyebrow__num">03</span>Havária</p>
+          <p class="eyebrow"><span class="eyebrow__num">03</span>Havária</p>
           <h2 class="emergency__title">Uviazol niekto vo výťahu?</h2>
           <p class="emergency__lead">
             Formulár nie je vhodný na riešenie havárie. Postup pri uviaznutí vo výťahu
@@ -178,7 +178,6 @@ export default function page(ctx) {
             }
           </div>
         </div>
-        <div class="emergency__stripe" aria-hidden="true"></div>
       </div>
     </div>
   </section>`;

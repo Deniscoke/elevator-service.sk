@@ -64,7 +64,7 @@ export default function page(ctx) {
   <section class="page-hero page-hero--emergency">
     <div class="container">
       <div class="page-hero__inner">
-        <p class="eyebrow eyebrow--danger"><span class="eyebrow__num">!</span>Havarijná služba</p>
+        <p class="eyebrow"><span class="eyebrow__num">!</span>Havarijná služba</p>
         <h1 class="page-hero__title">${esc(s.h1)}</h1>
         <p class="page-hero__lead">
           ${
@@ -90,9 +90,7 @@ export default function page(ctx) {
         </div>
         ${when(
           liveLine && isSet(company.emergency.hoursLabel),
-          () => `<p class="text-mono mt-lg" style="color:var(--color-text-invert-muted)">${esc(
-            company.emergency.hoursLabel
-          )}</p>`
+          () => `<p class="text-mono mt-lg text-muted">${esc(company.emergency.hoursLabel)}</p>`
         )}
       </div>
     </div>

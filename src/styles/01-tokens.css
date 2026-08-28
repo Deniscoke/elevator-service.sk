@@ -1,159 +1,272 @@
 /* ==================================================================
    01 · DESIGN TOKENS
+   INDUSTRIAL CLARITY WITH PREMIUM RESTRAINT
+
    Jediné miesto, kde sú definované hodnoty. Nikde inde v CSS
    nesmie byť „náhodná" farba, medzera ani veľkosť písma.
-
-   Paleta je DOČASNÁ — firemné farby zatiaľ nemáme (docs/MISSING_DATA.md).
-   Po ich dodaní sa mení len tento súbor.
    ================================================================== */
 
+/* ------------------------------------------------------------------
+   PÍSMO — Archivo, hostované lokálne
+
+   Variabilný rez 400–700 v dvoch podmnožinách. Prehliadač stiahne
+   latin-ext len vtedy, keď narazí na znak s diakritikou, takže
+   slovenčina nič nestojí navyše na stránke bez nej.
+
+   Prečo vlastný hosting a nie Google Fonts: o jedno DNS a TLS spojenie
+   menej, žiadna tretia strana v kritickej ceste vykreslenia a žiadny
+   externý zdroj v hlavičke.
+   ------------------------------------------------------------------ */
+
+@font-face {
+  font-family: "Archivo";
+  font-style: normal;
+  font-weight: 400 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/assets/fonts/archivo-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Archivo";
+  font-style: normal;
+  font-weight: 400 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/assets/fonts/archivo-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7,
+    U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF,
+    U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
 :root {
-  /* ---- farby: neutrálna os (grafit s modrým nádychom) ------------- */
-  --color-ink-900: #0b0f14;
-  --color-ink-800: #121820;
-  --color-ink-700: #1b232c;
-  --color-ink-600: #2a3542;
-  --color-steel-500: #54646f;
-  --color-steel-400: #7a8895;
-  --color-steel-300: #a9b4be;
-  --color-steel-200: #cbd3da;
+  /* ================================================================
+     FARBY
+     ================================================================ */
 
-  --color-line: #e2e7ec;
-  --color-line-strong: #cdd5dd;
-  --color-line-invert: rgba(255, 255, 255, 0.14);
+  /* ---- grafitová os: tmavé sekcie a text ------------------------- */
+  --ink-900: #12161c;
+  --ink-800: #1a2027;
+  --ink-700: #262e37;
+  --ink-600: #38424d;
 
-  --color-surface: #ffffff;
-  --color-surface-alt: #f4f6f8;
-  --color-surface-sunk: #eceff3;
-  --color-surface-dark: var(--color-ink-900);
+  /* ---- text ------------------------------------------------------ */
+  --text: #23292f;         /* 14,3:1 na podklade — hlavný text */
+  --text-muted: #5b6670;   /*  5,7:1 — sekundárny text */
+  --text-soft: #7c8791;    /*  3,6:1 — LEN veľký text a dekorácia */
+  --text-invert: #f2f0ec;
+  --text-invert-muted: #a8b0b8;
 
-  /* Povrchy, ktoré boli pôvodne tmavé. Klient si vyžiadal svetlý web,
-     takže vizuálnu váhu nesie typografia a žlté plochy, nie čierne pozadie. */
-  --color-hero-bg: #f2f5f7;
-  --color-footer-bg: #eef1f4;
+  /* ---- povrchy: teplá biela, nie studená sivá -------------------- */
+  --bg: #fbfaf8;
+  --bg-alt: #f3f1ec;
+  --bg-sunk: #eae7e0;
+  --surface: #ffffff;
+  /* Podklad tmavých sekcií. Zámerne samostatný token — nesmie ho
+     prepísať `.on-dark`, ktorá mení význam --ink-900. */
+  --surface-dark: #12161c;
 
-  /* ---- farby: akcent (žltá z loga) --------------------------------
+  /* ---- linky ------------------------------------------------------ */
+  --border: #e6e2da;
+  --border-strong: #d2cdc2;
+  --border-invert: rgba(255, 255, 255, 0.14);
 
-     Žltá je prevzatá z logotypu — malá šípka vľavo.
+  /* ---- akcent: priemyselná žltá zo značky -------------------------
 
-     POZOR na rolu tejto farby. Žltá #FFC61A má na bielej kontrast 1,6:1,
-     takže sa NIKDY nepoužíva ako farba textu na svetlom podklade.
-     Používa sa ako PLOCHA: žlté tlačidlo s tmavým textom má kontrast 12:1.
-     Na tmavom podklade žltá ako text funguje (11,9:1) a používa sa.
+     Žltá #FFC61A má na svetlom podklade kontrast 1,6:1, takže NIKDY
+     nie je farbou textu na svetlom. Je to farba PLOCHY a mikrolinky.
+     Na text v žltej rodine slúži --accent-text (6,4:1).
 
-     Ak treba akcentový TEXT na bielej, slúži na to --color-accent-text
-     (tmavý jantár, kontrast 5,6:1). Nikdy nie čistá žltá.
+     Po tomto redizajne sa používa striedmo: primárne CTA, tenké
+     accent linky, mikroštítky, aktívne stavy, ikony.
      ---------------------------------------------------------------- */
-  --color-yellow-500: #ffc61a;   /* značková žltá — plochy, nie text */
-  --color-yellow-600: #e8ad00;   /* hover žltej plochy */
-  --color-yellow-400: #ffd75e;   /* svetlejšia, na tmavom podklade */
-  --color-yellow-200: #ffe9a8;
-  --color-yellow-100: #fff8e3;   /* jemné tónovanie pozadia */
-  --color-accent-text: #8a6100;  /* akcentový TEXT na bielej, 5,6:1 */
+  --yellow: #ffc61a;
+  --yellow-dark: #e3ab00;
+  --yellow-tint: #fff6df;
+  --accent-text: #7a5600;
 
-  /* ---- farby: havária ---------------------------------------------
+  /* ---- havária: len a výhradne pre naliehavosť -------------------- */
+  --red: #b3200f;
+  --red-dark: #8c1809;
+  --red-tint: #fdf4f2;
+  --red-border: #f0d6d0;
 
-     Červená zostáva vyhradená výhradne pre naliehavosť. Žltá je značka,
-     červená je stav — keby sa role zliali, havarijné tlačidlo by prestalo
-     byť rozoznateľné od bežného CTA.
-     ---------------------------------------------------------------- */
-  --color-danger-600: #b3200f;
-  --color-danger-tint: #fdf3f1;  /* svetlý podklad havarijnej sekcie */
-  --color-danger-line: #f2d3cd;
-  --color-danger-500: #d92c1a;
-  --color-danger-400: #ff6a55;
+  /* ---- ostatné ----------------------------------------------------- */
+  --focus: #1f6feb;
+  /* Text na žltej ploche. Literál, nie var(--ink-900) — vnútri
+     .on-dark je --ink-900 biela a tlačidlo by stratilo kontrast. */
+  --on-accent: #12161c;
 
-  /* ---- sémantické aliasy ----------------------------------------- */
-  --color-primary: var(--color-ink-900);
-  --color-secondary: var(--color-steel-500);
-  --color-accent: var(--color-yellow-500);
-  --color-on-accent: var(--color-ink-900);
-  --color-background: var(--color-surface);
-  --color-text: var(--color-ink-800);
-  --color-text-muted: var(--color-steel-500);
-  --color-text-invert: #eef2f6;
-  --color-text-invert-muted: #a9b7c4;
-  --color-focus: #1f6feb;
+  /* ================================================================
+     TYPOGRAFIA
+     ================================================================ */
 
-  /* ---- typografia ------------------------------------------------- */
-  /* Systémový stack = nula font requestov. Miesto pre firemný font
-     je pripravené: stačí doplniť @font-face a prepísať --font-display. */
-  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, "Noto Sans", sans-serif;
-  --font-display: var(--font-sans);
+  --font-sans: "Archivo", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
     "Liberation Mono", monospace;
 
-  --text-xs: 0.75rem;
-  --text-sm: 0.875rem;
-  --text-base: 1rem;
-  --text-md: clamp(1.0625rem, 0.99rem + 0.35vw, 1.1875rem);
-  --text-lg: clamp(1.1875rem, 1.07rem + 0.55vw, 1.4375rem);
-  --text-xl: clamp(1.375rem, 1.18rem + 0.9vw, 1.875rem);
-  --text-2xl: clamp(1.625rem, 1.3rem + 1.5vw, 2.5rem);
-  --text-3xl: clamp(2rem, 1.45rem + 2.5vw, 3.25rem);
-  --text-4xl: clamp(2.25rem, 1.5rem + 3.4vw, 4rem);
+  /* Škála. Nadpisy majú väčšiu autoritu, telo je 17px — nie drobné. */
+  --fs-display: clamp(2.5rem, 1.75rem + 3.4vw, 4.5rem);
+  --fs-h1: clamp(2.05rem, 1.6rem + 2.1vw, 3.25rem);
+  --fs-h2: clamp(1.7rem, 1.4rem + 1.5vw, 2.5rem);
+  --fs-h3: clamp(1.125rem, 1.05rem + 0.4vw, 1.375rem);
+  --fs-lead: clamp(1.125rem, 1.04rem + 0.42vw, 1.3125rem);
+  --fs-body: 1.0625rem;
+  --fs-sm: 0.9375rem;
+  --fs-xs: 0.8125rem;
+  --fs-label: 0.75rem;
 
-  --leading-tight: 1.1;
-  --leading-snug: 1.25;
-  --leading-normal: 1.6;
-  --leading-relaxed: 1.75;
+  --lh-display: 1.03;
+  --lh-tight: 1.12;
+  --lh-snug: 1.3;
+  --lh-body: 1.65;
 
-  --tracking-tight: -0.02em;
-  --tracking-normal: 0;
-  --tracking-wide: 0.06em;
-  --tracking-wider: 0.14em;
+  --ls-display: -0.028em;
+  --ls-tight: -0.018em;
+  --ls-normal: 0;
+  --ls-label: 0.12em;
 
-  --weight-normal: 400;
-  --weight-medium: 500;
-  --weight-semibold: 600;
-  --weight-bold: 700;
+  --fw-normal: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
 
-  /* ---- spacing (4px základ) --------------------------------------- */
-  --space-3xs: 0.25rem;   /*  4px */
-  --space-2xs: 0.5rem;    /*  8px */
-  --space-xs: 0.75rem;    /* 12px */
-  --space-sm: 1rem;       /* 16px */
-  --space-md: 1.5rem;     /* 24px */
-  --space-lg: 2rem;       /* 32px */
-  --space-xl: 3rem;       /* 48px */
-  --space-2xl: 4rem;      /* 64px */
-  --space-3xl: 6rem;      /* 96px */
-  --space-4xl: 8rem;      /* 128px */
+  /* ================================================================
+     SPACING — jedna škála, žiadne náhodné hodnoty
+     ================================================================ */
 
-  --section-y: clamp(3.5rem, 2.2rem + 5vw, 7rem);
-  --section-y-tight: clamp(2.5rem, 1.8rem + 3vw, 4rem);
+  --space-1: 0.25rem;   /*   4 */
+  --space-2: 0.5rem;    /*   8 */
+  --space-3: 0.75rem;   /*  12 */
+  --space-4: 1rem;      /*  16 */
+  --space-5: 1.5rem;    /*  24 */
+  --space-6: 2rem;      /*  32 */
+  --space-7: 3rem;      /*  48 */
+  --space-8: 4rem;      /*  64 */
+  --space-9: 6rem;      /*  96 */
+  --space-10: 8rem;     /* 128 */
 
-  /* ---- rozmery ----------------------------------------------------- */
-  --container: 75rem;      /* 1200px */
-  --container-narrow: 48rem;
-  --gutter: clamp(1.25rem, 0.9rem + 1.4vw, 2.5rem);
-  --header-h: 4.5rem;
-  --tap-target: 2.75rem;   /* 44px minimum */
+  /* Sémantické aliasy — staršie pravidlá ich stále používajú. */
+  --space-3xs: var(--space-1);
+  --space-2xs: var(--space-2);
+  --space-xs: var(--space-3);
+  --space-sm: var(--space-4);
+  --space-md: var(--space-5);
+  --space-lg: var(--space-6);
+  --space-xl: var(--space-7);
+  --space-2xl: var(--space-8);
+  --space-3xl: var(--space-9);
+  --space-4xl: var(--space-10);
 
-  /* ---- rádiusy (tesné = technický charakter) ---------------------- */
-  --radius-sm: 2px;
-  --radius-md: 4px;
-  --radius-lg: 8px;
+  /* Rytmus sekcií. Whitespace má pôsobiť zámerne, nie nedokončene. */
+  --section-y: clamp(3.75rem, 2.6rem + 4.6vw, 6.5rem);
+  --section-y-tight: clamp(2.75rem, 2.1rem + 2.6vw, 4.25rem);
+
+  /* ================================================================
+     ROZMERY
+     ================================================================ */
+
+  --container: 77.5rem;        /* 1240px */
+  --container-narrow: 46rem;   /*  736px — meranie riadku 60–75 znakov */
+  --measure: 68ch;
+  --gutter: clamp(1.25rem, 0.85rem + 1.8vw, 2.75rem);
+  --header-h: 4.75rem;
+  --tap-target: 2.75rem;
+
+  /* ================================================================
+     RÁDIUSY — technické, nie SaaS pilulky
+     ================================================================ */
+
+  --radius-sm: 3px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
   --radius-pill: 999px;
 
-  /* ---- tiene (striedmo, prednosť majú linky) ---------------------- */
-  --shadow-sm: 0 1px 2px rgba(11, 15, 20, 0.06);
-  --shadow-md: 0 6px 20px -6px rgba(11, 15, 20, 0.14);
-  --shadow-lg: 0 24px 48px -24px rgba(11, 15, 20, 0.3);
+  /* ================================================================
+     TIENE — striedmo. Hierarchiu nesie linka a povrch, nie tieň.
+     ================================================================ */
 
-  /* ---- pohyb ------------------------------------------------------- */
+  --shadow-sm: 0 1px 2px rgba(18, 22, 28, 0.05);
+  --shadow-md: 0 10px 28px -14px rgba(18, 22, 28, 0.22);
+  --shadow-lg: 0 28px 60px -32px rgba(18, 22, 28, 0.34);
+
+  /* ================================================================
+     POHYB
+     ================================================================ */
+
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
-  --dur-fast: 140ms;
-  --dur-base: 240ms;
-  --dur-slow: 420ms;
+  --dur-fast: 130ms;
+  --dur-base: 220ms;
+  --dur-slow: 400ms;
 
-  /* ---- vrstvenie ---------------------------------------------------- */
+  /* ================================================================
+     VRSTVENIE
+     ================================================================ */
+
   --z-sticky-bar: 40;
   --z-header: 50;
   --z-menu: 60;
   --z-skip: 100;
+
+  /* ---- spätná kompatibilita starších názvov ---------------------- */
+  --color-ink-900: var(--ink-900);
+  --color-ink-800: var(--ink-800);
+  --color-ink-700: var(--ink-700);
+  --color-ink-600: var(--ink-600);
+  --color-steel-500: var(--text-muted);
+  --color-steel-400: var(--text-soft);
+  --color-steel-300: #b4bcc4;
+  --color-line: var(--border);
+  --color-line-strong: var(--border-strong);
+  --color-line-invert: var(--border-invert);
+  --color-surface: var(--surface);
+  --color-surface-alt: var(--bg-alt);
+  --color-surface-sunk: var(--bg-sunk);
+  --color-background: var(--bg);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-text-invert: var(--text-invert);
+  --color-text-invert-muted: var(--text-invert-muted);
+  --color-yellow-500: var(--yellow);
+  --color-yellow-600: var(--yellow-dark);
+  --color-yellow-100: var(--yellow-tint);
+  --color-yellow-200: #ffe6a8;
+  --color-accent-text: var(--accent-text);
+  --color-accent: var(--yellow);
+  --color-danger-600: var(--red);
+  --color-danger-500: #cf2a16;
+  --color-danger-400: #e8543f;
+  --color-danger-tint: var(--red-tint);
+  --color-danger-line: var(--red-border);
+  --color-focus: var(--focus);
+  --color-hero-bg: var(--bg);
+  --color-footer-bg: var(--ink-900);
+  --font-display: var(--font-sans);
+  --text-xs: var(--fs-xs);
+  --text-sm: var(--fs-sm);
+  --text-base: var(--fs-body);
+  --text-md: var(--fs-body);
+  --text-lg: var(--fs-lead);
+  --text-xl: var(--fs-h3);
+  --text-2xl: var(--fs-h2);
+  --text-3xl: var(--fs-h1);
+  --text-4xl: var(--fs-display);
+  --leading-tight: var(--lh-tight);
+  --leading-snug: var(--lh-snug);
+  --leading-normal: var(--lh-body);
+  --tracking-tight: var(--ls-tight);
+  --tracking-wide: 0.06em;
+  --tracking-wider: var(--ls-label);
+  --weight-normal: var(--fw-normal);
+  --weight-medium: var(--fw-medium);
+  --weight-semibold: var(--fw-semibold);
+  --weight-bold: var(--fw-bold);
+  --radius-full: var(--radius-pill);
 }
 
 /* Užívateľ si vypol animácie — rešpektujeme to globálne. */

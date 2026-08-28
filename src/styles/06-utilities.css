@@ -126,3 +126,23 @@ body.is-locked {
     color: #555;
   }
 }
+
+/* ------------------------------------------------------------------
+   DOPLNKY PO REDIZAJNE
+   ------------------------------------------------------------------ */
+
+.contact-card__note {
+  font-size: var(--fs-xs);
+  color: var(--text-invert-muted);
+  line-height: var(--lh-snug);
+}
+
+.text-mono {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  letter-spacing: 0.06em;
+}
+
+.text-muted {
+  color: var(--text-muted);
+}

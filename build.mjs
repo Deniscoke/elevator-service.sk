@@ -56,6 +56,8 @@ const STATIC = path.join(ROOT, 'static');
 const args = process.argv.slice(2);
 const isProd = args.includes('--prod');
 const isDry = args.includes('--dry');
+// --dev zapne interné upozornenia určené vývojárovi, nie klientovi.
+const isDev = args.includes('--dev');
 
 const problems = { errors: [], warnings: [] };
 const fail = (m) => problems.errors.push(m);
@@ -81,6 +83,7 @@ const ctx = {
   company,
   serviceAreaLabel: buildServiceAreaLabel(),
   isProd,
+  isDev,
 };
 
 /* ================================================================== */
@@ -137,7 +140,6 @@ async function buildPages() {
       crumbs: page.crumbs,
       schemas: page.schemas,
       main: page.main,
-      floors: page.floors || null,
       noindex: page.noindex,
       extraHead: page.extraHead || '',
       extraScripts: page.extraScripts || '',

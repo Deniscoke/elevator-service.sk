@@ -137,9 +137,9 @@ export function acquisition({ index = '03' } = {}) {
   return `
   <section class="section section--acquisition" id="novy-servis">
     <div class="container">
-      <div class="acquisition">
+      <div class="acquisition on-dark">
         <div class="acquisition__content">
-          <p class="eyebrow eyebrow--invert"><span class="eyebrow__num">${esc(index)}</span>Nový servisný partner</p>
+          <p class="eyebrow"><span class="eyebrow__num">${esc(index)}</span>Nový servisný partner</p>
           <h2 class="acquisition__title">Hľadáte nového servisného partnera pre váš výťah?</h2>
           <p class="acquisition__lead">
             Prevzatie výťahu do servisu je bežný proces a nemusí byť komplikovaný.
@@ -357,7 +357,7 @@ export function emergencyCta(company, { index = '07', compact = false } = {}) {
     <div class="container">
       <div class="emergency${compact ? ' emergency--compact' : ''}">
         <div class="emergency__content">
-          <p class="eyebrow eyebrow--danger"><span class="eyebrow__num">${esc(index)}</span>Havarijná služba</p>
+          <p class="eyebrow"><span class="eyebrow__num">${esc(index)}</span>Havarijná služba</p>
           <h2 class="emergency__title">Uviazol niekto vo výťahu alebo je zariadenie v nebezpečnom stave?</h2>
           ${
             live
@@ -383,7 +383,6 @@ export function emergencyCta(company, { index = '07', compact = false } = {}) {
           </div>`
           }
         </div>
-        <div class="emergency__stripe" aria-hidden="true"></div>
       </div>
     </div>
   </section>`;
@@ -505,43 +504,4 @@ export function relatedServices(currentId, { heading = 'Súvisiace služby' } = 
       </ul>
     </div>
   </section>`;
-}
-
-
-/* ------------------------------------------------------------------ */
-/*  Výťah ako navigácia po sekciách                                    */
-/* ------------------------------------------------------------------ */
-
-/**
- * Bočný indikátor pozície na stránke v podobe výťahu.
- *
- * Nie je to dekorácia — je to skutočná navigácia. Každá sekcia je
- * poschodie, kabína medzi nimi cestuje podľa toho, kde sa čitateľ
- * nachádza, a dá sa na ne klikať aj prechádzať klávesnicou.
- *
- * Poschodia dodáva stránka, nie komponent, aby zoznam vždy zodpovedal
- * sekciám, ktoré sa naozaj vykreslili (napr. referencie sa skrývajú).
- */
-export function floorNav(floors) {
-  if (!isSet(floors) || floors.length < 3) return '';
-
-  return `
-  <nav class="floors" aria-label="Sekcie stránky" data-floors>
-    <span class="floors__display" data-floor-display aria-hidden="true">P</span>
-    <div class="floors__shaft">
-      <span class="floors__car" data-floor-car aria-hidden="true"></span>
-      <ul class="floors__list">
-        ${map(
-          floors,
-          (f) => `
-        <li class="floors__item">
-          <a class="floors__link" href="#${esc(f.id)}" data-floor="${esc(f.num)}">
-            <span class="floors__tick" aria-hidden="true"></span>
-            <span class="floors__label">${esc(f.num)} · ${esc(f.label)}</span>
-          </a>
-        </li>`
-        )}
-      </ul>
-    </div>
-  </nav>`;
 }

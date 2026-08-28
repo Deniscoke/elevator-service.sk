@@ -8,7 +8,6 @@
 
 import { esc, isSet, when, map, telHref, absoluteUrl } from './html.js';
 import { icon } from './icons.js';
-import { floorNav } from './components.js';
 import { renderHead, renderSchemas } from './seo.js';
 import { services } from '../../data/services.js';
 
@@ -74,10 +73,7 @@ function header(company, currentPath) {
                 <a class="nav__panel-link${s.isEmergency ? ' nav__panel-link--emergency' : ''}"
                    href="${esc(s.path)}"${isCurrent(s.path)}>
                   <span class="nav__panel-icon">${icon(s.icon)}</span>
-                  <span>
-                    <span class="nav__panel-title">${esc(s.cardTitle)}</span>
-                    <span class="nav__panel-desc">${esc(s.summary.split('.')[0])}.</span>
-                  </span>
+                  <span class="nav__panel-title">${esc(s.cardTitle)}</span>
                 </a>
               </li>`
               )}
@@ -96,7 +92,7 @@ function header(company, currentPath) {
       ${when(
         company.emergency.enabled && emergencyPhone,
         () => `
-      <a class="btn btn--emergency btn--sm" href="${esc(emergencyPhone)}" data-action="emergency-call">
+      <a class="btn btn--emergency-outline btn--sm" href="${esc(emergencyPhone)}" data-action="emergency-call">
         ${icon('alert')}<span>Havária</span>
       </a>`
       )}
@@ -302,7 +298,6 @@ export function renderPage({
   crumbs = null,
   schemas = [],
   main,
-  floors = null,
   noindex = false,
   extraHead = '',
   extraScripts = '',
@@ -318,7 +313,6 @@ ${renderSchemas(company, schemas)}
   <a class="skip-link" href="#obsah">Preskočiť na obsah</a>
 ${header(company, path)}
 ${breadcrumbs(crumbs)}
-${floorNav(floors)}
   <main id="obsah">
 ${main}
   </main>

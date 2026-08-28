@@ -58,7 +58,7 @@ function field({ id, label, type = 'text', required = false, autocomplete, hint,
  * @param {string} opts.preselect  predvolený typ požiadavky (id služby)
  * @param {string} opts.context    'dopyt' | 'kariera' — mení texty a payload
  */
-export function inquiryForm(company, { preselect = '', context = 'dopyt', heading = null } = {}) {
+export function inquiryForm(company, { preselect = '', context = 'dopyt', heading = null, isDev = false } = {}) {
   const isCareer = context === 'kariera';
   const configured = isSet(forms.transport) && (forms.transport === 'mailto' || isSet(forms.endpoint));
   const altPhone = telHref(company.contact.phone);
@@ -206,7 +206,7 @@ export function inquiryForm(company, { preselect = '', context = 'dopyt', headin
         <div class="form__status" data-form-status role="status" aria-live="polite" hidden></div>
 
         ${when(
-          !configured,
+          !configured && isDev,
           () => `
         <p class="form__preview-warning" data-preview-warning>
           <strong>Náhľadová verzia.</strong> Odosielanie formulára ešte nie je napojené na backend,
