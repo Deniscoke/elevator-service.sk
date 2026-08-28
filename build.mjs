@@ -17,6 +17,7 @@
 
 import { mkdir, writeFile, readFile, rm, cp, readdir } from 'node:fs/promises';
 import { existsSync, readdirSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -114,11 +115,41 @@ async function buildCss() {
       .trim();
   }
 
+  /**
+   * Do názvu ide hash obsahu.
+   *
+   * Assety sa servírujú s `Cache-Control: immutable`, čo je sľub, že sa
+   * na danej URL už nikdy nezmenia. Na nemennom názve `main.css` by
+   * bol ten sľub porušený pri každom deployi a vracajúci sa návštevník
+   * by rok videl starý štýl s novým HTML. S hashom v názve zmena
+   * obsahu automaticky mení URL.
+   */
+  const hash = createHash('sha256').update(out).digest('hex').slice(0, 8);
+  const name = `main.${hash}.css`;
+
   if (!isDry) {
     await mkdir(path.join(DIST, 'css'), { recursive: true });
-    await writeFile(path.join(DIST, 'css', 'main.css'), out, 'utf8');
+    await writeFile(path.join(DIST, 'css', name), out, 'utf8');
   }
-  return { files: files.length, bytes: Buffer.byteLength(out) };
+  return { files: files.length, bytes: Buffer.byteLength(out), name, url: `/css/${name}` };
+}
+
+/** To isté pre skripty kopírované zo static/. */
+async function hashScripts() {
+  const map = {};
+  for (const file of ['site.js', 'form.js']) {
+    const src = path.join(STATIC, 'js', file);
+    if (!existsSync(src)) continue;
+    const body = await readFile(src, 'utf8');
+    const hash = createHash('sha256').update(body).digest('hex').slice(0, 8);
+    const name = file.replace(/\.js$/, `.${hash}.js`);
+    if (!isDry) {
+      await writeFile(path.join(DIST, 'js', name), body, 'utf8');
+      await rm(path.join(DIST, 'js', file), { force: true });
+    }
+    map[`/js/${file}`] = `/js/${name}`;
+  }
+  return map;
 }
 
 /* ================================================================== */
@@ -284,6 +315,9 @@ function checkLinks(pages) {
   };
   walk(STATIC);
   staticFiles.add('/css/main.css');
+  for (const entry of readdirSync(path.join(DIST, 'css'))) staticFiles.add('/css/' + entry);
+  if (existsSync(path.join(DIST, 'js')))
+    for (const entry of readdirSync(path.join(DIST, 'js'))) staticFiles.add('/js/' + entry);
   staticFiles.add('/sitemap.xml');
   staticFiles.add('/robots.txt');
 
@@ -458,7 +492,21 @@ async function main() {
   }
 
   const css = await buildCss();
-  const pages = await buildPages();
+  const scripts = await hashScripts();
+  const assetMap = { '/css/main.css': css.url, ...scripts };
+
+  let pages = await buildPages();
+
+  // Prepísanie ciest na hashované názvy. Robí sa až tu, aby stránky
+  // nemuseli o hashoch vedieť.
+  pages = await Promise.all(
+    pages.map(async (p) => {
+      let html = p.html;
+      for (const [from, to] of Object.entries(assetMap)) html = html.split(from).join(to);
+      if (!isDry) await writeFile(path.join(DIST, p.file), html, 'utf8');
+      return { ...p, html, bytes: Buffer.byteLength(html) };
+    })
+  );
   const sitemapCount = await buildSitemap(pages);
 
   const leaks = checkLeaks(pages);
@@ -475,7 +523,7 @@ async function main() {
 
   /* ---- výpis ------------------------------------------------------ */
   console.log(`  Stránky      ${pages.length}`);
-  console.log(`  CSS          ${css.files} vrstiev → ${(css.bytes / 1024).toFixed(1)} kB`);
+  console.log(`  CSS          ${css.files} vrstiev → ${css.name} (${(css.bytes / 1024).toFixed(1)} kB)`);
   console.log(`  Sitemap      ${sitemapCount} URL`);
   console.log(`  Skryté bloky ${new Set(hiddenComponents.map((h) => h.component)).size}`);
 

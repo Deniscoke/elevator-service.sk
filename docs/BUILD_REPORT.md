@@ -1,6 +1,6 @@
 # Build report
 
-Vygenerované: 2026-08-28 10:53
+Vygenerované: 2026-08-28 10:55
 Režim: náhľadový
 Doména: https://www.elevatorservis.sk
 Servisná oblasť: Banská Bystrica a okolie do 80 km
@@ -11,8 +11,8 @@ Servisná oblasť: Banská Bystrica a okolie do 80 km
 
 | Stránka | Súbor | Veľkosť | V sitemap |
 | --- | --- | ---: | :---: |
-| / | index.html | 45.5 kB | áno |
-| /servis-vytahov/ | servis-vytahov/index.html | 37.4 kB | áno |
+| / | index.html | 45.6 kB | áno |
+| /servis-vytahov/ | servis-vytahov/index.html | 37.5 kB | áno |
 | /opravy-vytahov/ | opravy-vytahov/index.html | 35.7 kB | áno |
 | /odborne-prehliadky-a-skusky/ | odborne-prehliadky-a-skusky/index.html | 35.8 kB | áno |
 | /modernizacia-vytahov/ | modernizacia-vytahov/index.html | 36.1 kB | áno |

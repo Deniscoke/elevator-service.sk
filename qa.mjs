@@ -37,7 +37,7 @@ for (const f of pages) {
     if (!/\swidth=/.test(tag) || !/\sheight=/.test(tag)) issues.push(`${rel}: <img> bez width/height`);
   }
 
-  for (const m of html.matchAll(/href="(\/[^"#?]*)/g)) {
+  for (const m of html.matchAll(/(?:href|src)="(\/[^"#?]*)/g)) {
     const p = m[1];
     if (p === '/') continue;
     const asDir = path.join(DIST, p, 'index.html');
@@ -46,7 +46,8 @@ for (const f of pages) {
   }
 }
 
-const css = readFileSync(path.join(DIST, 'css', 'main.css'), 'utf8');
+const cssFile = readdirSync(path.join(DIST, 'css')).find((f) => f.endsWith('.css'));
+const css = readFileSync(path.join(DIST, 'css', cssFile), 'utf8');
 const defined = new Set([...css.matchAll(/(--[a-z0-9-]+)\s*:/g)].map((m) => m[1]));
 const used = new Set([...css.matchAll(/var\((--[a-z0-9-]+)/g)].map((m) => m[1]));
 for (const v of used) {
