@@ -59,7 +59,11 @@ function renderIntegrations(company) {
 }
 
 export function renderHead({ company, title, description, path, noindex = false, extraHead = '' }) {
-  const canonical = absoluteUrl(company.siteUrl, path);
+  /* absoluteUrl pridáva koncovú lomku, čo pri názve súboru vytvorí
+     neplatnú URL (/404.html/). Súborové cesty preto skladáme priamo. */
+  const canonical = /\.[a-z0-9]+$/i.test(path)
+    ? String(company.siteUrl).replace(/\/+$/, '') + path
+    : absoluteUrl(company.siteUrl, path);
   const desc = clampDescription(description);
   const ogImage = isSet(company.brand.ogImage)
     ? absoluteUrl(company.siteUrl, '/').replace(/\/$/, '') + company.brand.ogImage
@@ -90,6 +94,7 @@ export function renderHead({ company, title, description, path, noindex = false,
 ${renderIntegrations(company)}
 
   <link rel="preload" href="/assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/archivo-latin-ext.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/css/main.css" as="style">
   <link rel="stylesheet" href="/css/main.css">
 ${extraHead}`.trim();

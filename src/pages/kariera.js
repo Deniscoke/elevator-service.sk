@@ -16,11 +16,20 @@ import { esc, isSet, when, map } from '../lib/html.js';
 import { sectionHead, ctaBand, btn } from '../lib/components.js';
 import { inquiryForm } from '../lib/form.js';
 import { organizationSchema, breadcrumbSchema } from '../lib/seo.js';
-import { positions, benefits, acceptsOpenApplications, whatWePublish } from '../../data/careers.js';
+import {
+  positions,
+  benefits,
+  acceptsOpenApplications,
+  whatWePublish,
+  canPublishAsJobAd,
+} from '../../data/careers.js';
 
 export default function page(ctx) {
   const { company, isDev } = ctx;
-  const open = isSet(positions);
+  const hasRoles = isSet(positions);
+  /* Inzerát bez mzdy je v SR v rozpore s § 62 ods. 2 zák. 5/2004 Z. z.
+     Kým mzdu nemáme, pozície uvádzame informatívne, nie ako inzeráty. */
+  const open = hasRoles && canPublishAsJobAd;
 
   const crumbs = [
     { label: 'Domov', path: '/' },
@@ -37,6 +46,8 @@ export default function page(ctx) {
           ${
             open
               ? 'Aktuálne obsadzujeme pozície uvedené nižšie.'
+              : hasRoles
+              ? 'Priebežne hľadáme ľudí na pozície uvedené nižšie. Konkrétnu ponuku vrátane mzdových podmienok zverejníme, keď pozíciu otvoríme.'
               : 'Momentálne nemáme zverejnenú žiadnu voľnú pozíciu. Keď sa to zmení, nájdete ju tu.'
           }
         </p>
@@ -54,11 +65,18 @@ export default function page(ctx) {
 
   /* ---- otvorené pozície — len ak existujú ------------------------- */
   const positionsBlock = when(
-    open,
+    hasRoles,
     () => `
   <section class="section" id="pozicie">
     <div class="container">
-      ${sectionHead({ index: '02', eyebrow: 'Voľné pozície', title: 'Otvorené pozície' })}
+      ${sectionHead({
+        index: '02',
+        eyebrow: open ? 'Voľné pozície' : 'Koho hľadáme',
+        title: open ? 'Otvorené pozície' : 'Pozície, na ktoré hľadáme ľudí',
+        lead: open
+          ? null
+          : 'Ak vás niektorá zaujala, ozvite sa — povieme vám, čo práca obnáša a aké sú podmienky.',
+      })}
       <ul class="card-grid card-grid--problems">
         ${map(
           positions,
@@ -76,7 +94,7 @@ export default function page(ctx) {
 
   /* ---- prázdny stav — čo zverejníme ------------------------------- */
   const emptyBlock = when(
-    !open,
+    !hasRoles,
     () => `
   <section class="section">
     <div class="container container--narrow">
@@ -136,6 +154,7 @@ export default function page(ctx) {
       title: 'Máte otázku k práci u nás?',
       text: 'Napíšte nám. Odpovieme aj vtedy, keď práve žiadnu pozíciu neobsadzujeme.',
       primaryLabel: 'Napísať správu',
+      primaryHref: '/kontakt/?typ=kariera#dopyt',
     }),
   ].join('\n');
 

@@ -90,7 +90,7 @@ export const faq = {
   havaria: [
     {
       q: 'Uviazol som vo výťahu. Čo mám robiť?',
-      a: 'Zachovajte pokoj a nepokúšajte sa otvárať dvere ani opustiť kabínu vlastnými silami. Stlačte a podržte tlačidlo núdzového volania v kabíne. Počkajte na príchod technika alebo záchranných zložiek. Kabína je zaistená a nehrozí voľný pád.',
+      a: 'Zachovajte pokoj a nepokúšajte sa otvárať dvere ani opustiť kabínu vlastnými silami. Stlačte a podržte tlačidlo núdzového volania v kabíne a počkajte na príchod technika alebo záchranných zložiek. Najrizikovejšie je pokúšať sa vystúpiť z kabíny, ktorá nestojí presne v stanici.',
     },
     {
       q: 'Kedy volať havarijnú službu a kedy stačí nahlásiť opravu?',

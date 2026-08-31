@@ -98,6 +98,9 @@ export const company = {
     icDph: null,            // ČAKÁ NA KLIENTA
     registration: null,     // ČAKÁ NA KLIENTA
     dpo: null,
+    // Doba uchovávania údajov z formulára. Povinná náležitosť podľa
+    // čl. 13 ods. 2 písm. a) GDPR — bez nej je informačná povinnosť neúplná.
+    dataRetention: null,   // ČAKÁ NA KLIENTA, napr. '2 roky od poslednej komunikácie'
   },
 
   /* ---- identita značky ---------------------------------------------- */
@@ -111,7 +114,8 @@ export const company = {
     logoInverse: null,
     // Žltá prevzatá z loga, grafitová z typografie loga.
     colors: { yellow: '#FFC61A', ink: '#12161B' },
-    ogImage: '/assets/og-default.svg', // DOČASNÉ — treba 1200×630 PNG/JPG
+    // 1200×630 PNG — SVG sociálne siete v náhľade odkazu nevykreslia.
+    ogImage: '/assets/og-default.png',
   },
 
   /* ---- integrácie ----------------------------------------------------
@@ -172,4 +176,5 @@ export const productionRequirements = [
   ['address.postalCode', company.address.postalCode, 'PSČ'],
   ['legal.ico',          company.legal.ico,          'IČO (povinný údaj na webe)'],
   ['legal.registration', company.legal.registration, 'Zápis v obchodnom registri'],
+  ['legal.dataRetention', company.legal.dataRetention, 'Doba uchovávania údajov z formulára (GDPR)'],
 ];

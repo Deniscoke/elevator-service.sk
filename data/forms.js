@@ -26,11 +26,15 @@ export const forms = {
     minFillSeconds: 3,     // formulár vyplnený rýchlejšie = pravdepodobne bot
   },
 
-  /** Prílohy — UI je hotové, zapne sa až s backendom, ktorý súbory prijme. */
+  /**
+   * Prílohy — súčasť balíka Rast.
+   * Súbory idú v base64 v tele požiadavky. Vercel obmedzuje telo na ~4,5 MB
+   * a base64 objem nafúkne o tretinu, preto sú limity zámerne nízke.
+   */
   attachments: {
-    enabled: false,        // ČAKÁ NA BACKEND
+    enabled: true,
     maxFiles: 3,
-    maxSizeMb: 8,
+    maxSizeMb: 2,
     accept: 'image/jpeg,image/png,image/webp,application/pdf',
     hints: [
       'Fotografia výťahu alebo kabíny',

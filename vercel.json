@@ -4,7 +4,6 @@
   "outputDirectory": "dist",
   "installCommand": "echo 'projekt nema zavislosti'",
   "cleanUrls": true,
-  "trailingSlash": true,
   "headers": [
     {
       "source": "/(.*)",

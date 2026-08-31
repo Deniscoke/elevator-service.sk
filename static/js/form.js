@@ -45,6 +45,19 @@
     return input.closest('.field') || input.parentElement;
   }
 
+  /**
+   * Pripojí alebo odpojí id chybového textu v aria-describedby.
+   * Bez toho čítačka obrazovky oznámi „neplatné", ale dôvod nepovie.
+   */
+  function describedBy(input, errorId, attach) {
+    var current = (input.getAttribute('aria-describedby') || '').split(/\s+/).filter(Boolean);
+    var index = current.indexOf(errorId);
+    if (attach && index === -1) current.push(errorId);
+    if (!attach && index > -1) current.splice(index, 1);
+    if (current.length) input.setAttribute('aria-describedby', current.join(' '));
+    else input.removeAttribute('aria-describedby');
+  }
+
   function showError(input, message) {
     var wrap = fieldWrapper(input);
     var errorEl = form.querySelector('[data-error-for="' + input.id + '"]');
@@ -52,6 +65,7 @@
     if (errorEl) {
       errorEl.textContent = message;
       errorEl.hidden = false;
+      if (errorEl.id) describedBy(input, errorEl.id, true);
     }
     input.setAttribute('aria-invalid', 'true');
   }
@@ -63,6 +77,7 @@
     if (errorEl) {
       errorEl.textContent = '';
       errorEl.hidden = true;
+      if (errorEl.id) describedBy(input, errorEl.id, false);
     }
     input.removeAttribute('aria-invalid');
   }
@@ -126,21 +141,25 @@
       }
     }
 
-    // Súhlas so spracovaním.
+    // Súhlas so spracovaním. Ide rovnakou cestou ako ostatné polia,
+    // takže dostane aria-invalid aj prepojenie na text chyby.
     var suhlas = form.elements.suhlas;
     if (suhlas) {
-      var consentWrap = suhlas.closest('.field');
-      var consentError = form.querySelector('[data-error-for="suhlas"]');
-      if (consentWrap) consentWrap.classList.remove('is-invalid');
-      if (consentError) consentError.hidden = true;
-
+      clearError(suhlas);
       if (!suhlas.checked) {
-        if (consentWrap) consentWrap.classList.add('is-invalid');
-        if (consentError) {
-          consentError.textContent = messages.consent;
-          consentError.hidden = false;
-        }
+        showError(suhlas, messages.consent);
         invalid.push(suhlas);
+      }
+    }
+
+    // Prílohy — počet, veľkosť a typ.
+    var files = form.elements.prilohy;
+    if (files && files.files && files.files.length) {
+      clearError(files);
+      var attachError = validateFiles(files.files);
+      if (attachError) {
+        showError(files, attachError);
+        invalid.push(files);
       }
     }
 
@@ -160,11 +179,48 @@
      PAYLOAD
      ================================================================ */
 
+  var MAX_FILES = 3;
+  var MAX_FILE_BYTES = 2 * 1024 * 1024;
+  var MAX_TOTAL_BYTES = 3 * 1024 * 1024;
+
+  function validateFiles(list) {
+    if (list.length > MAX_FILES) return 'Naraz sa dajú priložiť najviac ' + MAX_FILES + ' súbory.';
+    var total = 0;
+    for (var i = 0; i < list.length; i++) {
+      if (list[i].size > MAX_FILE_BYTES) {
+        return 'Súbor „' + list[i].name + '" je väčší než 2 MB.';
+      }
+      total += list[i].size;
+    }
+    if (total > MAX_TOTAL_BYTES) return 'Prílohy spolu presahujú 3 MB.';
+    return null;
+  }
+
+  /** Súbor → base64 bez dátovej hlavičky, aby ho vedel prijať Resend. */
+  function readAsBase64(file) {
+    return new Promise(function (resolve, reject) {
+      var reader = new FileReader();
+      reader.onload = function () {
+        var result = String(reader.result || '');
+        resolve({
+          name: file.name,
+          type: file.type,
+          content: result.slice(result.indexOf(',') + 1),
+        });
+      };
+      reader.onerror = function () {
+        reject(new Error('read_failed'));
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
   function collect() {
     var data = {};
+    var honeypot = form.dataset.honeypot;
     Array.prototype.forEach.call(form.elements, function (el) {
       if (!el.name || el.type === 'submit' || el.type === 'file') return;
-      if (el.name === form.dataset.honeypot) return;
+      if (honeypot && el.name === honeypot) return;
       data[el.name] = el.type === 'checkbox' ? el.checked : el.value.trim();
     });
 
@@ -320,7 +376,19 @@
 
     setBusy(true);
 
-    transports[transportName](endpoint, collect())
+    var payload = collect();
+    var fileInput = form.elements.prilohy;
+    var filesReady =
+      fileInput && fileInput.files && fileInput.files.length
+        ? Promise.all(Array.prototype.map.call(fileInput.files, readAsBase64)).then(function (list) {
+            payload.prilohy = list;
+          })
+        : Promise.resolve();
+
+    filesReady
+      .then(function () {
+        return transports[transportName](endpoint, payload);
+      })
       .then(function () {
         form.reset();
         setStatus(

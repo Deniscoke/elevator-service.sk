@@ -56,8 +56,8 @@ export default function page(ctx) {
             aby sa riešil rýchlo a s poriadkom v dokumentácii.
           </p>
           <p>
-            Pracujeme pre bytové domy a spoločenstvá vlastníkov, správcovské spoločnosti,
-            firmy, školy a inštitúcie. Rozsah servisu prispôsobujeme typu objektu,
+            Naše služby sú určené pre bytové domy a spoločenstvá vlastníkov, správcovské
+            spoločnosti, firmy, školy a inštitúcie. Rozsah servisu prispôsobujeme typu objektu,
             veku zariadenia a tomu, ako intenzívne sa používa.
           </p>
 
@@ -87,13 +87,40 @@ export default function page(ctx) {
     </div>
   </section>`;
 
+  /* ---- prečo my — vlastné tvrdenia klienta z dotazníka -------------
+     Vypnuteľné cez data/company.js → differentiators (prázdne pole = sekcia
+     zmizne). Sú to tvrdenia klienta, nie naše. */
+  const whyBlock = when(
+    isSet(company.differentiators),
+    () => `
+  <section class="section">
+    <div class="container">
+      ${sectionHead({
+        index: '03',
+        eyebrow: 'Prečo my',
+        title: 'Na čom si zakladáme',
+      })}
+      <ul class="card-grid card-grid--problems">
+        ${map(
+          company.differentiators,
+          (d) => `
+        <li class="card card--problem" data-reveal="stagger">
+          <h3 class="card__title card__title--sm">${esc(d.title)}</h3>
+          <p class="card__text">${esc(d.text)}</p>
+        </li>`
+        )}
+      </ul>
+    </div>
+  </section>`
+  );
+
   /* ---- odborné oprávnenia — len ak sú v dátach --------------------- */
   const certBlock = when(
     isSet(company.certifications),
     () => `
   <section class="section section--alt">
     <div class="container">
-      ${sectionHead({ index: '03', eyebrow: 'Odbornosť', title: 'Odborné oprávnenia' })}
+      ${sectionHead({ index: '04', eyebrow: 'Odbornosť', title: 'Odborné oprávnenia' })}
       <ul class="segments">
         ${map(
           company.certifications,
@@ -114,7 +141,7 @@ export default function page(ctx) {
     () => `
   <section class="section">
     <div class="container">
-      ${sectionHead({ index: '04', eyebrow: 'Zariadenia', title: 'S čím pracujeme' })}
+      ${sectionHead({ index: '05', eyebrow: 'Zariadenia', title: 'S čím pracujeme' })}
       <div class="split">
         ${when(
           isSet(company.equipmentTypes),
@@ -130,6 +157,10 @@ export default function page(ctx) {
         <div class="prose">
           <h3>Značky výťahov</h3>
           <ul>${map(company.brands, (b) => `<li>${esc(b)}</li>`)}</ul>
+          ${when(
+            isSet(company.brandsNote),
+            () => `<p class="text-muted" style="font-size:var(--fs-sm)">${esc(company.brandsNote)}</p>`
+          )}
         </div>`
         )}
       </div>
@@ -147,9 +178,10 @@ export default function page(ctx) {
       </div>
       ${deliverableStrip(deliverables)}
     </section>`,
+    whyBlock,
     certBlock,
     equipmentBlock,
-    segmentSection({ index: '05' }),
+    segmentSection({ index: '06' }),
     ctaBand(company, {
       title: 'Chcete sa o nás dozvedieť viac?',
       text: 'Najlepšie sa to zistí pri obhliadke. Napíšte nám a dohodneme termín.',

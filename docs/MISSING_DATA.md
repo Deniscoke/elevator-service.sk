@@ -1,5 +1,8 @@
 # Chýbajúce údaje od klienta
 
+> Pre balík za 800 € je záväzný prehľad v [PACKAGE_800_SCOPE.md](./PACKAGE_800_SCOPE.md)
+> a [CLIENT_DATA_TO_VERIFY.md](./CLIENT_DATA_TO_VERIFY.md). Tento súbor zostáva ako detail.
+
 Aktualizované po dodaní dotazníka „Doplňujúce otázky k novému webu" (28. 8. 2026).
 
 **Z pôvodných 17 otvorených položiek zostáva 8.** Kým sú tu odškrtnuté ako

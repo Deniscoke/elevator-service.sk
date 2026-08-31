@@ -14,7 +14,7 @@
 
 import { esc, isSet, when, map } from '../lib/html.js';
 import { organizationSchema, breadcrumbSchema } from '../lib/seo.js';
-import { inquiryFields } from '../../data/forms.js';
+import { inquiryFields, forms } from '../../data/forms.js';
 
 export default function page(ctx) {
   const { company } = ctx;
@@ -74,7 +74,14 @@ export default function page(ctx) {
         </p>
         <ul>
           ${map(inquiryFields, (f) => `<li>${esc(f.label)}${f.required ? ' (povinný údaj)' : ''}</li>`)}
+          ${when(forms.attachments.enabled, () => '<li>Prílohy, ak ich pripojíte (fotografie)</li>')}
         </ul>
+        <p>
+          Okrem vyplnených polí sa odosiela aj váš súhlas so spracúvaním a technické
+          údaje potrebné na doručenie a ochranu pred spamom: adresa stránky, z ktorej
+          bol formulár odoslaný, čas odoslania a IP adresa. IP adresa sa nikam neukladá —
+          slúži len na krátkodobé obmedzenie počtu odoslaní z jedného zariadenia.
+        </p>
         ${
           isSet(company.integrations?.analytics?.provider)
             ? `<p>
@@ -101,6 +108,12 @@ export default function page(ctx) {
           Údaje sa neposkytujú nikomu ďalšiemu a nepoužívajú sa na profilovanie
           ani na automatizované rozhodovanie.
         </p>
+        <p>
+          Obaja sprostredkovatelia sídlia mimo Európskej únie. Prenos údajov sa
+          uskutočňuje na základe štandardných zmluvných doložiek schválených
+          Európskou komisiou, ktoré sú súčasťou zmluvných podmienok týchto
+          poskytovateľov.
+        </p>
 
         <h2>Na aký účel údaje spracúvame</h2>
         <p>
@@ -108,6 +121,13 @@ export default function page(ctx) {
           kontaktovať späť, posúdiť požiadavku a pripraviť odpoveď alebo cenovú ponuku.
           Na iný účel ich nepoužívame.
         </p>
+
+        ${when(
+          isSet(company.legal.dataRetention),
+          () => `
+        <h2>Ako dlho údaje uchovávame</h2>
+        <p>${esc(company.legal.dataRetention)}</p>`
+        )}
 
         <h2>Právny základ spracúvania</h2>
         <p>

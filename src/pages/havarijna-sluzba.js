@@ -29,7 +29,7 @@ import {
 const stepsTrapped = [
   {
     title: 'Zachovajte pokoj',
-    text: 'Kabína je zaistená v šachte a nehrozí voľný pád. Vzduch v kabíne prúdi.',
+    text: 'Výťahy sú konštruované tak, aby kabína pri poruche zostala zaistená. Počkajte v kabíne a nesnažte sa dostať von.',
   },
   {
     title: 'Nepokúšajte sa dostať von sami',

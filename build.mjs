@@ -285,9 +285,15 @@ function checkLeaks(pages) {
   const found = [];
   for (const p of pages) {
     // Kontrolujeme len viditeľný obsah — JSON-LD a komentáre by dali falošné poplachy.
+    /* Značky sa odstraňujú a nahrádzajú medzerou, inak by sa susedné
+       <span> zlepili do jedného slova. Pôvodná verzia ich len vystrihla,
+       takže vzor „300+ výťahov" nemal čo nájsť — číslo a slovo sú
+       v dvoch samostatných elementoch. */
     const visible = p.html
-      .replace(/<script[\s\S]*?<\/script>/gi, '')
-      .replace(/<!--[\s\S]*?-->/g, '');
+      .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+      .replace(/<!--[\s\S]*?-->/g, ' ')
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/\s+/g, ' ');
 
     for (const [re, label] of [...LEAK_PATTERNS, ...conditionalLeakPatterns()]) {
       if (re.test(visible)) found.push({ file: p.file, label });
@@ -300,7 +306,7 @@ function checkLeaks(pages) {
 /*  Kontrola 2 — interné odkazy                                       */
 /* ================================================================== */
 
-function checkLinks(pages) {
+function checkLinks(pages, assetMap) {
   const known = new Set(pages.map((p) => p.path));
   known.add('/404.html');
 
@@ -315,9 +321,18 @@ function checkLinks(pages) {
   };
   walk(STATIC);
   staticFiles.add('/css/main.css');
-  for (const entry of readdirSync(path.join(DIST, 'css'))) staticFiles.add('/css/' + entry);
-  if (existsSync(path.join(DIST, 'js')))
-    for (const entry of readdirSync(path.join(DIST, 'js'))) staticFiles.add('/js/' + entry);
+  /* V --dry režime sa na disk nič nezapíše, takže hashované názvy
+     tam nenájdeme. Berieme ich preto z mapy, ktorú build vyrobil —
+     inak by kontrola hlásila vlastný výstup ako nefunkčný odkaz. */
+  for (const url of Object.values(assetMap || {})) staticFiles.add(url);
+  /* V režime --dry sa do dist/ nič nezapisuje, takže tieto adresáre
+     nemusia existovať. Bez tejto poistky `npm run check` spadol na ENOENT
+     skôr, než čokoľvek skontroloval. */
+  for (const dir of ['css', 'js']) {
+    const full = path.join(DIST, dir);
+    if (existsSync(full)) for (const entry of readdirSync(full)) staticFiles.add(`/${dir}/${entry}`);
+  }
+  staticFiles.add('/api/dopyt');
   staticFiles.add('/sitemap.xml');
   staticFiles.add('/robots.txt');
 
@@ -385,8 +400,12 @@ function checkProductionReadiness() {
     missing.push('Napojenie formulára — data/forms.js → transport + endpoint');
   }
 
-  if (company.siteUrl.includes('elevatorservis.sk') && !process.env.SITE_URL) {
-    missing.push('Potvrdená doména — data/company.js → siteUrl alebo premenná SITE_URL');
+  /* Kontrola sa pýta na to, či je doména POTVRDENÁ, nie aká je.
+     Pôvodná podmienka testovala výskyt reťazca 'elevatorservis.sk', ktorý
+     obsahuje aj správna produkčná doména — kontrola teda zlyhávala vždy
+     a nedala sa splniť zápisom do data/company.js. */
+  if (!/^https:\/\/[a-z0-9.-]+\.[a-z]{2,}$/i.test(company.siteUrl)) {
+    missing.push('Platná produkčná doména — data/company.js → siteUrl alebo premenná SITE_URL');
   }
 
   if (!isSet(company.brand.logo)) {
@@ -503,6 +522,12 @@ async function main() {
     pages.map(async (p) => {
       let html = p.html;
       for (const [from, to] of Object.entries(assetMap)) html = html.split(from).join(to);
+
+      /* `list-style: none` v resete zoberie zoznamom semantiku vo VoiceOver
+         (Safari ich prestane oznamovať ako zoznam). Vrátime ju explicitne
+         všetkým, ktoré rolu nemajú. Robí sa to tu, nie v šablónach, aby
+         na to nikto nemohol zabudnúť pri pridávaní ďalšieho zoznamu. */
+      html = html.replace(/<(ul|ol)(?![^>]*role=)/g, '<$1 role="list"');
       if (!isDry) await writeFile(path.join(DIST, p.file), html, 'utf8');
       return { ...p, html, bytes: Buffer.byteLength(html) };
     })
@@ -510,7 +535,7 @@ async function main() {
   const sitemapCount = await buildSitemap(pages);
 
   const leaks = checkLeaks(pages);
-  const broken = checkLinks(pages);
+  const broken = checkLinks(pages, assetMap);
   const seoIssues = checkSeo(pages);
   const notReady = checkProductionReadiness();
 

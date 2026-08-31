@@ -1,3 +1,5 @@
+import { company } from './company.js';
+
 /**
  * CENTRÁLNA DÁTOVÁ VRSTVA — kariéra
  *
@@ -95,11 +97,31 @@ export const benefits = [
   { title: 'Služobné vozidlo', text: 'Na výjazdy k zákazníkom.' },
   { title: 'Školenia', text: 'Na konkrétne typy zariadení, s ktorými budete pracovať.' },
   { title: 'Zaučenie', text: 'Nastupujete k skúseným technikom, nie do neznáma.' },
-  { title: 'Stabilita', text: 'Firma pôsobí v odbore 26 rokov a servisuje vyše 300 zariadení.' },
+  {
+    title: 'Stabilita',
+    /* Odvodené z company.stats, nie napísané natvrdo. Keby sa údaj
+       v data/company.js vypol, veta sa prispôsobí — inak by tvrdenie
+       zostalo na webe z druhého, needitovateľného zdroja. */
+    text: [
+      company.stats.yearsInBusiness ? `Firma pôsobí v odbore ${company.stats.yearsInBusiness} rokov` : null,
+      company.stats.servicedLifts ? `servisuje ${company.stats.servicedLifts} zariadení` : null,
+    ]
+      .filter(Boolean)
+      .join(' a ') || 'Zavedená firma so stabilnou zákazníckou základňou.',
+  },
 ];
 
 /** Klient sa k otvoreným žiadostiam nevyjadril → CTA sa nezobrazí. */
 export const acceptsOpenApplications = null;
+
+/**
+ * Smie sa pozícia zverejniť ako pracovný inzerát?
+ *
+ * § 62 ods. 2 zákona č. 5/2004 Z. z. vyžaduje pri inzeráte uviesť sumu
+ * základnej zložky mzdy. Kým ju klient nedodá, pozície sa NEZOBRAZUJÚ
+ * ako otvorené inzeráty — stránka o nich hovorí len informatívne.
+ */
+export const canPublishAsJobAd = positions.length > 0 && positions.every((p) => p.salaryFrom);
 
 export const whatWePublish = [
   'Názov pozície a miesto výkonu práce',

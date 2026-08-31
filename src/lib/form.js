@@ -49,7 +49,7 @@ function field({ id, label, type = 'text', required = false, autocomplete, hint,
           <label class="field__label" for="${esc(id)}">${esc(label)}${required ? req : ''}</label>
           ${control}
           ${when(hint, () => `<p class="field__hint" id="${esc(id)}-hint">${esc(hint)}</p>`)}
-          <p class="field__error" data-error-for="${esc(id)}" hidden></p>
+          <p class="field__error" id="${esc(id)}-error" data-error-for="${esc(id)}" hidden></p>
         </div>`;
 }
 
@@ -75,6 +75,7 @@ export function inquiryForm(company, { preselect = '', context = 'dopyt', headin
             data-transport="${esc(configured ? forms.transport : 'none')}"
             data-has-contact="${isSet(company.contact.phone) || isSet(company.contact.email) ? 'true' : 'false'}"
             ${configured && isSet(forms.endpoint) ? `data-endpoint="${esc(forms.endpoint)}"` : ''}
+            data-honeypot="${esc(forms.antispam.honeypot)}"
             data-min-fill="${esc(forms.antispam.minFillSeconds)}">
 
         ${when(heading, () => `<h2 class="form__heading">${esc(heading)}</h2>`)}
@@ -170,7 +171,7 @@ export function inquiryForm(company, { preselect = '', context = 'dopyt', headin
               ${esc(forms.attachments.hints.join(' · '))} — max. ${esc(forms.attachments.maxFiles)} súbory,
               do ${esc(forms.attachments.maxSizeMb)} MB.
             </p>
-            <p class="field__error" data-error-for="prilohy" hidden></p>
+            <p class="field__error" id="prilohy-error" data-error-for="prilohy" hidden></p>
           </div>`
           )}
         </fieldset>
@@ -184,7 +185,7 @@ export function inquiryForm(company, { preselect = '', context = 'dopyt', headin
               <a href="/ochrana-osobnych-udajov/">Viac o ochrane osobných údajov</a>
             </span>
           </label>
-          <p class="field__error" data-error-for="suhlas" hidden></p>
+          <p class="field__error" id="suhlas-error" data-error-for="suhlas" hidden></p>
         </div>
 
         <!-- Ochrana proti botom: pole je skryté pre ľudí, boty ho vyplnia. -->

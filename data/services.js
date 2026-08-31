@@ -17,7 +17,7 @@ export const services = [
     h1: 'Servis výťahov Banská Bystrica',
     metaTitle: 'Servis výťahov Banská Bystrica | ELEVÁTOR SERVIS',
     metaDescription:
-      'Pravidelný servis a údržba výťahov v Banskej Bystrici a okolí. Preventívne prehliadky, mazanie, nastavenie a kontrola bezpečnostných prvkov. Vyžiadajte si ponuku.',
+      'Pravidelný servis a údržba výťahov v Banskej Bystrici a okolí. Preventívne prehliadky, mazanie, nastavenie a kontrola bezpečnostných prvkov.',
     summary:
       'Preventívne prehliadky v dohodnutých intervaloch, mazanie a nastavenie mechanických častí, kontrola bezpečnostných prvkov a vedenie servisnej dokumentácie.',
     schemaName: 'Servis a údržba výťahov',
@@ -99,6 +99,7 @@ export const inquiryTypes = [
   { value: 'oprava',            label: 'Oprava / porucha' },
   { value: 'prehliadka-skuska', label: 'Odborná prehliadka alebo skúška' },
   { value: 'modernizacia',      label: 'Modernizácia alebo rekonštrukcia' },
+  { value: 'kariera',           label: 'Kariéra / spolupráca' },
   { value: 'ine',               label: 'Iné' },
 ];
 
