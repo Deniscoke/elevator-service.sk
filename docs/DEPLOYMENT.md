@@ -131,7 +131,7 @@ Tento transport vie posielať aj prílohy — zapni ich cez
 
 ```js
 transport: 'mailto',
-endpoint: 'info@elevatorservis.sk',
+endpoint: company.contact.email,   // nevypisuj adresu ručne
 ```
 
 Otvorí e-mailového klienta s predvyplnenou správou.
