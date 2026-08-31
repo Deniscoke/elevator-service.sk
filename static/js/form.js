@@ -185,8 +185,19 @@
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify(data),
       }).then(function (res) {
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        return res;
+        if (res.ok) return res;
+        /* Server vracia dôvod zlyhania, aby sme používateľovi vedeli
+           povedať niečo konkrétnejšie než „nepodarilo sa". */
+        return res
+          .json()
+          .catch(function () {
+            return {};
+          })
+          .then(function (payload) {
+            var err = new Error('HTTP ' + res.status);
+            err.code = payload.error || String(res.status);
+            throw err;
+          });
       });
     },
 
@@ -320,12 +331,28 @@
           window.location.href = form.dataset.successRedirect;
         }
       })
-      .catch(function () {
-        setStatus(
-          'error',
-          '<strong>Dopyt sa nepodarilo odoslať.</strong> ' +
-            'Skúste to o chvíľu znova alebo nás kontaktujte priamo.'
-        );
+      .catch(function (err) {
+        var code = err && err.code;
+        var message;
+
+        if (code === 'rate_limited') {
+          message =
+            '<strong>Príliš veľa pokusov.</strong> ' +
+            'Skúste to znova o minútu.';
+        } else if (code === 'not_configured') {
+          message =
+            '<strong>Odosielanie dopytov je momentálne nedostupné.</strong> ' +
+            'Kontaktujte nás, prosím, priamo telefonicky alebo e-mailom.';
+        } else if (code === 'validation_failed') {
+          message =
+            '<strong>Niektoré údaje sa nedali spracovať.</strong> ' +
+            'Skontrolujte, prosím, vyplnené polia.';
+        } else {
+          message =
+            '<strong>Dopyt sa nepodarilo odoslať.</strong> ' +
+            'Skúste to o chvíľu znova alebo nás kontaktujte priamo.';
+        }
+        setStatus('error', message);
       })
       .then(function () {
         setBusy(false);

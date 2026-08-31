@@ -23,6 +23,41 @@ function siteId(siteUrl) {
 /*  <head>                                                             */
 /* ------------------------------------------------------------------ */
 
+/**
+ * Overenie pre Google Search Console a analytika.
+ *
+ * Kým nie sú v data/company.js reálne hodnoty, nevloží sa nič — žiadne
+ * fake ID, žiadny mŕtvy skript. Odporúčaná je bezcookie analytika,
+ * ktorá nevyžaduje súhlas ani cookie lištu.
+ */
+function renderIntegrations(company) {
+  const i = (company.integrations || {});
+  const a = i.analytics || {};
+  const out = [];
+
+  if (isSet(i.searchConsoleVerification)) {
+    out.push(`<meta name="google-site-verification" content="${esc(i.searchConsoleVerification)}">`);
+  }
+
+  if (isSet(a.provider) && isSet(a.id)) {
+    if (a.provider === 'plausible') {
+      out.push(
+        `<script defer data-domain="${esc(a.id)}" src="https://plausible.io/js/script.js"></script>`
+      );
+    } else if (a.provider === 'umami') {
+      const src = isSet(a.scriptUrl) ? a.scriptUrl : 'https://cloud.umami.is/script.js';
+      out.push(`<script defer data-website-id="${esc(a.id)}" src="${esc(src)}"></script>`);
+    } else if (a.provider === 'ga4') {
+      // GA4 ukladá cookies — bez súhlasu sa nesmie spúšťať.
+      // Preto sa načíta až po udelení súhlasu, ktorý nie je súčasťou
+      // tohto balíka. Zámerne sa tu nevkladá nič.
+      out.push('<!-- GA4 vyžaduje súhlas; consent vrstva nie je súčasťou tohto balíka -->');
+    }
+  }
+
+  return out.length ? '\n  ' + out.join('\n  ') : '';
+}
+
 export function renderHead({ company, title, description, path, noindex = false, extraHead = '' }) {
   const canonical = absoluteUrl(company.siteUrl, path);
   const desc = clampDescription(description);
@@ -51,6 +86,8 @@ export function renderHead({ company, title, description, path, noindex = false,
   <link rel="mask-icon" href="/assets/favicon.svg" color="#12161c">
   <link rel="manifest" href="/site.webmanifest">
   <meta name="theme-color" content="#fbfaf8">
+
+${renderIntegrations(company)}
 
   <link rel="preload" href="/assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/css/main.css" as="style">

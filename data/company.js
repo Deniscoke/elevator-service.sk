@@ -20,9 +20,9 @@ export const company = {
   claim: 'Servis, opravy a modernizácia výťahov',
 
   /* ---- web --------------------------------------------------------- */
-  // Klient v dotazníku uviedol „Neviem" k zachovaniu domény.
-  // Dovtedy pracujeme s existujúcou doménou.
-  siteUrl: process.env.SITE_URL || 'https://www.elevatorservis.sk',
+  // Produkčná doména. Kanonická je apex bez www; www na ňu presmeruje
+  // (presmerovanie je vo vercel.json).
+  siteUrl: process.env.SITE_URL || 'https://elevatorservis.sk',
   locale: 'sk_SK',
   lang: 'sk',
 
@@ -112,6 +112,21 @@ export const company = {
     // Žltá prevzatá z loga, grafitová z typografie loga.
     colors: { yellow: '#FFC61A', ink: '#12161B' },
     ogImage: '/assets/og-default.svg', // DOČASNÉ — treba 1200×630 PNG/JPG
+  },
+
+  /* ---- integrácie ----------------------------------------------------
+     Zapnú sa až po dodaní reálnych ID. Žiadne fake hodnoty — kým je tu
+     null, príslušný tag sa do stránky vôbec nevloží. */
+  integrations: {
+    // Google Search Console: obsah meta tagu google-site-verification.
+    searchConsoleVerification: null,
+    // Analytika. Odporúčaná je bezcookie (Plausible/Umami) — nevyžaduje
+    // súhlas ani cookie lištu. Pri GA4 treba doriešiť súhlas.
+    analytics: {
+      provider: null,   // 'plausible' | 'umami' | 'ga4'
+      id: null,         // doména pri Plausible, websiteId pri Umami, G-XXXX pri GA4
+      scriptUrl: null,  // pri self-hosted Umami
+    },
   },
 
   /* ---- profily ------------------------------------------------------ */

@@ -75,9 +75,31 @@ export default function page(ctx) {
         <ul>
           ${map(inquiryFields, (f) => `<li>${esc(f.label)}${f.required ? ' (povinný údaj)' : ''}</li>`)}
         </ul>
-        <p>
+        ${
+          isSet(company.integrations?.analytics?.provider)
+            ? `<p>
+          Web používa nástroj na meranie návštevnosti
+          (${esc(company.integrations.analytics.provider)}). Zbiera len súhrnné,
+          neosobné údaje o návštevnosti.
+        </p>`
+            : `<p>
           Web nepoužíva analytické ani reklamné nástroje a neukladá do vášho prehliadača
           žiadne súbory cookies na sledovanie správania.
+        </p>`
+        }
+
+        <h2>Komu sa údaje dostanú</h2>
+        <p>
+          Dopyt odoslaný cez formulár spracúvajú okrem nás dvaja
+          sprostredkovatelia, ktorí zabezpečujú technickú prevádzku:
+        </p>
+        <ul>
+          <li><strong>Vercel Inc.</strong> — hosting webu a spracovanie odoslaného formulára.</li>
+          <li><strong>Resend</strong> — doručenie dopytu do našej e-mailovej schránky.</li>
+        </ul>
+        <p>
+          Údaje sa neposkytujú nikomu ďalšiemu a nepoužívajú sa na profilovanie
+          ani na automatizované rozhodovanie.
         </p>
 
         <h2>Na aký účel údaje spracúvame</h2>

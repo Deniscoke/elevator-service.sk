@@ -63,5 +63,18 @@
         }
       ]
     }
+  ],
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.elevatorservis.sk"
+        }
+      ],
+      "destination": "https://elevatorservis.sk/:path*",
+      "permanent": true
+    }
   ]
 }

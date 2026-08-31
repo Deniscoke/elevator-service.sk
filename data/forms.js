@@ -15,8 +15,10 @@
  */
 
 export const forms = {
-  transport: null,   // ČAKÁ NA ROZHODNUTIE — 'json' | 'formdata' | 'mailto'
-  endpoint: null,    // ČAKÁ NA ROZHODNUTIE — URL endpointu
+  // Rozhodnuté: dopyt ide na vlastnú serverless funkciu na Verceli,
+  // ktorá ho odošle e-mailom. Detaily v api/dopyt.js.
+  transport: 'json',
+  endpoint: '/api/dopyt',
 
   /** Ochrana proti spamu bez externých služieb a bez CAPTCHA. */
   antispam: {
