@@ -39,12 +39,37 @@ Podklad: audit projektu z 31. 8. 2026 (6 dimenzií, 148 posúdených položiek).
 
 | DELIVERABLE | STATUS | FILE/URL | BLOCKER | NOTES |
 |---|---|---|---|---|
-| Funkčný dopytový formulár | WAITING FOR CLIENT | `api/dopyt.js` | `RESEND_API_KEY` | Pipeline hotový a nasadený; overené 405/503/200 na živom endpointe |
+| Funkčný dopytový formulár | WAITING FOR CLIENT | `api/dopyt.js` | `RESEND_API_KEY`, `INQUIRY_FROM`, overená doména v Resende | Pipeline hotový a nasadený; overené 405/503/200 na živom endpointe |
+| Premenné prostredia bez fallbacku | DONE | `api/dopyt.js` | — | Všetky tri povinné; pri chýbajúcej `503` + názov premennej v logu, žiadna skrytá náhradná adresa |
 | Serverová validácia | DONE | `api/dopyt.js` | — | Zrkadlí klientsku, kontextovo citlivá |
-| Antispam | DONE | honeypot + rate limit + limity dĺžok | — | Bez CAPTCHA a bez sledovania |
+| Reply-To v oboch smeroch | DONE | `api/dopyt.js` | — | Firme odpovedá priamo zákazníkovi, zákazníkovi späť na firemnú schránku |
+| Ochrana proti mailovej slučke | DONE | `api/dopyt.js` | — | Potvrdenie sa preskočí, ak je zadaná adresa naša vlastná |
+| Antispam | DONE | honeypot + čas vyplnenia + rate limit | — | Rate limit je best-effort per-inštancia, nie distribuovaný — viď `docs/DEPLOYMENT.md` |
 | **Prílohy — foto výťahu a štítku** | DONE | `data/forms.js`, `api/dopyt.js` | — | Deliverable balíka Rast |
+| Serverová kontrola príloh podľa obsahu | DONE | `api/dopyt.js` | — | Typ z magic bytes, nie z prípony ani z hlavičky prehliadača; názov cez whitelist znakov |
 | **Automatická odpoveď zákazníkovi** | DONE | `api/dopyt.js` | — | Deliverable balíka Rast |
-| Čestné správanie pri zlyhaní | DONE | `static/js/form.js` | — | Nikdy nepredstiera úspech |
+| Čestné správanie pri zlyhaní | DONE | `static/js/form.js`, `api/dopyt.js` | — | Nikdy nepredstiera úspech; zlyhanie potvrdenia nezruší už doručený dopyt |
+| Automatický test endpointu | DONE | `api/dopyt.test.mjs` | — | 27 scenárov bez siete, `node api/dopyt.test.mjs` |
+
+### Manuálny test po nastavení premenných
+
+Automatický test overí logiku, nie doručiteľnosť. Toto sa dá overiť až
+s ostrým kľúčom a overenou doménou:
+
+| # | Scenár | Očakávaný výsledok |
+|---|---|---|
+| 1 | `GET /api/dopyt` v prehliadači | `405` |
+| 2 | Odoslanie pred nastavením premenných | `503`, formulár ponúkne telefón |
+| 3 | Kompletný dopyt z `/kontakt/` | `200`, e-mail v schránke do minúty |
+| 4 | Odpoveď na notifikáciu v e-mailovom kliente | Adresát je zákazník, nie `INQUIRY_FROM` |
+| 5 | Potvrdenie zákazníkovi | Príde, Reply-To smeruje na firmu |
+| 6 | Dopyt len s telefónom, bez e-mailu | `200`, potvrdenie sa neposiela |
+| 7 | Formulár z `/kariera/` | `200`, predmet rozlíši kariéru od dopytu |
+| 8 | Príloha: foto výťahu + štítku | Prídu ako prílohy, čitateľné názvy |
+| 9 | Príloha `.exe` premenovaná na `.png` | `400`, konkrétna hláška, e-mail sa neodošle |
+| 10 | Súbor nad 2 MB | `400 attachment_too_large` |
+| 11 | 6 odoslaní za minútu z jedného zariadenia | `429` (pri rozložení na viac inštancií nemusí nastať — viď rate limit) |
+| 12 | Kontrola priečinka spam u prijímateľa | E-mail nie je v spame — inak dokončiť DKIM/SPF |
 
 ## 3. SEO
 
@@ -95,6 +120,8 @@ Podklad: audit projektu z 31. 8. 2026 (6 dimenzií, 148 posúdených položiek).
 | **Zápis v obchodnom registri** | Povinný údaj |
 | **Logo v elektronickej podobe** | Značka v hlavičke je rekonštrukcia z pečiatky |
 | **`RESEND_API_KEY`** | Bez neho formulár neodošle |
+| **`INQUIRY_FROM` — z akej adresy má web odosielať** | Musí byť na doméne overenej v Resende. Hodnotu určuje klient, nie je nikde v kóde a nemá náhradu |
+| **Overenie domény v Resende (DKIM/SPF)** | Bez neho Resend odosielanie odmietne. Záznamy z dashboardu Resendu; MX ani nameservery sa nemenia |
 | **DNS záznamy u Websupportu** | Bez nich doména neukazuje na Vercel |
 | **Mzda pri pracovných pozíciách** | Bez nej sa pozície nezverejnia — § 62 ods. 2 zák. 5/2004 Z. z. |
 | **Súhlasy s referenciami** | Bez nich sa sekcia nevykreslí |

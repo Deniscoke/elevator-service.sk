@@ -401,25 +401,41 @@
       })
       .catch(function (err) {
         var code = err && err.code;
-        var message;
 
-        if (code === 'rate_limited') {
-          message =
-            '<strong>Príliš veľa pokusov.</strong> ' +
-            'Skúste to znova o minútu.';
-        } else if (code === 'not_configured') {
-          message =
+        // Kódy zo servera. Server kontroluje prílohy ešte raz — podľa
+        // obsahu súboru, nie podľa prípony — takže sem sa dá dostať aj
+        // vtedy, keď kontrola v prehliadači prešla.
+        var MESSAGES = {
+          rate_limited:
+            '<strong>Príliš veľa pokusov.</strong> Skúste to znova o minútu.',
+          not_configured:
             '<strong>Odosielanie dopytov je momentálne nedostupné.</strong> ' +
-            'Kontaktujte nás, prosím, priamo telefonicky alebo e-mailom.';
-        } else if (code === 'validation_failed') {
-          message =
+            'Kontaktujte nás, prosím, priamo telefonicky alebo e-mailom.',
+          validation_failed:
             '<strong>Niektoré údaje sa nedali spracovať.</strong> ' +
-            'Skontrolujte, prosím, vyplnené polia.';
-        } else {
-          message =
-            '<strong>Dopyt sa nepodarilo odoslať.</strong> ' +
+            'Skontrolujte, prosím, vyplnené polia.',
+          too_many_files:
+            '<strong>Priložili ste priveľa súborov.</strong> ' +
+            'Naraz sa dajú poslať najviac ' + MAX_FILES + ' súbory.',
+          attachment_too_large:
+            '<strong>Jedna z príloh je väčšia než 2 MB.</strong> ' +
+            'Zmenšite ju, prosím, a skúste to znova.',
+          attachments_too_large:
+            '<strong>Prílohy spolu presahujú 3 MB.</strong> ' +
+            'Pošlite, prosím, menej súborov alebo ich zmenšite.',
+          attachment_type:
+            '<strong>Jednu z príloh sme nevedeli prijať.</strong> ' +
+            'Prijímame fotografie (JPG, PNG, WebP) a súbory PDF.',
+          invalid_attachment:
+            '<strong>Jednu z príloh sa nepodarilo načítať.</strong> ' +
+            'Skúste ju, prosím, priložiť znova.',
+        };
+
+        var message =
+          MESSAGES[code] ||
+          '<strong>Dopyt sa nepodarilo odoslať.</strong> ' +
             'Skúste to o chvíľu znova alebo nás kontaktujte priamo.';
-        }
+
         setStatus('error', message);
       })
       .then(function () {

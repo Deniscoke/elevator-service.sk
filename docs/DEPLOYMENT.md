@@ -210,31 +210,125 @@ Resend sa volá cez `fetch` na REST API.
 
 ### Premenné prostredia vo Verceli
 
+**Všetky tri sú povinné a žiadna nemá fallback.** Ak niektorá chýba, funkcia
+vráti `503` a do logu napíše, ktorá to je. Zámerne tam nie je žiadna náhradná
+adresa — radšej čitateľná chyba než dopyt odoslaný z adresy, o ktorej klient
+nevie.
+
 | Premenná | Povinná | Hodnota |
 |---|---|---|
-| `RESEND_API_KEY` | **áno** | Kľúč z resend.com |
-| `INQUIRY_TO` | nie | Kam chodia dopyty. Bez nej sa použije `contact.email` z `data/company.js` |
-| `INQUIRY_FROM` | nie | Odosielateľ. Musí byť na doméne overenej v Resende |
+| `RESEND_API_KEY` | **áno** | Kľúč z resend.com (`re_…`) |
+| `INQUIRY_TO` | **áno** | Kam chodia dopyty — `elevator@elevatorservis.sk` |
+| `INQUIRY_FROM` | **áno** | Odosielateľ. Musí byť na doméne overenej v Resende. Tvar `Meno <adresa@doména>` alebo holá adresa. **Konkrétnu hodnotu určuje klient, v kóde nie je.** |
 | `SITE_URL` | odporúčaná | `https://elevatorservis.sk` |
+
+Nastavujú sa vo Vercel → Settings → Environment Variables, pre prostredia
+Production aj Preview. Po zmene je nutný nový deploy — funkcie si premenné
+načítajú pri štarte inštancie.
 
 ### Nastavenie Resendu
 
 1. Vytvoriť účet na resend.com (free tier: 3 000 e-mailov/mesiac, 100/deň).
-2. Pridať doménu `elevatorservis.sk` a doplniť **TXT záznamy** (DKIM + SPF),
-   ktoré Resend zobrazí. **MX sa nemenia.**
-3. Vygenerovať API kľúč a vložiť ho do Vercelu ako `RESEND_API_KEY`.
+2. **Domains → Add Domain → `elevatorservis.sk`.**
+3. Resend zobrazí konkrétne DNS záznamy pre túto doménu — typicky DKIM
+   (`TXT` na subdoméne `resend._domainkey`), SPF (`TXT`) a voliteľný
+   MAIL FROM záznam. **Tieto hodnoty sa preberajú z dashboardu Resendu,
+   nie z tejto dokumentácie ani z generických návodov.** Sú viazané na
+   konkrétny účet a doménu, takže sem sa naslepo nezapisujú.
+4. Záznamy doplniť u správcu DNS domény (DNS nie je vo Verceli).
+5. Počkať na stav **Verified** v Resende.
+6. Vygenerovať API kľúč (Sending access stačí) a vložiť ho do Vercelu.
+7. Až potom nastaviť `INQUIRY_FROM` na adresu v overenej doméne.
 
-### Správanie bez kľúča
+**Bez overenej domény Resend odmietne odoslať e-mail** — funkcia vtedy vráti
+`502` a formulár používateľovi povie, že sa dopyt nepodarilo odoslať. Nikdy
+nepredstiera úspech.
 
-Funkcia vráti `503 not_configured` a formulár používateľovi povie, že
-odosielanie je nedostupné a má sa ozvať telefonicky alebo e-mailom.
-**Nikdy nepredstiera úspech a dopyt nikdy ticho nezahodí.**
+#### Čo sa pri tom NESMIE zmeniť
 
-### Antispam
+- **MX záznamy** — firemná pošta musí zostať funkčná. Resend na odosielanie
+  MX nepotrebuje.
+- **Nameservery** — DNS je spravované mimo Vercelu a ostáva tak.
+- Existujúce SPF: ak už doména jeden `TXT` so `v=spf1` má, **nepridáva sa
+  druhý** — do existujúceho sa doplní `include` podľa pokynu Resendu.
+  Dva SPF záznamy na jednej doméne SPF rozbijú.
 
-Honeypot pole, minimálny čas vyplnenia, serverová validácia zrkadliaca
-klientskú, limity dĺžky polí a jednoduchý rate limit (5 odoslaní za minútu
-z jednej IP). Žiadna CAPTCHA, žiadne sledovanie.
+### Adresy v odoslaných e-mailoch
+
+| E-mail | From | To | Reply-To |
+|---|---|---|---|
+| Notifikácia firme | `INQUIRY_FROM` | `INQUIRY_TO` | e-mail zákazníka — odpovedá sa priamo z schránky |
+| Potvrdenie zákazníkovi | `INQUIRY_FROM` | e-mail zákazníka | `INQUIRY_TO` |
+
+Potvrdenie sa posiela len vtedy, keď zákazník e-mail uviedol (formulár
+pripúšťa aj samotný telefón) a keď zadaná adresa **nie je naša vlastná** —
+inak by si systém mohol odpovedať sám sebe.
+
+Ak zlyhá potvrdenie zákazníkovi, dopyt je už doručený firme a odpoveď
+zostáva `200`. Zlyhanie sa zapíše do logu. Opačne to nefunguje: keď zlyhá
+notifikácia firme, používateľ dostane `502` a vidí chybu.
+
+### Chybové stavy
+
+| Stav | Kedy nastane | Čo vidí používateľ |
+|---|---|---|
+| `200 ok` | dopyt doručený, alebo zachytený honeypot | potvrdenie |
+| `400 validation_failed` | serverová validácia neprešla | výzva skontrolovať polia |
+| `400 too_many_files` / `attachment_too_large` / `attachments_too_large` / `attachment_type` / `invalid_attachment` | príloha neprešla serverovou kontrolou | konkrétna hláška podľa dôvodu |
+| `429 rate_limited` | viac než 5 odoslaní za minútu z jednej IP | výzva skúsiť o minútu |
+| `502 send_failed` | Resend odmietol alebo nie je dostupný | chyba + odkaz na telefón |
+| `503 not_configured` | chýba premenná prostredia | informácia, že odosielanie je nedostupné |
+| `405` | iná metóda než POST | — |
+
+Honeypot vracia `200` **pred** kontrolou konfigurácie — robot sa tak nedozvie
+nič o stave servera.
+
+### Prílohy
+
+Povolené sú JPG, PNG, WebP a PDF; najviac 3 súbory, 2 MB na súbor, 3 MB spolu.
+
+Server prílohy kontroluje **znova a nezávisle od prehliadača**. Neverí ani
+prípone názvu, ani hlavičke `type`, ktorú pošle prehliadač — typ určí podľa
+prvých bajtov súboru (magic bytes). Prípona uloženého súboru sa dosadí podľa
+zisteného typu, takže `faktura.pdf.exe` s obsahom PDF skončí ako
+`faktura.pdf`, a súbor `.exe` vydávaný za PNG sa odmietne. Názov prechádza
+whitelistom znakov, takže cesty ani riadiace znaky neprejdú.
+
+Veľkosť sa kontroluje z dĺžky base64 **pred dekódovaním** — veľký vstup tak
+nič nealokuje.
+
+### Rate limit — čo naozaj vie
+
+`api/dopyt.js` počíta odoslania na IP v pamäti bežiacej inštancie:
+5 za minútu. **Nie je to distribuovaný limit a nesmie sa tak prezentovať.**
+
+Vercel spúšťa viac serverless inštancií naraz a po čase ich recykluje.
+Dôsledky:
+
+- požiadavky rozložené na N inštancií znamenajú až N × 5 pokusov za minútu,
+- po studenom štarte je počítadlo prázdne,
+- limit nie je bezpečnostná záruka, je to brzda proti primitívnemu zaplaveniu.
+
+Skutočnú ochranu robia dve veci, ktoré od stavu inštancie nezávisia:
+**honeypot** (skryté pole, ktoré vyplní len robot) a **minimálny čas
+vyplnenia** formulára. Obe sú aktívne a testované.
+
+Ak by spam prerástol, riešením je perzistentné počítadlo (Vercel KV, Redis)
+alebo Vercel BotID. **Oboje je platená služba a zmena rozsahu — nezavádza sa
+bez odsúhlasenia klientom.**
+
+### Test pred spustením
+
+Automatický test bez siete (Resend je podvrhnutý, nič sa neodosiela):
+
+```bash
+node api/dopyt.test.mjs
+```
+
+Pokrýva 27 scenárov: chýbajúce premenné po jednej, honeypot, validáciu,
+adresy a Reply-To v oboch e-mailoch, ochranu proti slučke, prílohy vrátane
+podvrhnutého typu a prekročených limitov, zlyhanie Resendu a rate limit.
+Manuálny zoznam pre ostrú prevádzku je v `docs/PACKAGE_800_SCOPE.md`.
 
 ---
 

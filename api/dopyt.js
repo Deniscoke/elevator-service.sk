@@ -17,10 +17,16 @@
  *  odoslanie zlyhá, vráti chybu a frontend to používateľovi povie.
  * ══════════════════════════════════════════════════════════════════
  *
- *  Premenné prostredia (Vercel → Settings → Environment Variables):
- *    RESEND_API_KEY   povinné — kľúč z resend.com
- *    INQUIRY_TO       nepovinné — kam chodia dopyty
- *    INQUIRY_FROM     nepovinné — odosielateľ na doméne overenej v Resende
+ *  Premenné prostredia (Vercel → Settings → Environment Variables).
+ *  VŠETKY TRI SÚ POVINNÉ. Žiadna nemá fallback — pri chýbajúcej vráti
+ *  funkcia 503 a napíše do logu, ktorá chýba.
+ *
+ *    RESEND_API_KEY   kľúč z resend.com
+ *    INQUIRY_TO       kam chodia dopyty, napr. elevator@elevatorservis.sk
+ *    INQUIRY_FROM     odosielateľ; musí byť na doméne overenej v Resende,
+ *                     napr. "ELEVÁTOR SERVIS <web@elevatorservis.sk>"
+ *
+ *  Produkčnú hodnotu INQUIRY_FROM určuje klient. Nie je nikde v kóde.
  */
 
 import { company } from '../data/company.js';
@@ -29,16 +35,32 @@ import { forms } from '../data/forms.js';
 
 const RESEND_ENDPOINT = 'https://api.resend.com/emails';
 
-const TO = process.env.INQUIRY_TO || company.contact.email;
-
 /**
- * Odosielateľ.
+ * Konfigurácia sa číta pri každej požiadavke a NEMÁ žiadny fallback.
  *
- * Žiadna vymyslená adresa — bez nastavenej premennej sa použije jediný
- * potvrdený firemný e-mail z dátovej vrstvy. Ten musí byť v Resende
- * na overenej doméne, inak Resend odoslanie odmietne a funkcia vráti 502.
+ * Skorší variant dosadzoval za chýbajúci INQUIRY_FROM a INQUIRY_TO
+ * e-mail z dátovej vrstvy. Znamenalo to, že zle nakonfigurované
+ * nasadenie odosielalo z adresy, ktorú nikto vedome nenastavil —
+ * a nikto sa to nedozvedel. Radšej čestne zlyhať.
  */
-const FROM = process.env.INQUIRY_FROM || `${company.legalName} <${company.contact.email}>`;
+function readConfig() {
+  const cfg = {
+    apiKey: (process.env.RESEND_API_KEY || '').trim(),
+    to: (process.env.INQUIRY_TO || '').trim(),
+    from: (process.env.INQUIRY_FROM || '').trim(),
+  };
+  const missing = [];
+  if (!cfg.apiKey) missing.push('RESEND_API_KEY');
+  if (!cfg.to) missing.push('INQUIRY_TO');
+  if (!cfg.from) missing.push('INQUIRY_FROM');
+  return { ...cfg, missing };
+}
+
+/** Z „Meno <adresa@doména>" vytiahne samotnú adresu. */
+function bareAddress(value) {
+  const match = String(value).match(/<([^>]+)>/);
+  return (match ? match[1] : String(value)).trim().toLowerCase();
+}
 
 const LIMITS = {
   meno: 120,
@@ -65,15 +87,89 @@ const ATTACH = {
   allowed: new Set(forms.attachments.accept.split(',').map((t) => t.trim())),
 };
 
+/**
+ * Typ súboru sa určuje z obsahu, nie z prípony ani z toho, čo tvrdí
+ * prehliadač. Oboje si útočník nastaví ľubovoľne.
+ */
+const SIGNATURES = [
+  { mime: 'image/jpeg', ext: 'jpg', test: (b) => b[0] === 0xff && b[1] === 0xd8 && b[2] === 0xff },
+  {
+    mime: 'image/png',
+    ext: 'png',
+    test: (b) => b[0] === 0x89 && b[1] === 0x50 && b[2] === 0x4e && b[3] === 0x47,
+  },
+  {
+    mime: 'image/webp',
+    ext: 'webp',
+    test: (b) =>
+      b[0] === 0x52 && b[1] === 0x49 && b[2] === 0x46 && b[3] === 0x46 &&
+      b[8] === 0x57 && b[9] === 0x45 && b[10] === 0x42 && b[11] === 0x50,
+  },
+  {
+    mime: 'application/pdf',
+    ext: 'pdf',
+    test: (b) => b[0] === 0x25 && b[1] === 0x50 && b[2] === 0x44 && b[3] === 0x46,
+  },
+];
+
+function sniffType(base64) {
+  let head;
+  try {
+    head = Buffer.from(base64.slice(0, 64), 'base64');
+  } catch {
+    return null;
+  }
+  if (head.length < 12) return null;
+  return SIGNATURES.find((s) => s.test(head)) || null;
+}
+
+/**
+ * Názov súboru zbavený všetkého, čo do neho nepatrí.
+ *
+ * Namiesto zoznamu zakázaných znakov je tu zoznam POVOLENÝCH — písmená,
+ * číslice, medzera, bodka, pomlčka a podčiarkovník. Cesty ani riadiace
+ * znaky sa cez to nedostanú a nezávisí to na tom, či sa v zdrojáku
+ * správne zapísali únikové sekvencie.
+ *
+ * Prípona sa NEPREBERÁ zo vstupu — dosadí sa podľa zisteného typu,
+ * takže „faktura.pdf.exe“ skončí ako „faktura.pdf“.
+ */
+function safeFilename(name, ext) {
+  const base =
+    String(name)
+      .replace(/[^\p{L}\p{N} ._-]+/gu, ' ')
+      .replace(/\.[a-z0-9]{1,8}$/i, '')
+      .replace(/[.\s]+/g, ' ')
+      .trim()
+      .slice(0, 80) || 'priloha';
+  return `${base}.${ext}`;
+}
+
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i;
 const PHONE_RE = /^\+?[\d\s()/-]{9,20}$/;
 
 /**
- * Najjednoduchší možný rate limit.
+ * Rate limit — BEST-EFFORT, NIE DISTRIBUOVANÝ.
  *
- * Serverless inštancie sú krátkodobé a je ich viac, takže toto nie je
- * spoľahlivá obrana — je to lacná brzda proti jednoduchému zaplaveniu
- * z jednej IP. Skutočnú ochranu robí honeypot a validácia.
+ * Počítadlo žije v pamäti JEDNEJ serverless inštancie. Vercel spúšťa
+ * inštancií viac naraz a po čase ich recykluje, takže:
+ *
+ *   – útočník, ktorého požiadavky padnú na rôzne inštancie, dostane
+ *     až N × MAX_PER_WINDOW pokusov namiesto MAX_PER_WINDOW,
+ *   – po studenom štarte je počítadlo prázdne,
+ *   – limit sa NEDÁ použiť ako bezpečnostná záruka a nesmie sa tak
+ *     ani opisovať v dokumentácii.
+ *
+ * Je to lacná brzda proti primitívnemu zaplaveniu z jednej IP, nič viac.
+ * Skutočnú ochranu formulára robia dve iné veci, ktoré od stavu
+ * inštancie nezávisia:
+ *
+ *   1. honeypot (skryté pole „website“), ktoré vyplní len robot,
+ *   2. minimálny čas vyplnenia (forms.antispam.minFillSeconds).
+ *
+ * Ak by spam prerástol, riešením je perzistentné počítadlo (KV / Redis)
+ * alebo Vercel BotID. Oboje je zmena rozsahu a platená služba — bez
+ * odsúhlasenia klientom sa nezavádza. Viac: docs/DEPLOYMENT.md.
  */
 const seen = new Map();
 const WINDOW_MS = 60_000;
@@ -152,20 +248,27 @@ function normaliseAttachments(raw) {
 
   for (const f of raw) {
     const name = clean(f && f.name, 160);
-    const type = clean(f && f.type, 80);
-    const content = typeof (f && f.content) === 'string' ? f.content : '';
+    const content = typeof (f && f.content) === 'string' ? f.content.replace(/\s/g, '') : '';
 
-    if (!name || !content) return { files: [], error: 'invalid_attachment' };
-    if (!ATTACH.allowed.has(type)) return { files: [], error: 'attachment_type' };
+    if (!name || !content || !/^[A-Za-z0-9+/]+={0,2}$/.test(content.slice(0, 256))) {
+      return { files: [], error: 'invalid_attachment' };
+    }
 
-    // Dĺžka base64 → približná veľkosť v bajtoch.
+    // Dĺžka base64 → približná veľkosť v bajtoch. Kontroluje sa PRED
+    // dekódovaním, aby veľký vstup nič nealokoval.
     const bytes = Math.floor((content.length * 3) / 4);
     if (bytes > ATTACH.maxFileBytes) return { files: [], error: 'attachment_too_large' };
 
     total += bytes;
     if (total > ATTACH.maxTotalBytes) return { files: [], error: 'attachments_too_large' };
 
-    files.push({ filename: name, content });
+    // Typ z obsahu, nie z prípony ani z hlavičky prehliadača.
+    const sig = sniffType(content);
+    if (!sig || !ATTACH.allowed.has(sig.mime)) {
+      return { files: [], error: 'attachment_type' };
+    }
+
+    files.push({ filename: safeFilename(name, sig.ext), content });
   }
 
   return { files, error: null };
@@ -281,11 +384,11 @@ ${company.siteUrl}`;
   return { subject: 'Prijali sme váš dopyt — ' + company.name, text, html };
 }
 
-async function sendViaResend(payload) {
+async function sendViaResend(apiKey, payload) {
   const response = await fetch(RESEND_ENDPOINT, {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+      Authorization: `Bearer ${apiKey}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(payload),
@@ -312,9 +415,15 @@ export default async function handler(req, res) {
     return res.status(200).json({ ok: true });
   }
 
-  if (!process.env.RESEND_API_KEY) {
-    console.error('[dopyt] RESEND_API_KEY nie je nastavený — dopyt sa neodoslal.');
-    return res.status(503).json({ ok: false, error: 'not_configured' });
+  /* Konfigurácia. Chýbajúca premenná = čestné zlyhanie, nie tichá
+     náhrada. Názov chýbajúcej premennej vraciame zámerne — nie je to
+     tajomstvo a bez neho sa chyba ladí naslepo. */
+  const cfg = readConfig();
+  if (cfg.missing.length) {
+    console.error('[dopyt] chýba konfigurácia:', cfg.missing.join(', '), '— dopyt sa neodoslal.');
+    return res
+      .status(503)
+      .json({ ok: false, error: 'not_configured', missing: cfg.missing });
   }
 
   const ip =
@@ -355,9 +464,9 @@ export default async function handler(req, res) {
   const mail = buildEmail(data, files.length);
 
   try {
-    await sendViaResend({
-      from: FROM,
-      to: [TO],
+    await sendViaResend(cfg.apiKey, {
+      from: cfg.from,
+      to: [cfg.to],
       subject: mail.subject,
       text: mail.text,
       html: mail.html,
@@ -370,22 +479,34 @@ export default async function handler(req, res) {
   }
 
   /* Automatické potvrdenie zákazníkovi.
-     Zlyhanie tu NESMIE zhodiť celú požiadavku — dopyt už firma dostala,
-     takže z pohľadu používateľa je odoslanie úspešné. */
-  if (data.email) {
+     Dve poistky:
+     1. Zlyhanie tu NESMIE zhodiť požiadavku — dopyt už firma dostala,
+        takže z pohľadu odosielateľa je odoslanie úspešné. Iba sa zaloguje.
+     2. Ak zadal adresu, ktorá je zároveň naša schránka alebo odosielateľ,
+        potvrdenie sa neposiela — inak by sme písali sami sebe a pri
+        zapnutej automatickej odpovedi by vznikla slučka. */
+  const customer = data.email.toLowerCase();
+  const ours = new Set([bareAddress(cfg.to), bareAddress(cfg.from)]);
+
+  if (data.email && !ours.has(customer)) {
     try {
       const confirm = buildConfirmation(data);
-      await sendViaResend({
-        from: FROM,
+      await sendViaResend(cfg.apiKey, {
+        from: cfg.from,
         to: [data.email],
         subject: confirm.subject,
         text: confirm.text,
         html: confirm.html,
-        reply_to: TO,
+        reply_to: cfg.to,
       });
     } catch (err) {
-      console.error('[dopyt] potvrdenie zákazníkovi zlyhalo:', err.message);
+      console.error(
+        '[dopyt] dopyt DORUČENÝ firme, ale potvrdenie zákazníkovi zlyhalo:',
+        err.message
+      );
     }
+  } else if (data.email) {
+    console.warn('[dopyt] potvrdenie preskočené — adresa zákazníka je naša vlastná.');
   }
 
   return res.status(200).json({ ok: true });
