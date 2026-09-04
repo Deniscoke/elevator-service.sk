@@ -8,6 +8,8 @@
  * servera pri zlej konfigurácii, podvrhnutých prílohách a zlyhaní API.
  */
 
+import { company } from '../data/company.js';
+
 const results = [];
 let sent = [];
 let failNext = null;
@@ -154,6 +156,56 @@ async function run() {
   check('Reply-To notifikácie je zákazník', sent[0]?.reply_to === VALID.email);
   check('potvrdenie ide zákazníkovi', sent[1]?.to?.[0] === VALID.email);
   check('Reply-To potvrdenia je firma', sent[1]?.reply_to === FULL_ENV.INQUIRY_TO);
+
+  // 6b. obsah potvrdenia zákazníkovi
+  const confirm = sent[1] || {};
+  const emergencyPhone = company.emergency?.enabled ? company.contact.emergencyPhone : null;
+
+  check(
+    'predmet potvrdenia je presne dohodnutý',
+    confirm.subject === 'Ďakujeme za váš dopyt – ELEVÁTOR SERVIS',
+    confirm.subject
+  );
+  check(
+    'potvrdenie hovorí, že správa bola doručená',
+    /úspešne doručená/.test(confirm.text || '') &&
+      (confirm.text || '').includes(company.legalName)
+  );
+  check(
+    'potvrdenie sľubuje odpoveď na uvedený kontakt, nie termín',
+    /kontaktných údajov, ktoré ste uviedli/.test(confirm.text || '')
+  );
+  check(
+    'potvrdenie NESĽUBUJE čas odpovede',
+    !/do\s*\d+\s*(hodin|hod|dn|prac)/i.test(confirm.text || '') &&
+      !/do\s*\d+\s*(hodin|hod|dn|prac)/i.test(confirm.html || '')
+  );
+  check(
+    'potvrdenie odlišuje haváriu od bežného dopytu',
+    /havarijn/i.test(confirm.text || '') &&
+      /uviazla osoba/i.test(confirm.text || '') &&
+      /nepoužívajte webový formulár/i.test(confirm.text || '')
+  );
+  check(
+    'havarijné číslo pochádza z data/company.js',
+    emergencyPhone
+      ? (confirm.text || '').includes(emergencyPhone) &&
+        (confirm.html || '').includes(`tel:${emergencyPhone.replace(/\s+/g, '')}`)
+      : !/\+421|\d{3} \d{3} \d{3}/.test(confirm.text || ''),
+    emergencyPhone ? `z konfigurácie: ${emergencyPhone}` : 'číslo nie je potvrdené — správne sa neuvádza'
+  );
+  check(
+    'potvrdenie neobsahuje text zákazníka (nie je čo escapovať)',
+    !(confirm.text || '').includes(VALID.sprava) && !(confirm.html || '').includes(VALID.sprava)
+  );
+  check(
+    'HTML potvrdenia nemá externé zdroje ani sledovacie pixely',
+    !/<img|<script|<link|<iframe|background-image|url\(/i.test(confirm.html || '')
+  );
+  check(
+    'HTML potvrdenia je v slovenčine a má vlastný titulok',
+    /<html lang="sk">/.test(confirm.html || '') && /<title>/.test(confirm.html || '')
+  );
 
   // 7. ochrana proti slučke
   sent = [];

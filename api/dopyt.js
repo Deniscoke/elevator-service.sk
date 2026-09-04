@@ -328,60 +328,132 @@ function buildEmail(d, attachmentCount) {
 /**
  * Automatická odpoveď zákazníkovi.
  *
- * Zámerne nesľubuje čas odpovede — taký záväzok klient pre bežné dopyty
- * nepotvrdil. Potvrdzuje len prijatie a zhrnie, čo odoslal.
+ * Zámerne NESĽUBUJE čas odpovede — taký záväzok klient pre bežné dopyty
+ * nepotvrdil. Potvrdzuje prijatie a odlišuje bežný dopyt od havárie.
+ *
+ * Havarijné číslo sa berie výhradne z data/company.js. Ak by ho klient
+ * nemal potvrdené (`emergency.enabled === false` alebo prázdne číslo),
+ * odstavec o havárii sa vykreslí bez čísla — číslo sa nevymýšľa.
+ *
+ * E-mail zámerne neobsahuje žiadny údaj od zákazníka. Nie je čo escapovať
+ * a potvrdenie sa nedá zneužiť na odraz cudzieho obsahu.
  */
-function buildConfirmation(d) {
-  const summary = [
-    d.mesto ? `Mesto: ${d.mesto}` : '',
-    d.typPoziadavky ? `Typ požiadavky: ${labelOf(inquiryTypes, d.typPoziadavky)}` : '',
-  ]
-    .filter(Boolean)
-    .join('\n');
+function emergencyLine() {
+  const enabled = company.emergency && company.emergency.enabled;
+  const phone = enabled ? String(company.contact.emergencyPhone || '').trim() : '';
+  return phone || null;
+}
+
+function buildConfirmation() {
+  const phone = emergencyLine();
+  const domain = String(company.siteUrl || '').replace(/^https?:\/\//, '').replace(/\/$/, '');
+
+  const emergencyText = phone
+    ? `V prípade havarijnej situácie alebo ak vo výťahu uviazla osoba, nepoužívajte webový formulár a volajte priamo havarijnú linku ${phone}.`
+    : 'V prípade havarijnej situácie alebo ak vo výťahu uviazla osoba, nepoužívajte webový formulár a kontaktujte nás telefonicky.';
 
   const text = `Dobrý deň,
 
-váš dopyt sme prijali a ozveme sa na kontakt, ktorý ste uviedli.
+ďakujeme za váš dopyt.
 
-${summary}
+Vaša správa bola úspešne doručená spoločnosti ${company.legalName} a budeme sa jej venovať čo najskôr.
 
-Vaša správa:
-${d.sprava}
+Ak ste nám poslali informácie o konkrétnom výťahu, poruche alebo požiadavke na servis, ozveme sa vám po ich preverení prostredníctvom kontaktných údajov, ktoré ste uviedli vo formulári.
 
-Toto je automatické potvrdenie prijatia — netreba naň odpovedať.
+${emergencyText}
+
+Ďakujeme za dôveru.
 
 ${company.legalName}
-${company.contact.phone}
-${company.siteUrl}`;
+${domain}
 
-  const html = `<!DOCTYPE html><html lang="sk"><body style="margin:0;background:#f3f1ec;padding:24px;font-family:Arial,Helvetica,sans-serif;color:#23292f">
-<div style="max-width:560px;margin:0 auto;background:#fff;border-radius:8px;overflow:hidden">
-  <div style="background:#12161c;padding:22px 24px">
-    <div style="height:3px;width:48px;background:#ffc61a;margin-bottom:12px"></div>
-    <div style="color:#fff;font-size:18px;font-weight:bold">Váš dopyt sme prijali</div>
-  </div>
-  <div style="padding:22px 24px;font-size:14px;line-height:1.65">
-    <p style="margin:0 0 14px">Dobrý deň,</p>
-    <p style="margin:0 0 18px">váš dopyt sme prijali a ozveme sa na kontakt, ktorý ste uviedli.</p>
-    ${
-      summary
-        ? `<div style="background:#f3f1ec;border-radius:6px;padding:12px 16px;margin-bottom:18px;font-size:13px;white-space:pre-line">${escapeHtml(summary)}</div>`
-        : ''
-    }
-    <div style="color:#5b6670;font-size:12px;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Vaša správa</div>
-    <div style="white-space:pre-wrap;margin-bottom:20px">${escapeHtml(d.sprava)}</div>
-    <p style="margin:0;color:#5b6670;font-size:12px">
-      Toto je automatické potvrdenie prijatia — netreba naň odpovedať.
-    </p>
-  </div>
-  <div style="padding:16px 24px;background:#12161c;color:#a8b0b8;font-size:12px">
-    <strong style="color:#fff">${escapeHtml(company.legalName)}</strong><br>
-    ${escapeHtml(company.contact.phone)} · ${escapeHtml(company.siteUrl)}
-  </div>
-</div>
-</body></html>`;
+Toto je automatická potvrdzovacia správa. Na túto správu nie je potrebné odpovedať.`;
 
-  return { subject: 'Prijali sme váš dopyt — ' + company.name, text, html };
+  const html = `<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ďakujeme za váš dopyt</title>
+</head>
+<body style="margin:0;padding:0;background:#f3f1ec;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f3f1ec;">
+  <tr>
+    <td align="center" style="padding:24px 12px;">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="560" style="width:100%;max-width:560px;background:#ffffff;border:1px solid #e4e0d8;border-radius:8px;">
+        <tr>
+          <td style="padding:28px 28px 0 28px;">
+            <div style="height:4px;width:56px;background:#ffc61a;border-radius:2px;"></div>
+            <h1 style="margin:18px 0 0 0;font-family:Arial,Helvetica,sans-serif;font-size:20px;line-height:1.3;color:#12161c;font-weight:bold;">
+              Ďakujeme za váš dopyt
+            </h1>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:18px 28px 4px 28px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.65;color:#262e37;">
+            <p style="margin:0 0 14px 0;">Dobrý deň,</p>
+            <p style="margin:0 0 14px 0;">ďakujeme za váš dopyt.</p>
+            <p style="margin:0 0 14px 0;">
+              Vaša správa bola úspešne doručená spoločnosti
+              <strong style="color:#12161c;">${company.legalName}</strong>
+              a budeme sa jej venovať čo najskôr.
+            </p>
+            <p style="margin:0 0 20px 0;">
+              Ak ste nám poslali informácie o konkrétnom výťahu, poruche alebo požiadavke
+              na servis, ozveme sa vám po ich preverení prostredníctvom kontaktných údajov,
+              ktoré ste uviedli vo formulári.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:0 28px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fff6df;border-left:4px solid #ffc61a;border-radius:0 6px 6px 0;">
+              <tr>
+                <td style="padding:14px 16px;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.6;color:#262e37;">
+                  <strong style="color:#12161c;">Havarijná situácia</strong><br>
+                  Ak vo výťahu uviazla osoba alebo ide o haváriu, nečakajte na odpoveď
+                  na tento formulár${
+                    phone
+                      ? ` a volajte priamo havarijnú linku
+                  <a href="tel:${phone.replace(/\s+/g, '')}" style="color:#12161c;font-weight:bold;text-decoration:underline;">${phone}</a>.`
+                      : ' a kontaktujte nás telefonicky.'
+                  }
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:20px 28px 0 28px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.65;color:#262e37;">
+            <p style="margin:0;">Ďakujeme za dôveru.</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:20px 28px 24px 28px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td style="border-top:1px solid #e4e0d8;padding-top:16px;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.6;color:#12161c;">
+                  <strong>${company.legalName}</strong><br>
+                  <a href="${company.siteUrl}" style="color:#5b6670;text-decoration:none;">${domain}</a>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding-top:14px;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;color:#5b6670;">
+                  Toto je automatická potvrdzovacia správa.
+                  Na túto správu nie je potrebné odpovedať.
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+</body>
+</html>`;
+
+  return { subject: `Ďakujeme za váš dopyt – ${company.name}`, text, html };
 }
 
 async function sendViaResend(apiKey, payload) {
