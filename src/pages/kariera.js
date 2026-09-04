@@ -46,9 +46,7 @@ export default function page(ctx) {
           ${
             open
               ? 'Aktuálne obsadzujeme pozície uvedené nižšie.'
-              : hasRoles
-              ? 'Priebežne hľadáme ľudí na pozície uvedené nižšie. Konkrétnu ponuku vrátane mzdových podmienok zverejníme, keď pozíciu otvoríme.'
-              : 'Momentálne nemáme zverejnenú žiadnu voľnú pozíciu. Keď sa to zmení, nájdete ju tu.'
+              : 'Momentálne nemáme zverejnenú konkrétnu voľnú pozíciu. To ale neznamená, že sa neoplatí ozvať.'
           }
         </p>
         ${when(
@@ -65,7 +63,7 @@ export default function page(ctx) {
 
   /* ---- otvorené pozície — len ak existujú ------------------------- */
   const positionsBlock = when(
-    hasRoles,
+    open,
     () => `
   <section class="section" id="pozicie">
     <div class="container">
@@ -92,9 +90,42 @@ export default function page(ctx) {
   </section>`
   );
 
-  /* ---- prázdny stav — čo zverejníme ------------------------------- */
+  /* ---- evergreen nábor — keď nie je otvorená konkrétna pozícia -----
+     Netvrdíme počet voľných miest ani že práve niekoho prijímame.
+     Hovoríme, o aké profesie ide a od čoho závisí odborná spôsobilosť.
+     Právny základ znenia je v docs/LEGAL_CONTENT_SOURCES.md. */
+  const evergreenBlock = when(
+    !open,
+    () => `
+  <section class="section" id="pozicie">
+    <div class="container container--narrow">
+      ${sectionHead({
+        index: '02',
+        eyebrow: 'Koho hľadáme',
+        title: 'Ozvite sa aj bez zverejneného inzerátu',
+      })}
+      <div class="prose">
+        <p>
+          Máte skúsenosti so servisom výťahov, s elektrotechnikou alebo s vyhradenými
+          technickými zariadeniami? Napíšte nám. Keď sa miesto uvoľní alebo otvoríme
+          nové, oslovujeme najskôr ľudí, o ktorých už vieme.
+        </p>
+        <p>
+          Požadovaná odborná spôsobilosť závisí od konkrétnej činnosti a rozsahu prác.
+          Pri pozícii revízneho technika sa riadi platnými právnymi predpismi —
+          rozsah vzdelania, praxe a osvedčení určuje vyhláška č. 508/2009 Z. z.
+          a jej príloha č. 11. Pri prácach na elektrických technických zariadeniach
+          môžu pribudnúť ďalšie požiadavky na elektrotechnickú spôsobilosť.
+          Čo presne sa vyžaduje, si povieme podľa toho, o akú prácu pôjde.
+        </p>
+      </div>
+    </div>
+  </section>`
+  );
+
+  /* ---- čo o pozícii zverejníme, keď ju otvoríme -------------------- */
   const emptyBlock = when(
-    !hasRoles,
+    !open,
     () => `
   <section class="section">
     <div class="container container--narrow">
@@ -147,6 +178,7 @@ export default function page(ctx) {
   const main = [
     pageHero,
     positionsBlock,
+    evergreenBlock,
     emptyBlock,
     benefitsBlock,
     openApplicationBlock,

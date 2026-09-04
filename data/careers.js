@@ -1,5 +1,3 @@
-import { company } from './company.js';
-
 /**
  * CENTRÁLNA DÁTOVÁ VRSTVA — kariéra
  *
@@ -92,23 +90,17 @@ export const positions = [
   },
 ];
 
-/** Podľa dotazníka: „služobné auto, školenia, zaučenie, stabilita". */
+/**
+ * Podmienky spolupráce.
+ *
+ * Uvádzame IBA to, čo klient priamo potvrdil v dotazníku a čo je overiteľné.
+ * NEUVÁDZAME: preplácanie školení a certifikácií, mzdy, ani odvodené
+ * tvrdenia o stabilite — klient ich nepotvrdil.
+ * Prázdne pole = sekcia sa na stránke nevykreslí.
+ */
 export const benefits = [
   { title: 'Služobné vozidlo', text: 'Na výjazdy k zákazníkom.' },
-  { title: 'Školenia', text: 'Na konkrétne typy zariadení, s ktorými budete pracovať.' },
   { title: 'Zaučenie', text: 'Nastupujete k skúseným technikom, nie do neznáma.' },
-  {
-    title: 'Stabilita',
-    /* Odvodené z company.stats, nie napísané natvrdo. Keby sa údaj
-       v data/company.js vypol, veta sa prispôsobí — inak by tvrdenie
-       zostalo na webe z druhého, needitovateľného zdroja. */
-    text: [
-      company.stats.yearsInBusiness ? `Firma pôsobí v odbore ${company.stats.yearsInBusiness} rokov` : null,
-      company.stats.servicedLifts ? `servisuje ${company.stats.servicedLifts} zariadení` : null,
-    ]
-      .filter(Boolean)
-      .join(' a ') || 'Zavedená firma so stabilnou zákazníckou základňou.',
-  },
 ];
 
 /** Klient sa k otvoreným žiadostiam nevyjadril → CTA sa nezobrazí. */

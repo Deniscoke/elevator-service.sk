@@ -16,26 +16,15 @@ import { services } from '../../data/services.js';
 /* ------------------------------------------------------------------ */
 
 /**
- * Kým nemáme firemné logo, používame typografickú značku s geometrickým
- * znakom šachty. Nie je to výplň ani placeholder — je to funkčná dočasná
- * identita, ktorú vymeníme za dodané logo na jednom mieste.
+ * Oficiálne logo klienta. Rozmery sa berú z dátovej vrstvy, aby obrázok
+ * držal pomer strán a neposúval layout pri načítaní (CLS).
+ *
+ * Na tmavej pätičke sa logo nepreflabuje — kladie sa na svetlú plochu,
+ * takže artwork zostáva presne taký, aký ho klient dodal.
  */
 function logo(company, { inverse = false } = {}) {
-  if (isSet(company.brand.logo)) {
-    const src = inverse && isSet(company.brand.logoInverse) ? company.brand.logoInverse : company.brand.logo;
-    return `<img src="${esc(src)}" alt="${esc(company.legalName)}" width="180" height="36" class="logo__img">`;
-  }
-  return `
-    <span class="logo__mark" aria-hidden="true">
-      <svg width="62" height="26" viewBox="0 0 160 64" fill="none">
-        <path d="M100 2 L 63 30 L 96 44 L 26 44 Z" class="logo__wing logo__wing--accent"
-              transform="translate(0 28) scale(0.44)"/>
-        <path d="M100 2 L 63 30 L 96 44 L 26 44 Z" class="logo__wing logo__wing--ink"
-              transform="translate(52 6) scale(0.98)"/>
-      </svg></span>
-    <span class="logo__text">
-      <span class="logo__name">ELEVÁTOR</span><span class="logo__name logo__name--accent">SERVIS</span>
-    </span>`;
+  const src = inverse && isSet(company.brand.logoInverse) ? company.brand.logoInverse : company.brand.logo;
+  return `<img src="${esc(src)}" alt="${esc(company.legalName)}" width="${company.brand.logoWidth}" height="${company.brand.logoHeight}" class="logo__img" decoding="async">`;
 }
 
 /* ------------------------------------------------------------------ */

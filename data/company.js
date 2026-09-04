@@ -57,13 +57,16 @@ export const company = {
     enabled: true,
     mode: 'nonstop',
     hoursLabel: 'Nonstop, 24 hodín denne',
-    // Klientom uvedený záväzok: „nahlásené poruchy sa riešia do max. 1 hod."
-    responseTimeNote: 'Reakcia na nahlásenú poruchu do 1 hodiny',
+    // ČAKÁ NA KLIENTA — reakčný čas nie je zmluvne potvrdený, takže
+    // web žiadny konkrétny čas nesľubuje. Prázdna hodnota = nezobrazí sa.
+    responseTimeNote: null,
   },
 
   /* ---- čísla do trust layeru --------------------------------------- */
   stats: {
-    yearsInBusiness: 26,
+    // ČAKÁ NA KLIENTA — rok založenia a počet rokov na trhu nie sú overené.
+    // Kým to klient nepotvrdí, web žiadny údaj o dĺžke pôsobenia neuvádza.
+    yearsInBusiness: null,
     foundedYear: null,      // ČAKÁ NA KLIENTA — dopočítať sa nedá presne
     servicedLifts: '300+',
     technicians: null,      // ČAKÁ NA KLIENTA
@@ -72,12 +75,10 @@ export const company = {
   /* ---- odbornosť ---------------------------------------------------- */
   // Presné znenie podľa dotazníka. Význam jednotlivých paragrafov
   // zámerne nevysvetľujeme — to je vec odborne spôsobilej osoby.
-  certifications: [
-    { name: 'Osvedčenie podľa § 16', issuer: 'vyhláška č. 508/2009 Z. z.', number: null },
-    { name: 'Osvedčenie podľa § 18', issuer: 'vyhláška č. 508/2009 Z. z.', number: null },
-    { name: 'Osvedčenie podľa § 22', issuer: 'vyhláška č. 508/2009 Z. z.', number: null },
-    { name: 'Osvedčenie podľa § 23', issuer: 'vyhláška č. 508/2009 Z. z.', number: null },
-  ],
+  // ČAKÁ NA KLIENTA — presný zoznam a rozsah platných oprávnení firmy
+  // nie je doložený. Kým klient nedodá čísla osvedčení a ich rozsah,
+  // sekcia sa nevykreslí. Nezverejňujeme ani ich počet.
+  certifications: [],
 
   equipmentTypes: ['Osobné výťahy', 'Nákladné výťahy', 'Malé nákladné výťahy'],
 
@@ -98,20 +99,30 @@ export const company = {
     icDph: null,            // ČAKÁ NA KLIENTA
     registration: null,     // ČAKÁ NA KLIENTA
     dpo: null,
-    // Doba uchovávania údajov z formulára. Povinná náležitosť podľa
-    // čl. 13 ods. 2 písm. a) GDPR — bez nej je informačná povinnosť neúplná.
-    dataRetention: null,   // ČAKÁ NA KLIENTA, napr. '2 roky od poslednej komunikácie'
+    // POTVRDENÉ klientom: interné pravidlo firmy, NIE zákonná lehota.
+    // GDPR žiadne konkrétne číslo nestanovuje — hovorí, že údaje sa nemajú
+    // uchovávať dlhšie, než je potrebné na účel. Znenie to musí odlíšiť.
+    dataRetention:
+      'Údaje z dopytu uchovávame najviac 2 roky od poslednej komunikácie s vami. ' +
+      'Je to interné pravidlo našej spoločnosti — po uplynutí tejto doby údaje ' +
+      'vymažeme, ak nás iná zákonná povinnosť alebo prebiehajúca zmluvná ' +
+      'spolupráca nezaväzuje uchovať ich dlhšie.',
   },
 
   /* ---- identita značky ---------------------------------------------- */
   brand: {
-    // Logo prekreslené do SVG podľa dodaného PNG — klient má logo
-    // iba v rastri. Pred spustením nech tvar odsúhlasí.
-    // Klient má logo iba v PNG/JPG. Značku sme prekreslili do vektoru
-    // (static/assets/logo.svg + inline v hlavičke), ale kým ju klient
-    // neodsúhlasí, necháme požiadavku otvorenú.
-    logo: null,
+    // Oficiálne logo dodané klientom. Zdroj pravdy je
+    // static/assets/brand/logo-master.png; ostatné varianty sú z neho
+    // odvodené len orezaním a odstránením bieleho pozadia — kresba
+    // sa nemenila. Nikdy sa neprekresľuje ani neprefarbuje.
+    logo: '/assets/brand/logo.png',
+    logoWidth: 640,
+    logoHeight: 300,
+    // Na tmavom podklade sa logo kladie na svetlú plochu (pozri
+    // .logo--footer v 03-layout.css), aby si zachovalo pôvodné farby.
     logoInverse: null,
+    // Samotný symbol bez textu — pre ikony a drobné použitie.
+    symbol: '/assets/brand/mark.png',
     // Žltá prevzatá z loga, grafitová z typografie loga.
     colors: { yellow: '#FFC61A', ink: '#12161B' },
     // 1200×630 PNG — SVG sociálne siete v náhľade odkazu nevykreslia.

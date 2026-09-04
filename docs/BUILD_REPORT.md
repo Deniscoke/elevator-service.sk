@@ -1,6 +1,6 @@
 # Build report
 
-Vygenerované: 2026-09-04 10:47
+Vygenerované: 2026-09-04 13:19
 Režim: náhľadový
 Doména: https://elevatorservis.sk
 Servisná oblasť: Banská Bystrica a okolie do 80 km
@@ -11,21 +11,21 @@ Servisná oblasť: Banská Bystrica a okolie do 80 km
 
 | Stránka | Súbor | Veľkosť | V sitemap |
 | --- | --- | ---: | :---: |
-| / | index.html | 44.2 kB | áno |
-| /servis-vytahov/ | servis-vytahov/index.html | 37.8 kB | áno |
-| /opravy-vytahov/ | opravy-vytahov/index.html | 36.1 kB | áno |
-| /odborne-prehliadky-a-skusky/ | odborne-prehliadky-a-skusky/index.html | 36.2 kB | áno |
-| /modernizacia-vytahov/ | modernizacia-vytahov/index.html | 36.5 kB | áno |
-| /havarijna-sluzba/ | havarijna-sluzba/index.html | 31.8 kB | áno |
-| /o-nas/ | o-nas/index.html | 27.9 kB | áno |
-| /referencie/ | referencie/index.html | 22.1 kB | áno |
-| /kariera/ | kariera/index.html | 19.4 kB | áno |
-| /kontakt/ | kontakt/index.html | 27.5 kB | áno |
-| /poradna/ | poradna/index.html | 28.1 kB | áno |
-| /ochrana-osobnych-udajov/ | ochrana-osobnych-udajov/index.html | 19.4 kB | áno |
-| /404.html | 404.html | 21.0 kB | nie |
+| / | index.html | 43.2 kB | áno |
+| /servis-vytahov/ | servis-vytahov/index.html | 37.1 kB | áno |
+| /opravy-vytahov/ | opravy-vytahov/index.html | 35.4 kB | áno |
+| /odborne-prehliadky-a-skusky/ | odborne-prehliadky-a-skusky/index.html | 35.5 kB | áno |
+| /modernizacia-vytahov/ | modernizacia-vytahov/index.html | 35.8 kB | áno |
+| /havarijna-sluzba/ | havarijna-sluzba/index.html | 31.0 kB | áno |
+| /o-nas/ | o-nas/index.html | 25.7 kB | áno |
+| /referencie/ | referencie/index.html | 21.3 kB | áno |
+| /kariera/ | kariera/index.html | 18.6 kB | áno |
+| /kontakt/ | kontakt/index.html | 26.8 kB | áno |
+| /poradna/ | poradna/index.html | 27.4 kB | áno |
+| /ochrana-osobnych-udajov/ | ochrana-osobnych-udajov/index.html | 19.0 kB | áno |
+| /404.html | 404.html | 20.2 kB | nie |
 
-CSS: 7 vrstiev → `css/main.css` (80.0 kB)
+CSS: 7 vrstiev → `css/main.css` (79.3 kB)
 Sitemap: 12 URL
 
 ## Komponenty skryté pre chýbajúce dáta
@@ -39,7 +39,7 @@ Sitemap: 12 URL
 - Presakovanie zástupných hodnôt: OK
 - Interné odkazy: OK
 - SEO metadáta: OK
-- Pripravenosť na produkciu: 6 chýbajúcich údajov
+- Pripravenosť na produkciu: 4 chýbajúcich údajov
 
 ### Chýba pred spustením webu
 
@@ -47,7 +47,5 @@ Sitemap: 12 URL
 - [ ] PSČ (address.postalCode)
 - [ ] IČO (povinný údaj na webe) (legal.ico)
 - [ ] Zápis v obchodnom registri (legal.registration)
-- [ ] Doba uchovávania údajov z formulára (GDPR) (legal.dataRetention)
-- [ ] Firemné logo — data/company.js → brand.logo
 
 Detaily a kontext: [MISSING_DATA.md](./MISSING_DATA.md)

@@ -119,37 +119,18 @@
   flex-shrink: 0;
 }
 
-.logo__mark {
-  display: grid;
-  place-items: center;
+/* Oficiálne logo. Výška riadi veľkosť, šírka sa dopočíta z pomeru strán
+   dodaného súboru — logo sa nikdy nedeformuje. */
+.logo__img {
+  display: block;
+  width: auto;
+  height: 3.5rem;
 }
 
-.logo__wing--accent {
-  fill: var(--yellow);
-}
-
-.logo__wing--ink {
-  fill: var(--ink-900);
-}
-
-.logo__text {
-  display: flex;
-  flex-direction: column;
-  line-height: 1;
-}
-
-.logo__name {
-  font-size: 1.0625rem;
-  font-weight: var(--fw-bold);
-  letter-spacing: 0.11em;
-}
-
-.logo__name--accent {
-  margin-top: 3px;
-  font-size: 0.7rem;
-  font-weight: var(--fw-medium);
-  letter-spacing: 0.3em;
-  color: var(--text-muted);
+@media (max-width: 47.99em) {
+  .logo__img {
+    height: 2.875rem;
+  }
 }
 
 /* ---- navigácia ---------------------------------------------------- */
@@ -487,17 +468,17 @@
   border-bottom: 1px solid var(--border-invert);
 }
 
-.site-footer .logo,
-.site-footer .logo__name {
-  color: var(--text-invert);
+/* Na tmavej pätičke logo neprefarbujeme — položíme ho na svetlú plochu,
+   aby si zachovalo pôvodné firemné farby. */
+.logo--footer {
+  display: inline-block;
+  padding: var(--space-3) var(--space-4);
+  background: #ffffff;
+  border-radius: var(--radius-sm, 6px);
 }
 
-.site-footer .logo__wing--ink {
-  fill: #ffffff;
-}
-
-.site-footer .logo__name--accent {
-  color: var(--text-invert-muted);
+.logo--footer .logo__img {
+  height: 3.25rem;
 }
 
 .site-footer__claim {
