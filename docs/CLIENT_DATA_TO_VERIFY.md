@@ -10,13 +10,17 @@ Web nikdy nič nedopĺňa odhadom.
 
 ## A. Bráni spusteniu
 
-| Údaj | Prečo je potrebný | Kde sa doplní |
-|---|---|---|
-| **IČO** | Povinný identifikačný údaj podnikateľa na webovom sídle | `data/company.js` → `legal.ico` |
-| **Zápis v obchodnom registri** | Povinný údaj (oddiel, vložka, súd) | `legal.registration` |
-| **Ulica a číslo + PSČ sídla** | Dopĺňa adresu na webe aj v štruktúrovaných dátach; odomkne úplnú `PostalAddress` | `address.street`, `address.postalCode` |
+**Žiadne.** Identifikačné údaje firmy sú doplnené a overené vo verejnom
+obchodnom registri (4. 9. 2026), takže `npm run build:prod` prechádza:
 
-Produkčný build (`npm run build:prod`) kým tieto chýbajú **zlyhá**. Je to zámer.
+| Údaj | Hodnota |
+|---|---|
+| Sídlo | Rudohorská 22, 974 11 Banská Bystrica |
+| IČO | 36 045 641 |
+| Zápis | Obchodný register Okresného súdu Banská Bystrica, oddiel Sro, vložka č. 6832/S |
+| Dátum zápisu | 22. 12. 2000 (v dátach ako `legal.registeredSince`, na web sa nevypisuje) |
+
+DIČ a IČ DPH zostávajú `null` — neboli overené a preto sa nezobrazujú.
 
 ## B. Rozhodnutie klienta, nie údaj
 
@@ -34,7 +38,7 @@ Produkčný build (`npm run build:prod`) kým tieto chýbajú **zlyhá**. Je to 
 
 | Vec | Popis |
 |---|---|
-| **Právny základ spracúvania pri dopytovom formulári** | Formulár vyžaduje zaškrtnúť súhlas a stránka uvádza súhlas ako prvý právny základ. Pri bežnom dopyte býva vhodnejší predzmluvný vzťah. Zámerne sme to nemenili sami — detail v [LEGAL_CONTENT_SOURCES.md](./LEGAL_CONTENT_SOURCES.md). Informačná povinnosť je aj tak splnená, takže to nebráni spusteniu. |
+| **Právny základ spracúvania pri dopytovom formulári** | **Opravené na pokyn klienta 4. 9. 2026.** Políčko vo formulári je potvrdenie o oboznámení, nie súhlas; právnym základom sú predzmluvné opatrenia na žiadosť dotknutej osoby. Odporúčame nechať finálne znenie prejsť právnikom, ale spusteniu to nebráni. |
 
 ## D. Materiál na neskôr
 
@@ -58,3 +62,4 @@ Pre poriadok — tieto údaje sú overené a používajú sa:
 - typy zariadení a najčastejšie značky
 - doba uchovávania údajov 2 roky od poslednej komunikácie (interné pravidlo)
 - oficiálne logo — zdroj pravdy je `brand/logo-master.png`
+- sídlo, IČO a zápis v obchodnom registri (overené vo verejnom registri)

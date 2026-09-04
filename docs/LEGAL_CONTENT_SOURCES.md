@@ -92,25 +92,26 @@ Informačná povinnosť podľa čl. 13 je pokrytá stránkou
 sprostredkovatelia (Vercel, Resend), prenos mimo EÚ, doba uchovávania,
 práva dotknutej osoby a kanál na ich uplatnenie.
 
-### Otvorená otázka — NEEDS LEGAL REVIEW
+### Právny základ — stav po oprave (4. 9. 2026)
 
-Formulár obsahuje **povinné** zaškrtávacie políčko so znením
-„Súhlasím so spracúvaním osobných údajov na účel vybavenia tohto dopytu",
-a stránka ochrany osobných údajov uvádza ako právny základ v prvom rade
-**súhlas**.
+Pôvodne formulár vyžadoval zaškrtnúť **súhlas** a stránka uvádzala súhlas ako
+prvý právny základ. Pri bežnom zákazníckom dopyte je to nepresné: spracúvanie
+je nevyhnutné na to, aby sme na dopyt vôbec mohli odpovedať.
 
-Pri bežnom zákazníckom dopyte býva vhodnejším právnym základom
-**predzmluvný vzťah** (čl. 6 ods. 1 písm. b), prípadne oprávnený záujem —
-súhlas má byť slobodný, a súhlas vynútený ako podmienka odoslania formulára
-je sporný.
+Na pokyn klienta bolo upravené takto:
 
-Toto **zámerne nemeníme sami** — je to právny záver, nie technická oprava.
-Odporúčaný postup: nech znenie políčka aj odsek o právnom základe posúdi
-osoba s právnou kvalifikáciou. Technicky je zmena triviálna (jedno pole
-v `src/lib/form.js` a jeden odsek v `src/pages/ochrana-osobnych-udajov.js`).
+- políčko vo formulári znie „Oboznámil/a som sa s informáciami o spracúvaní
+  osobných údajov" — je to **potvrdenie o oboznámení, nie súhlas**,
+- stránka ochrany osobných údajov uvádza ako právny základ **vykonanie
+  opatrení pred uzavretím zmluvy na žiadosť dotknutej osoby**,
+- výslovne sa uvádza, že zaškrtnutie políčka samo osebe právny základ
+  nevytvára,
+- súhlas sa spomína len pre prípad iného účelu, spolu s doložkou
+  o zákonnosti spracúvania pred jeho odvolaním.
 
-Informačná povinnosť je aj v súčasnom stave splnená, takže to nebráni
-technickému spusteniu webu.
+Informačná povinnosť podľa čl. 13 zostáva pokrytá v plnom rozsahu.
+Odporúčanie: nechať finálne znenie prejsť osobou s právnou kvalifikáciou —
+je to bežná záverečná kontrola, nie prekážka spustenia.
 
 ---
 

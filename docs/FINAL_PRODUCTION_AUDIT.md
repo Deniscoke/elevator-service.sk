@@ -84,8 +84,8 @@ Tento dokument je stav **po** zapracovaní opráv.
 | Nález | Status | Poznámka |
 |---|---|---|
 | Chýbala doba uchovávania | DONE | 2 roky od poslednej komunikácie, výslovne ako **interné pravidlo firmy**, nie zákonná lehota |
-| Prevádzkovateľ bez IČO, sídla a zápisu | WAITING FOR CLIENT | Sekcia sa vykreslí automaticky po doplnení dát |
-| Vynútený súhlas ako právny základ bežného dopytu | **NEEDS LEGAL REVIEW** | Zámerne nemenené — je to právny záver. Detail v `LEGAL_CONTENT_SOURCES.md` |
+| Prevádzkovateľ bez IČO, sídla a zápisu | DONE | Doplnené 4. 9. 2026 z verejného obchodného registra |
+| Vynútený súhlas ako právny základ bežného dopytu | DONE | Políčko je potvrdenie o oboznámení, nie súhlas; právnym základom sú predzmluvné opatrenia. Odporúčané finálne právne posúdenie znenia. |
 | Kariérne dopyty nie sú v informačnej povinnosti opísané | NEEDS UPDATE | Formulár na /kariera/ posiela rovnaké údaje |
 | Chýba doložka o zákonnosti spracúvania pred odvolaním súhlasu | NEEDS UPDATE | Súvisí s právnym posúdením vyššie |
 | Dozorný orgán nie je pomenovaný | NEEDS UPDATE | Uvedené je len „dozorný orgán" |
@@ -169,7 +169,7 @@ Tento dokument je stav **po** zapracovaní opráv.
 
 - **BLOCKED:** 1 — verejná duplicitná kópia webu na `elevator-service-sk.vercel.app`
   (vyžaduje rozhodnutie majiteľa účtu, nie technickú prácu).
-- **NEEDS LEGAL REVIEW:** 1 — právny základ spracúvania pri dopytovom formulári.
+- **NEEDS LEGAL REVIEW:** 0 — právny základ bol opravený; odporúčané je už len záverečné posúdenie znenia právnikom.
 - **WAITING FOR CLIENT:** viď `CLIENT_DATA_TO_VERIFY.md`.
 - **NEEDS UPDATE:** kozmetické a nepodstatné položky, žiadna z nich nebráni
   spusteniu; sú tu vedené preto, aby sa na ne nezabudlo.
