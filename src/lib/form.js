@@ -126,7 +126,7 @@ export function inquiryForm(company, { preselect = '', context = 'dopyt', headin
               min: 1,
               max: 500,
               inputmode: 'numeric',
-              hint: 'Koľko zariadení sa dopyt týka.',
+              hint: 'Koľkých zariadení sa dopyt týka.',
             })}
           </div>
         </fieldset>`

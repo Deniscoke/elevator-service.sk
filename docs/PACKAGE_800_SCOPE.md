@@ -39,7 +39,7 @@ Podklad: audit projektu z 31. 8. 2026 (6 dimenzií, 148 posúdených položiek).
 
 | DELIVERABLE | STATUS | FILE/URL | BLOCKER | NOTES |
 |---|---|---|---|---|
-| Funkčný dopytový formulár | WAITING FOR CLIENT | `api/dopyt.js` | `RESEND_API_KEY`, `INQUIRY_FROM`, overená doména v Resende | Pipeline hotový a nasadený; overené 405/503/200 na živom endpointe |
+| Funkčný dopytový formulár | DONE | `api/dopyt.js` | — | Premenné nastavené, doména v Resende overená, endpoint beží na produkčnej doméne |
 | Premenné prostredia bez fallbacku | DONE | `api/dopyt.js` | — | Všetky tri povinné; pri chýbajúcej `503` + názov premennej v logu, žiadna skrytá náhradná adresa |
 | Serverová validácia | DONE | `api/dopyt.js` | — | Zrkadlí klientsku, kontextovo citlivá |
 | Reply-To v oboch smeroch | DONE | `api/dopyt.js` | — | Firme odpovedá priamo zákazníkovi, zákazníkovi späť na firemnú schránku |
@@ -118,14 +118,14 @@ s ostrým kľúčom a overenou doménou:
 | **Ulica a číslo + PSČ** | Povinný údaj; odomkne `LocalBusiness` schému |
 | **IČO** | Povinný identifikačný údaj (§ 3a Obchodného zákonníka) |
 | **Zápis v obchodnom registri** | Povinný údaj |
-| **Logo v elektronickej podobe** | Značka v hlavičke je rekonštrukcia z pečiatky |
-| **`RESEND_API_KEY`** | Bez neho formulár neodošle |
-| **`INQUIRY_FROM` — z akej adresy má web odosielať** | Musí byť na doméne overenej v Resende. Hodnotu určuje klient, nie je nikde v kóde a nemá náhradu |
-| **Overenie domény v Resende (DKIM/SPF)** | Bez neho Resend odosielanie odmietne. Záznamy z dashboardu Resendu; MX ani nameservery sa nemenia |
-| **DNS záznamy u Websupportu** | Bez nich doména neukazuje na Vercel |
+| ~~Logo v elektronickej podobe~~ | **Vyriešené** — klient dodal oficiálne logo, je nasadené |
+| ~~`RESEND_API_KEY`~~ | **Vyriešené** — nastavené vo Verceli |
+| ~~`INQUIRY_FROM`~~ | **Vyriešené** — nastavené vo Verceli, hodnota nie je v kóde |
+| ~~Overenie domény v Resende (DKIM/SPF)~~ | **Vyriešené** — doména je v Resende overená |
+| ~~DNS záznamy u Websupportu~~ | **Vyriešené** — doména beží na Verceli cez HTTPS |
 | **Mzda pri pracovných pozíciách** | Bez nej sa pozície nezverejnia — § 62 ods. 2 zák. 5/2004 Z. z. |
 | **Súhlasy s referenciami** | Bez nich sa sekcia nevykreslí |
-| **Doba uchovávania údajov z formulára** | Povinná náležitosť GDPR |
+| ~~Doba uchovávania údajov z formulára~~ | **Vyriešené** — 2 roky od poslednej komunikácie |
 
 ## 7. Mimo balíka za 800 €
 

@@ -5,3 +5,8 @@ Thumbs.db
 *.log
 
 .vercel
+
+# Tajomstvá sa do repozitára nepíšu. Repozitár je verejný.
+.env
+.env.*
+!.env.example

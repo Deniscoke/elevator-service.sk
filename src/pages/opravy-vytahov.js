@@ -22,7 +22,7 @@ export default function page(ctx) {
         'rieši prejav — vymení sa diel, výťah pár týždňov beží a potom sa to zopakuje. ' +
         'Pri diagnostike sa preto pozeráme aj na uzly, ktoré s poruchou súvisia.',
       'Opravy robíme na zariadeniach v našom servise aj na zariadeniach, ktoré bežne ' +
-        'neservisujeme. Pri druhom prípade si najprv potrebujeme overiť typ a stav výťahu.',
+        'neservisujeme. V druhom prípade si najprv potrebujeme overiť typ a stav výťahu.',
       'Ak je vo výťahu uviaznutý človek, nejde o opravu, ale o havarijnú situáciu — ' +
         'postup nájdete na stránke <a href="/havarijna-sluzba/">havarijnej služby</a>.',
     ],

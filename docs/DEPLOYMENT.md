@@ -26,7 +26,7 @@ Kanonické URL, sitemap a OpenGraph potrebujú finálnu doménu.
 Nastavuje sa buď v `data/company.js` (`siteUrl`), alebo premennou prostredia:
 
 ```bash
-SITE_URL=https://www.elevatorservis.sk npm run build:prod
+SITE_URL=https://elevatorservis.sk npm run build:prod
 ```
 
 Premenná má prednosť — hodí sa pre náhľadové nasadenia.
@@ -53,6 +53,17 @@ Overenie:
 cat .vercel/project.json
 vercel project inspect elevetorservis.sk
 ```
+
+### Stav produkcie (4. 9. 2026)
+
+| | |
+|---|---|
+| `https://elevatorservis.sk` | beží, platný certifikát, HTTP → HTTPS 308 |
+| `https://www.elevatorservis.sk` | 308 na apex — presmerovanie je nastavené na úrovni domény v projekte |
+| Premenné (Production) | `RESEND_API_KEY`, `INQUIRY_TO`, `INQUIRY_FROM`, `SITE_URL` — všetky nastavené |
+| Resend | doména `elevatorservis.sk` overená |
+
+DNS je spravované mimo Vercelu. **MX ani nameservery sa nemenili a nemenia.**
 
 ### Legacy / duplicitný projekt — čaká na odstránenie
 

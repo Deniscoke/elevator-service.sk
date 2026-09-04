@@ -38,7 +38,7 @@ export default function page(ctx) {
         <h1 class="page-hero__title">${esc(company.legalName)}</h1>
         <p class="page-hero__lead">
           Staráme sa o výťahy — od pravidelného servisu cez opravy a odborné prehliadky
-          až po modernizáciu. Pôsobíme v regióne ${esc(serviceAreaLabel)}.
+          až po modernizáciu. Pôsobíme v Banskej Bystrici a okolí.
         </p>
       </div>
     </div>

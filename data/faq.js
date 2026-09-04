@@ -71,7 +71,7 @@ export const faq = {
   modernizacia: [
     {
       q: 'Kedy sa oprava už neoplatí a treba modernizáciu?',
-      a: 'Keď sa ročné náklady na opravy priblížia k časti ceny obnovy, keď sa poruchy opakujú a keď na zariadenie ťažko zohnať náhradné diely. Konkrétne čísla vieme povedať až po obhliadke a po pohľade na históriu opráv.',
+      a: 'Keď sa ročné náklady na opravy priblížia k časti ceny obnovy, keď sa poruchy opakujú a keď sa na zariadenie ťažko zháňajú náhradné diely. Konkrétne čísla vieme povedať až po obhliadke a po pohľade na históriu opráv.',
     },
     {
       q: 'Musí sa meniť celý výťah naraz?',

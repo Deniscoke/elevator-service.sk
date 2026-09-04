@@ -56,7 +56,7 @@ export const company = {
   emergency: {
     enabled: true,
     mode: 'nonstop',
-    hoursLabel: 'Nonstop, 24 hodín denne',
+    hoursLabel: 'Nonstop, 24 hodín denne, 7 dní v týždni',
     // ČAKÁ NA KLIENTA — reakčný čas nie je zmluvne potvrdený, takže
     // web žiadny konkrétny čas nesľubuje. Prázdna hodnota = nezobrazí sa.
     responseTimeNote: null,

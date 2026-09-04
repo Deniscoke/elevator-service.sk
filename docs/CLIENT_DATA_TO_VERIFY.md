@@ -1,110 +1,60 @@
-# Údaje na potvrdenie klientom
+# Čo ešte potrebujeme od klienta
 
-Zoznam všetkých údajov na webe, ktoré pôsobia ako **faktické alebo obchodné
-tvrdenie**. Každý z nich je centrálne konfigurovateľný — dá sa upraviť alebo
-nastavením na `null` úplne vypnúť bez zásahu do šablón.
+Stav k 4. 9. 2026. Sú tu **len skutočne otvorené položky**. Čo je potvrdené,
+je už v `data/*.js` a na webe — a v tomto zozname to nemá čo robiť.
 
-**Pravidlo projektu:** `null` = údaj nemáme → komponent sa nevykreslí.
-Web nikde nedopĺňa odhad ani zástupnú hodnotu.
-
-Zdroj potvrdených údajov: dotazník *„Doplňujúce otázky k novému webu"*
-(28. 8. 2026).
+Pravidlo: pokiaľ položka nie je vyriešená, príslušný obsah sa **nevykresľuje**.
+Web nikdy nič nedopĺňa odhadom.
 
 ---
 
-## A. Potvrdené klientom, ale vhodné znovu overiť pred spustením
+## A. Bráni spusteniu
 
-Tieto údaje klient uviedol písomne. Web ich zobrazuje ako fakt, preto by ich
-mal pred spustením ešte raz potvrdiť — od vyplnenia dotazníka sa mohli zmeniť.
-
-| Údaj | Hodnota na webe | Kde sa zobrazuje | Kde sa mení | Riziko |
-|---|---|---|---|---|
-| Roky na trhu | **26** | Trust bar na homepage a O nás | `data/company.js` → `stats.yearsInBusiness` | Obchodné tvrdenie |
-| Počet servisovaných výťahov | **300+** | Trust bar | `stats.servicedLifts` | Obchodné tvrdenie |
-| Havarijná dostupnosť | **Nonstop, 24 hodín denne** | Trust bar, hlavička, havarijná sekcia, sticky lišta | `emergency.enabled` + `emergency.hoursLabel` | **Vysoké** — záväzok dostupnosti |
-| Reakčný čas | **do 1 hodiny** | O nás → „Prečo my" | `company.differentiators[0]` | **Vysoké** — merateľný záväzok |
-| Odborné oprávnenia | **§ 16, § 18, § 22, § 23 vyhl. 508/2009 Z. z.** | Trust bar (počet 4), O nás | `company.certifications` | **Vysoké** — právne tvrdenie |
-| Typy zariadení | Osobné, nákladné, malé nákladné | O nás → S čím pracujeme | `company.equipmentTypes` | Nízke |
-| Značky výťahov | TRANSPORTA, GLOBAL LIFT, TREVA, LIFTCOMPONENTS | O nás | `company.brands` | Stredné — naznačuje rozsah |
-| Servisná oblasť | Banská Bystrica a okolie **do 80 km** | Celý web | `data/locations.js` → `serviceArea` | Stredné |
-| Telefón a havarijná linka | +421 905 365 177 | Celý web | `company.contact` | Vysoké — musí fungovať |
-| E-mail | elevator@elevatorservis.sk | Pätička, kontakt, GDPR | `company.contact.email` | Vysoké |
-| Pracovné pozície | 3 (servisný technik, revízny technik, elektrikár) | Kariéra | `data/careers.js` → `positions` | Stredné |
-| Benefity | Auto, školenia, zaučenie, stabilita | Kariéra | `data/careers.js` → `benefits` | Nízke |
-
-> **Ako ktorýkoľvek z nich vypnúť:** nastav hodnotu na `null` (alebo `[]` pri
-> zoznamoch) a spusti `npm run build`. Príslušná dlaždica alebo sekcia zmizne
-> a v `docs/BUILD_REPORT.md` pribudne dôvod.
-
----
-
-## B. Chýbajú a blokujú spustenie
-
-Produkčný build (`npm run build:prod`) **zlyhá**, kým nie sú doplnené.
-
-| Údaj | Kde sa doplní | Prečo blokuje |
+| Údaj | Prečo je potrebný | Kde sa doplní |
 |---|---|---|
-| **Ulica a číslo** | `company.address.street` | Povinný údaj; odomkne aj `LocalBusiness` schému pre Google |
-| **PSČ** | `company.address.postalCode` | To isté |
-| **IČO** | `company.legal.ico` | Povinný identifikačný údaj na webe firmy |
-| **Zápis v obchodnom registri** | `company.legal.registration` | Povinný údaj |
-| **Logo v elektronickej podobe** | `company.brand.logo` | Značka v hlavičke je rekonštrukcia z fotky pečiatky |
+| **IČO** | Povinný identifikačný údaj podnikateľa na webovom sídle | `data/company.js` → `legal.ico` |
+| **Zápis v obchodnom registri** | Povinný údaj (oddiel, vložka, súd) | `legal.registration` |
+| **Ulica a číslo + PSČ sídla** | Dopĺňa adresu na webe aj v štruktúrovaných dátach; odomkne úplnú `PostalAddress` | `address.street`, `address.postalCode` |
+
+Produkčný build (`npm run build:prod`) kým tieto chýbajú **zlyhá**. Je to zámer.
+
+## B. Rozhodnutie klienta, nie údaj
+
+| Otázka | Dôsledok |
+|---|---|
+| **Súhlas jednotlivých zákazníkov so zverejnením referencie** | Bez neho zostáva `/referencie/` bez menovaných referencií. Meno sa do repozitára doplní až spolu so súhlasom — repozitár je verejný. |
+| **Presný zoznam a rozsah odborných oprávnení firmy** (čísla osvedčení, rozsah) | Bez neho sa sekcia „Odborné oprávnenia" nevykresľuje. Počet oprávnení sa nezverejňuje. |
+| **Rok založenia / dĺžka pôsobenia** | Bez neho web neuvádza žiadny údaj typu „X rokov na trhu". |
+| **Preplácame alebo spolufinancujeme školenia a certifikácie uchádzačov?** | Bez potvrdenia sa to na `/kariera/` netvrdí. |
+| **Konkrétne otvorené pozície vrátane základnej zložky mzdy** | Bez mzdy sa pozícia nesmie zverejniť ako inzerát (§ 62 ods. 2 zák. č. 5/2004 Z. z.). Kým to tak je, `/kariera/` je evergreen stránka bez JobPosting schémy. |
+| **Reakčný čas na nahlásenú poruchu** — je to záväzok, alebo len bežná prax? | Bez potvrdenia web žiadny čas nesľubuje. |
+| **Doba uchovávania — potvrdiť znenie** | Aktuálne znenie: „najviac 2 roky od poslednej komunikácie, ak nás iná zákonná povinnosť alebo prebiehajúca spolupráca nezaväzuje uchovať ich dlhšie." Je to interné pravidlo firmy, nie zákonná lehota. |
+
+## C. Na právne posúdenie
+
+| Vec | Popis |
+|---|---|
+| **Právny základ spracúvania pri dopytovom formulári** | Formulár vyžaduje zaškrtnúť súhlas a stránka uvádza súhlas ako prvý právny základ. Pri bežnom dopyte býva vhodnejší predzmluvný vzťah. Zámerne sme to nemenili sami — detail v [LEGAL_CONTENT_SOURCES.md](./LEGAL_CONTENT_SOURCES.md). Informačná povinnosť je aj tak splnená, takže to nebráni spusteniu. |
+
+## D. Materiál na neskôr
+
+| Vec | Stav |
+|---|---|
+| **Reálne fotografie firmy** | Súčasné fotografie sú AI ilustračné. Nie sú označené ako reálne realizácie a alt texty nič netvrdia. Architektúra je pripravená na výmenu 1 : 1. |
+| **Logo vo vektore (SVG / AI / EPS)** | Máme kvalitný raster od klienta a z neho odvodené varianty. Vektor by pomohol pri tlači a pri veľmi veľkých zobrazeniach. |
+| **Overenie v Google Search Console** | Vlastníctvo musí potvrdiť majiteľ domény. Do `data/company.js` → `integrations.searchConsoleVerification` sa vloží až reálna hodnota. |
 
 ---
 
-## C. Nepotvrdené — momentálne sa nezobrazujú
+## Čo je už POTVRDENÉ (a preto tu nie je otvorené)
 
-Tieto veci sú v architektúre pripravené, ale sekcia sa nevykreslí.
-**Nič sa nevymýšľa.**
+Pre poriadok — tieto údaje sú overené a používajú sa:
 
-| Údaj | Stav | Čo sa odomkne po doplnení |
-|---|---|---|
-| **Referencie** (SBD Banská Bystrica, REALBYT V. K., FILBYT Fiľakovo) | `consent: false` — klient uviedol *„pri každej referencii sa treba najskôr dohodnúť"* | Sekcia referencií na homepage aj `/referencie/` |
-| Fotografie firmy a prác | Klient uviedol *„pravdepodobne áno"* | Nahradia AI ilustračné zábery |
-| Počet technikov | Nebolo v dotazníku | Dlaždica v trust bare |
-| Rok založenia | Nebolo v dotazníku | — |
-| Pracovné hodiny kancelárie | Nebolo v dotazníku | `openingHours` v `LocalBusiness` schéme |
-| Mzdové rozpätie pozícií | Nebolo v dotazníku | Mzda pri pozíciách |
-| DIČ / IČ DPH | Nebolo v dotazníku | Pätička, GDPR |
-| Google Maps odkaz a GPS | Nebolo v dotazníku | `geo` v schéme |
-| Doba uchovávania údajov z formulára | Nebolo v dotazníku | Sekcia v GDPR |
-| Google firemný profil | Klient uviedol, že prístup **nemá** | `sameAs` v schéme |
-
----
-
-## D. Fotografie — dôležité upozornenie
-
-V `static/assets/foto/` sú **štyri AI generované ilustračné fotografie**
-(strojovňa, rozvádzač, ruky technika, kabína).
-
-- **Nezobrazujú túto firmu, jej zamestnancov ani jej realizácie.**
-- Nikde na webe sa netvrdí, že áno — `alt` texty popisujú výjav všeobecne
-  a pri fotografiách nie je žiadna zmienka o konkrétnej realizácii.
-- Odporúčam ich pred spustením nahradiť reálnymi zábermi. Stačia fotky
-  z mobilu; rozmery a orezy sú v kóde nastavené, takže výmena je len
-  o nahradení súborov rovnakých názvov.
-
-> Ak sa fotografia vymení, treba **znovu premerať kontrast textu** v hero
-> a v akvizičnej sekcii — text leží priamo na fotke a jeho čitateľnosť
-> závisí od svetlých miest v obrázku. Postup je popísaný v komentári
-> v `src/styles/04-components.css`.
-
----
-
-## E. Technické tvrdenia na odborné posúdenie
-
-Vedené samostatne v [EXPERT_VERIFICATION.md](./EXPERT_VERIFICATION.md).
-Web sa zámerne vyhýba uvedeniu konkrétnych zákonných lehôt a periodicity
-odborných prehliadok a skúšok — hovorí o priebehu spolupráce, nie
-o legislatíve.
-
----
-
-## Kontrola v builde
-
-Build obsahuje automatickú poistku proti presakovaniu nepotvrdených údajov
-(`build.mjs` → `LEAK_PATTERNS` a `conditionalLeakPatterns`).
-
-Kontrola je **dátovo závislá**: tvrdenie „24/7" alebo počet výťahov je chybou
-len vtedy, keď zaň v `data/` nestojí potvrdený údaj. Ak sa `emergency.enabled`
-prepne späť na `false`, build začne text „24/7" hlásiť ako chybu.
+- 300+ servisovaných výťahov
+- havarijná služba nonstop, 24 hodín denne, 7 dní v týždni
+- telefón a havarijná linka `+421 905 365 177`
+- e-mail `elevator@elevatorservis.sk`
+- sídlo Banská Bystrica, servisná oblasť do 80 km
+- typy zariadení a najčastejšie značky
+- doba uchovávania údajov 2 roky od poslednej komunikácie (interné pravidlo)
+- oficiálne logo — zdroj pravdy je `brand/logo-master.png`

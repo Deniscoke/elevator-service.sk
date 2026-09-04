@@ -1,49 +1,63 @@
 /**
  * CENTRÁLNA DÁTOVÁ VRSTVA — referencie a segmenty zákazníkov
  *
- * ⚠ DÔLEŽITÉ — SÚHLAS
+ * ⚠ SÚHLAS SO ZVEREJNENÍM
  * Klient v dotazníku uviedol: „Pri každej referencii sa treba najskôr dohodnúť."
- * To NIE JE súhlas so zverejnením. Všetky tri referencie majú preto
- * consent: false a na webe sa NEZOBRAZUJÚ.
+ * To NIE JE súhlas. Všetky záznamy majú preto consent: false a na webe
+ * sa NEZOBRAZUJÚ.
  *
- * Sú tu pripravené, aby ich po dohode so zákazníkom stačilo prepnúť
- * na consent: true a doplniť popis. Nič iné meniť netreba.
+ * ⚠ MENÁ ZÁKAZNÍKOV TU NIE SÚ
+ * Tento repozitár je verejný. Meno zákazníka bez jeho súhlasu sa doň
+ * nepíše — ani do zakomentovaného kódu. Zoznam konkrétnych referencií
+ * má klient vo svojom dotazníku. Meno sa sem doplní až spolu
+ * s consent: true, teda vo chvíli, keď je zverejnenie dohodnuté.
+ *
+ * Štruktúra záznamu je pripravená tak, aby stačilo doplniť údaje:
+ *   clientName  meno zákazníka        (len so súhlasom)
+ *   serviceId   ktorá služba
+ *   city        lokalita              (nepovinné)
+ *   summary     krátky popis          (nepovinné)
+ *   logo        logo zákazníka        (len so súhlasom)
+ *   image       fotografia realizácie (len so súhlasom)
  */
 
 export const references = [
   {
-    id: 'sbd-banska-bystrica',
+    id: 'referencia-1',
     title: 'Nové výťahy, rekonštrukcie a modernizácie',
     objectType: 'sprava',
     city: 'Banská Bystrica',
     year: null,
     serviceId: 'modernizacia',
-    clientName: 'SBD Banská Bystrica',
+    clientName: null,       // ⚠ doplniť až so súhlasom zákazníka
     summary: null,          // doplniť po dohode so zákazníkom
+    logo: null,
     image: null,
     consent: false,         // ⚠ ČAKÁ NA SÚHLAS ZÁKAZNÍKA
   },
   {
-    id: 'realbyt-vk',
+    id: 'referencia-2',
     title: 'Nové výťahy, rekonštrukcie a modernizácie',
     objectType: 'sprava',
     city: null,
     year: null,
     serviceId: 'modernizacia',
-    clientName: 'REALBYT V. K.',
+    clientName: null,       // ⚠ doplniť až so súhlasom zákazníka
     summary: null,
+    logo: null,
     image: null,
     consent: false,         // ⚠ ČAKÁ NA SÚHLAS ZÁKAZNÍKA
   },
   {
-    id: 'filbyt-filakovo',
+    id: 'referencia-3',
     title: 'Nové výťahy, rekonštrukcie a modernizácie',
     objectType: 'sprava',
     city: 'Fiľakovo',
     year: null,
     serviceId: 'modernizacia',
-    clientName: 'FILBYT Fiľakovo',
+    clientName: null,       // ⚠ doplniť až so súhlasom zákazníka
     summary: null,
+    logo: null,
     image: null,
     consent: false,         // ⚠ ČAKÁ NA SÚHLAS ZÁKAZNÍKA
   },
