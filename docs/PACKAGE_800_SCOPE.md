@@ -49,7 +49,7 @@ Podklad: audit projektu z 31. 8. 2026 (6 dimenzií, 148 posúdených položiek).
 | Serverová kontrola príloh podľa obsahu | DONE | `api/dopyt.js` | — | Typ z magic bytes, nie z prípony ani z hlavičky prehliadača; názov cez whitelist znakov |
 | **Automatická odpoveď zákazníkovi** | DONE | `api/dopyt.js` | — | Deliverable balíka Rast |
 | Čestné správanie pri zlyhaní | DONE | `static/js/form.js`, `api/dopyt.js` | — | Nikdy nepredstiera úspech; zlyhanie potvrdenia nezruší už doručený dopyt |
-| Automatický test endpointu | DONE | `api/dopyt.test.mjs` | — | 27 scenárov bez siete, `node api/dopyt.test.mjs` |
+| Automatický test endpointu | DONE | `test/dopyt.test.mjs` | — | 27 scenárov bez siete, `node test/dopyt.test.mjs` |
 
 ### Manuálny test po nastavení premenných
 

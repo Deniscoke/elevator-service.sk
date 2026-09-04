@@ -35,6 +35,47 @@ Premenná má prednosť — hodí sa pre náhľadové nasadenia.
 
 ## Vercel
 
+### Kanonický projekt — jediný, na ktorý sa nasadzuje
+
+| | |
+|---|---|
+| **Projekt** | `elevetorservis.sk` |
+| **Project ID** | `prj_unceb1AellmRGkV2Br1ldtCR9tkU` |
+| **Team ID** | `team_5DYuL7aZP9vwM0z1K7z3Ji9m` |
+| **Repozitár** | `Deniscoke/elevator-service.sk`, produkčná vetva `main` |
+| **Produkčné domény** | `elevatorservis.sk`, `www.elevatorservis.sk` |
+
+Lokálne prepojenie je v `.vercel/project.json` (súbor je v `.gitignore`,
+takže sa neverzuje). Musí obsahovať práve toto `projectId` a `orgId`.
+Overenie:
+
+```bash
+cat .vercel/project.json
+vercel project inspect elevetorservis.sk
+```
+
+### Legacy / duplicitný projekt — čaká na odstránenie
+
+| | |
+|---|---|
+| **Projekt** | `elevator-service-sk` |
+| **Project ID** | `prj_EHZFtnwy1stspQ98meUwRRL2GgFq` |
+| **Stav** | **NEPOUŽÍVAŤ.** Vznikol skôr, má len domény `*.vercel.app`. |
+
+Je pripojený na **ten istý** GitHub repozitár a tú istú vetvu, takže každý
+push zbytočne buildí dvakrát a existuje druhá verejná kópia webu na
+`elevator-service-sk.vercel.app`. Odpojenie ani zmazanie sa nerobí bez
+výslovného pokynu klienta/majiteľa účtu — ale kým existuje, platí:
+
+- premenné prostredia sa nastavujú **len** v kanonickom projekte,
+- doména sa **nikdy** neprevesuje na duplikát,
+- pri hľadaní chyby si vždy over, ktorý projekt práve pozeráš.
+
+Duplicitná kópia je indexovateľná — pred spustením webu ju treba odstrániť,
+inak vzniká duplicitný obsah k `elevatorservis.sk`.
+
+### Nastavenia projektu
+
 Repozitár sa dá pripojiť priamo. V nastaveniach projektu:
 
 | Nastavenie | Hodnota |
@@ -166,6 +207,12 @@ vo `vercel.json` v sekcii `redirects`.
 | Súčasný A záznam | `37.9.175.12` (parkovacia stránka Websupportu) |
 | Pošta | funkčná — MX `mailin1.elevatorservis.sk`, `mailin2.elevatorservis.sk` |
 | Web | **žiadny — len parkovacia stránka**, prepnutie nič nerozbije |
+| Domény vo Verceli | `elevatorservis.sk` aj `www.elevatorservis.sk` sú priradené ku kanonickému projektu a v Verceli označené ako verified |
+| Reálne smerovanie | **stále na Websupport** — `https://elevatorservis.sk` zlyhá na TLS (certifikát), `http://` vráti parkovaciu stránku |
+
+Kým sa nezmenia A záznamy, doména web nezobrazuje — bez ohľadu na to, že je
+v projekte priradená. Presmerovanie `www` → apex je pravidlo v `vercel.json`
+a začne fungovať až vtedy, keď prevádzka dorazí na Vercel.
 
 ### Prečo Vercel doménu „neponúka"
 
@@ -322,7 +369,7 @@ bez odsúhlasenia klientom.**
 Automatický test bez siete (Resend je podvrhnutý, nič sa neodosiela):
 
 ```bash
-node api/dopyt.test.mjs
+node test/dopyt.test.mjs
 ```
 
 Pokrýva 27 scenárov: chýbajúce premenné po jednej, honeypot, validáciu,

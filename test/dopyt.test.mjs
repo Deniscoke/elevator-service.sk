@@ -1,7 +1,7 @@
 /**
  * Test dopytového endpointu bez siete a bez závislostí.
  *
- *   node api/dopyt.test.mjs
+ *   node test/dopyt.test.mjs
  *
  * Resend sa podvrhne cez globalThis.fetch, takže sa nič neodosiela.
  * Testuje sa presne to, čo sa nedá overiť z prehliadača: správanie
@@ -74,7 +74,7 @@ async function call(body, { method = 'POST', env = {}, ip = '1.2.3.4' } = {}) {
     else process.env[k] = v;
   }
   // Modul číta env pri každej požiadavke, takže stačí jeden import.
-  const { default: handler } = await import('./dopyt.js');
+  const { default: handler } = await import('../api/dopyt.js');
   const res = mockRes();
   await handler(
     { method, body, headers: { 'x-forwarded-for': ip }, socket: {} },
