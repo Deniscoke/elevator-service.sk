@@ -74,6 +74,17 @@
   --border-strong: #d2cdc2;
   --border-invert: rgba(255, 255, 255, 0.14);
 
+  /* Okraj ovládacích prvkov formulára.
+     Pri poli, kde je okraj JEDINÝ vizuálny znak toho, že ide o ovládací
+     prvok, žiada WCAG 2.2 SC 1.4.11 (Non-text Contrast) aspoň 3:1 voči
+     susednému podkladu. --border-strong má na bielej len 1,58:1, preto
+     má formulár vlastný, tmavší odtieň z rovnakej teplej rodiny:
+       #8b8273 na #ffffff → 3,79:1
+       #8b8273 na #f3f1ec → 3,36:1
+     Dekoratívne linky (oddeľovače, rámy kariet) zostávajú na
+     --border / --border-strong — na tie sa pravidlo nevzťahuje. */
+  --border-control: #8b8273;
+
   /* ---- akcent: priemyselná žltá zo značky -------------------------
 
      Žltá #FFC61A má na svetlom podklade kontrast 1,6:1, takže NIKDY

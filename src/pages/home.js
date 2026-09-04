@@ -30,7 +30,6 @@ import {
   organizationSchema,
   localBusinessSchema,
   websiteSchema,
-  faqSchema,
 } from '../lib/seo.js';
 import { problems, processServis, deliverables } from '../../data/content.js';
 import { faqHome } from '../../data/faq.js';
@@ -107,7 +106,6 @@ export default function page(ctx) {
       organizationSchema(company),
       localBusinessSchema(company),
       websiteSchema(company),
-      faqSchema(faqHome),
     ],
     main,
   };

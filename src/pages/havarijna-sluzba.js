@@ -20,7 +20,6 @@ import {
   organizationSchema,
   serviceSchema,
   breadcrumbSchema,
-  faqSchema,
 } from '../lib/seo.js';
 
 /* Bezpečnostné pokyny sú všeobecne platné a nezávisia od údajov klienta.
@@ -241,7 +240,6 @@ export default function page(ctx) {
       organizationSchema(company),
       serviceSchema(company, s),
       breadcrumbSchema(company, crumbs),
-      faqSchema(faq.havaria),
     ],
     main,
   };

@@ -74,7 +74,7 @@
   padding: 0.7em 0.9em;
   background: var(--surface);
   color: var(--text);
-  border: 1px solid var(--border-strong);
+  border: 1px solid var(--border-control);
   border-radius: var(--radius-md);
   font-size: var(--fs-body);
   transition: border-color var(--dur-fast) var(--ease-out),
@@ -200,7 +200,7 @@
   width: 1.3rem;
   height: 1.3rem;
   margin-top: 1px;
-  border: 1px solid var(--border-strong);
+  border: 1px solid var(--border-control);
   border-radius: var(--radius-sm);
   background: var(--surface);
   transition: background var(--dur-fast) var(--ease-out),

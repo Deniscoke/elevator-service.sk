@@ -23,7 +23,7 @@ import {
   relatedServices,
   btn,
 } from './components.js';
-import { serviceSchema, breadcrumbSchema, faqSchema, organizationSchema } from './seo.js';
+import { serviceSchema, breadcrumbSchema, organizationSchema } from './seo.js';
 
 /**
  * @param {object} spec
@@ -210,7 +210,6 @@ export function buildServicePage(ctx, spec) {
       organizationSchema(company),
       serviceSchema(company, s),
       breadcrumbSchema(company, crumbs),
-      faqSchema(spec.faq),
     ],
     main,
   };

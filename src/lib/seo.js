@@ -278,18 +278,22 @@ export function breadcrumbSchema(company, crumbs) {
   };
 }
 
-/** FAQPage — len ak stránka naozaj obsahuje viditeľné otázky. */
-export function faqSchema(items) {
-  if (!isSet(items)) return null;
-  return {
-    '@type': 'FAQPage',
-    mainEntity: items.map((it) => ({
-      '@type': 'Question',
-      name: it.q,
-      acceptedAnswer: { '@type': 'Answer', text: it.a },
-    })),
-  };
-}
+/* FAQPage schéma tu zámerne NIE JE.
+ *
+ * Štyri otázky z data/faq.js sa zobrazujú na domovskej stránke aj na
+ * príslušnej tematickej stránke. Schéma ich preto opisovala dvakrát,
+ * na dvoch URL — tá istá Question ako dve entity. Bola to duplicita
+ * v koreni, nie v šablóne.
+ *
+ * Google FAQ rich results pre bežné komerčné weby od roku 2023 prakticky
+ * nezobrazuje, takže značkovanie neprinášalo žiadny úžitok, len povinnosť
+ * držať ho v súlade s viditeľným textom. Riešením je odstránenie, nie
+ * presúvanie duplicity.
+ *
+ * Viditeľné FAQ sekcie na stránkach zostávajú nedotknuté.
+ * Ak by sa schéma niekedy vracala, musí byť len na JEDNEJ URL pre danú
+ * otázku a musí presne zodpovedať viditeľnému textu.
+ */
 
 /** Zabalenie do jedného @graph — čistejšie než 5 samostatných blokov. */
 export function renderSchemas(company, list) {
