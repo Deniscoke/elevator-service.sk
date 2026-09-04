@@ -65,7 +65,7 @@ Tento dokument je stav **po** zapracovaní opráv.
 | robots.txt neblokuje CSS/JS/obrázky, odkazuje na sitemap | DONE | — |
 | `lastmod` = dátum buildu pre všetky URL | NEEDS UPDATE | Údaj je neudržateľný; zvážiť odstránenie |
 | Kontrola domény v builde prepustila www aj `*.vercel.app` | NEEDS UPDATE | `SITE_URL` je nastavená správne, kontrola je len voľnejšia, než by mala byť |
-| Duplicitný Vercel projekt servíruje indexovateľnú kópiu | **BLOCKED** | Git integrácia je odpojená, ale posledný build je stále verejný na `elevator-service-sk.vercel.app` — vyžaduje rozhodnutie majiteľa účtu |
+| Duplicitný Vercel projekt servíruje indexovateľnú kópiu | WAITING FOR CLIENT | Git integrácia je odpojená a produkcia je overená — projekt `prj_EHZFtnwy1stspQ98meUwRRL2GgFq` je možné bezpečne ručne zmazať. Z kódu sa nemení nič. |
 | `localhost` / `127.0.0.1` v repozitári | DONE | Iba `serve.mjs` — legitímny vývojový nástroj |
 
 ## 5. Kariéra a právna presnosť
@@ -167,8 +167,9 @@ Tento dokument je stav **po** zapracovaní opráv.
 
 ## Zhrnutie
 
-- **BLOCKED:** 1 — verejná duplicitná kópia webu na `elevator-service-sk.vercel.app`
-  (vyžaduje rozhodnutie majiteľa účtu, nie technickú prácu).
+- **BLOCKED:** 0. Produkčný build prechádza, identifikačné údaje sú doplnené.
+- Ručný krok mimo kódu: zmazať legacy projekt `elevator-service-sk`
+  (`prj_EHZFtnwy1stspQ98meUwRRL2GgFq`) — produkcia je overená, je to bezpečné.
 - **NEEDS LEGAL REVIEW:** 0 — právny základ bol opravený; odporúčané je už len záverečné posúdenie znenia právnikom.
 - **WAITING FOR CLIENT:** viď `CLIENT_DATA_TO_VERIFY.md`.
 - **NEEDS UPDATE:** kozmetické a nepodstatné položky, žiadna z nich nebráni

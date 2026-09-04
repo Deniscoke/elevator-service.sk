@@ -28,7 +28,7 @@ DIČ a IČ DPH zostávajú `null` — neboli overené a preto sa nezobrazujú.
 |---|---|
 | **Súhlas jednotlivých zákazníkov so zverejnením referencie** | Bez neho zostáva `/referencie/` bez menovaných referencií. Meno sa do repozitára doplní až spolu so súhlasom — repozitár je verejný. |
 | **Presný zoznam a rozsah odborných oprávnení firmy** (čísla osvedčení, rozsah) | Bez neho sa sekcia „Odborné oprávnenia" nevykresľuje. Počet oprávnení sa nezverejňuje. |
-| **Rok založenia / dĺžka pôsobenia** | Bez neho web neuvádza žiadny údaj typu „X rokov na trhu". |
+| **Zverejniť dátum zápisu do registra?** | Dátum 22. 12. 2000 je overený a je v dátach (`legal.registeredSince`), ale na web sa nevypisuje. Ak má web uvádzať napríklad „od roku 2000", nech to klient odsúhlasí — je to marketingové tvrdenie, aj keď má oporu v registri. |
 | **Preplácame alebo spolufinancujeme školenia a certifikácie uchádzačov?** | Bez potvrdenia sa to na `/kariera/` netvrdí. |
 | **Konkrétne otvorené pozície vrátane základnej zložky mzdy** | Bez mzdy sa pozícia nesmie zverejniť ako inzerát (§ 62 ods. 2 zák. č. 5/2004 Z. z.). Kým to tak je, `/kariera/` je evergreen stránka bez JobPosting schémy. |
 | **Reakčný čas na nahlásenú poruchu** — je to záväzok, alebo len bežná prax? | Bez potvrdenia web žiadny čas nesľubuje. |
