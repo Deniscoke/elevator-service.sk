@@ -167,10 +167,14 @@ function footer(company, serviceAreaLabel) {
   const hasContactBlock =
     isSet(company.contact.phone) || isSet(company.contact.email) || isSet(company.address.street);
 
+  /* § 3a Obchodného zákonníka: na webovom sídle sa uvádza obchodné meno,
+     sídlo, IČO a označenie registra vrátane čísla zápisu. Všetko sa berie
+     z dátovej vrstvy — v šablónach sa nič neprepisuje ručne. */
   const legalBits = [
     isSet(company.legal.ico) ? `IČO: ${esc(company.legal.ico)}` : null,
     isSet(company.legal.dic) ? `DIČ: ${esc(company.legal.dic)}` : null,
     isSet(company.legal.icDph) ? `IČ DPH: ${esc(company.legal.icDph)}` : null,
+    isSet(company.legal.registration) ? esc(company.legal.registration) : null,
   ].filter(Boolean);
 
   return `

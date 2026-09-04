@@ -37,10 +37,11 @@ export const company = {
   },
 
   /* ---- adresa / prevádzka ------------------------------------------ */
+  // OVERENÉ podľa verejného obchodného registra.
   address: {
-    street: null,           // ČAKÁ NA KLIENTA — v dotazníku nebolo
+    street: 'Rudohorská 22',
     city: 'Banská Bystrica',
-    postalCode: null,       // ČAKÁ NA KLIENTA
+    postalCode: '974 11',
     country: 'Slovensko',
     countryCode: 'SK',
     region: 'Banskobystrický kraj',
@@ -94,10 +95,16 @@ export const company = {
 
   /* ---- právne údaje ------------------------------------------------- */
   legal: {
-    ico: null,              // ČAKÁ NA KLIENTA — v dotazníku nebolo
-    dic: null,              // ČAKÁ NA KLIENTA
-    icDph: null,            // ČAKÁ NA KLIENTA
-    registration: null,     // ČAKÁ NA KLIENTA
+    // OVERENÉ podľa verejného obchodného registra.
+    ico: '36 045 641',
+    dic: null,              // nie je verejne overené — nezobrazuje sa
+    icDph: null,            // nie je verejne overené — nezobrazuje sa
+    registration:
+      'Obchodný register Okresného súdu Banská Bystrica, oddiel Sro, vložka č. 6832/S',
+    // Dátum zápisu do obchodného registra. Je to overiteľný fakt, ale
+    // sám osebe nie je tvrdením o dĺžke pôsobenia — na web sa nevypisuje,
+    // kým klient neodsúhlasí konkrétnu formuláciu.
+    registeredSince: '2000-12-22',
     dpo: null,
     // POTVRDENÉ klientom: interné pravidlo firmy, NIE zákonná lehota.
     // GDPR žiadne konkrétne číslo nestanovuje — hovorí, že údaje sa nemajú

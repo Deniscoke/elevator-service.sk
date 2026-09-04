@@ -77,10 +77,12 @@ export default function page(ctx) {
           ${when(forms.attachments.enabled, () => '<li>Prílohy, ak ich pripojíte (fotografie)</li>')}
         </ul>
         <p>
-          Okrem vyplnených polí sa odosiela aj váš súhlas so spracúvaním a technické
-          údaje potrebné na doručenie a ochranu pred spamom: adresa stránky, z ktorej
-          bol formulár odoslaný, čas odoslania a IP adresa. IP adresa sa nikam neukladá —
-          slúži len na krátkodobé obmedzenie počtu odoslaní z jedného zariadenia.
+          Okrem vyplnených polí sa odosiela potvrdenie, že ste sa oboznámili s týmito
+          informáciami, a technické údaje potrebné na doručenie a na ochranu pred spamom:
+          adresa stránky, z ktorej bol formulár odoslaný, čas odoslania a IP adresa.
+          IP adresu neukladáme do žiadnej databázy — slúži len na krátkodobé obmedzenie
+          počtu odoslaní z jedného zariadenia. Prevádzkové záznamy hostingu vznikajú
+          nezávisle od nás na strane poskytovateľa.
         </p>
         ${
           isSet(company.integrations?.analytics?.provider)
@@ -131,9 +133,19 @@ export default function page(ctx) {
 
         <h2>Právny základ spracúvania</h2>
         <p>
-          Právnym základom je súhlas, ktorý udelíte odoslaním formulára, prípadne
-          predzmluvné vzťahy, ak dopyt smeruje k uzavretiu zmluvy. Súhlas môžete
-          kedykoľvek odvolať.
+          Keď nám pošlete dopyt, spracúvame vaše údaje preto, že je to nevyhnutné na
+          to, aby sme vám mohli odpovedať a pripraviť prípadnú ponuku — teda na
+          vykonanie opatrení pred uzavretím zmluvy na vašu žiadosť.
+        </p>
+        <p>
+          Zaškrtnutie políčka vo formulári je potvrdenie, že ste sa s týmito
+          informáciami oboznámili. Nie je to súhlas a samo osebe nevytvára právny
+          základ spracúvania.
+        </p>
+        <p>
+          Ak by sme vaše údaje chceli použiť na iný účel, než je vybavenie vášho dopytu,
+          vyžiadali by sme si na to samostatný súhlas. Taký súhlas by ste mohli
+          kedykoľvek odvolať bez vplyvu na zákonnosť spracúvania pred jeho odvolaním.
         </p>
 
         ${when(
@@ -152,7 +164,8 @@ export default function page(ctx) {
           <li>na obmedzenie spracúvania,</li>
           <li>na prenosnosť údajov,</li>
           <li>namietať proti spracúvaniu,</li>
-          <li>kedykoľvek odvolať udelený súhlas,</li>
+          <li>kedykoľvek odvolať súhlas, ak ste nám nejaký udelili, bez vplyvu na
+              zákonnosť spracúvania pred jeho odvolaním,</li>
           <li>podať sťažnosť dozornému orgánu.</li>
         </ul>
 

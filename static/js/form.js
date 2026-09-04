@@ -32,7 +32,7 @@
     phone: 'Skontrolujte tvar telefónneho čísla.',
     contact: 'Uveďte aspoň jeden kontakt — telefón alebo e-mail.',
     short: 'Napíšte, prosím, aspoň pár slov k požiadavke.',
-    consent: 'Bez súhlasu nevieme dopyt spracovať.',
+    consent: 'Pred odoslaním potvrďte, že ste sa oboznámili s informáciami o spracúvaní údajov.',
     number: 'Zadajte počet výťahov ako číslo.',
   };
 

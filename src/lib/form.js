@@ -181,8 +181,8 @@ export function inquiryForm(company, { preselect = '', context = 'dopyt', headin
             <input type="checkbox" id="suhlas" name="suhlas" required>
             <span class="checkbox__box" aria-hidden="true"></span>
             <span class="checkbox__text">
-              Súhlasím so spracúvaním osobných údajov na účel vybavenia tohto dopytu.${req}
-              <a href="/ochrana-osobnych-udajov/">Viac o ochrane osobných údajov</a>
+              Oboznámil/a som sa s informáciami o spracúvaní osobných údajov.${req}
+              <a href="/ochrana-osobnych-udajov/">Prečítať informácie o spracúvaní osobných údajov</a>
             </span>
           </label>
           <p class="field__error" id="suhlas-error" data-error-for="suhlas" hidden></p>
