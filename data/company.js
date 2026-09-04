@@ -145,7 +145,13 @@ export const company = {
     // Analytika. Odporúčaná je bezcookie (Plausible/Umami) — nevyžaduje
     // súhlas ani cookie lištu. Pri GA4 treba doriešiť súhlas.
     analytics: {
-      provider: null,   // 'plausible' | 'umami' | 'ga4'
+      // 'vercel' | 'plausible' | 'umami' | 'ga4'
+      //
+      // Vercel Web Analytics: bezcookie, meria sa z vlastnej domény cez
+      // /_vercel/insights/, nepotrebuje žiadne ID ani externý skript.
+      // Aby sa reálne zbierali dáta, musí byť Analytics zapnuté aj
+      // v projekte na Verceli (Analytics → Enable).
+      provider: 'vercel',
       id: null,         // doména pri Plausible, websiteId pri Umami, G-XXXX pri GA4
       scriptUrl: null,  // pri self-hosted Umami
     },

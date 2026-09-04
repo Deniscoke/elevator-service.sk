@@ -37,9 +37,16 @@ for (const f of pages) {
     if (!/\swidth=/.test(tag) || !/\sheight=/.test(tag)) issues.push(`${rel}: <img> bez width/height`);
   }
 
+  /* Cesty, ktoré obsluhuje hostingová platforma, nie náš build — v dist/
+     preto neexistujú a kontrola odkazov ich musí obísť.
+       /_vercel/insights/  Vercel Web Analytics (bezcookie meranie)
+       /api/               serverless funkcie */
+  const PLATFORM_PATHS = [/^\/_vercel\//, /^\/api\//];
+
   for (const m of html.matchAll(/(?:href|src)="(\/[^"#?]*)/g)) {
     const p = m[1];
     if (p === '/') continue;
+    if (PLATFORM_PATHS.some((re) => re.test(p))) continue;
     const asDir = path.join(DIST, p, 'index.html');
     const asFile = path.join(DIST, p);
     if (!existsSync(asDir) && !existsSync(asFile)) issues.push(`${rel}: nefunkčný odkaz ${p}`);

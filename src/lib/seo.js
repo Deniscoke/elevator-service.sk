@@ -40,7 +40,13 @@ function renderIntegrations(company) {
     out.push(`<meta name="google-site-verification" content="${esc(i.searchConsoleVerification)}">`);
   }
 
-  if (isSet(a.provider) && isSet(a.id)) {
+  /* Vercel Web Analytics nepotrebuje žiadne ID — meranie beží na vlastnej
+     doméne cez /_vercel/insights/. Skript sa načíta len vtedy, keď je
+     provider v dátach; zapnutie merania sa navyše robí v projekte na
+     Verceli, takže bez oboch krokov sa nezbiera nič. */
+  if (a.provider === 'vercel') {
+    out.push('<script defer src="/_vercel/insights/script.js"></script>');
+  } else if (isSet(a.provider) && isSet(a.id)) {
     if (a.provider === 'plausible') {
       out.push(
         `<script defer data-domain="${esc(a.id)}" src="https://plausible.io/js/script.js"></script>`

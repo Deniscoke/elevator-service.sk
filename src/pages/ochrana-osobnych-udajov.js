@@ -16,6 +16,19 @@ import { esc, isSet, when, map } from '../lib/html.js';
 import { organizationSchema, breadcrumbSchema } from '../lib/seo.js';
 import { inquiryFields, forms } from '../../data/forms.js';
 
+/** Ľudský názov analytického nástroja — do textu nepatrí kľúč z konfigurácie. */
+function analyticsLabel(company) {
+  const provider = company.integrations?.analytics?.provider;
+  return (
+    {
+      vercel: 'Vercel Web Analytics',
+      plausible: 'Plausible Analytics',
+      umami: 'Umami',
+      ga4: 'Google Analytics 4',
+    }[provider] || provider
+  );
+}
+
 export default function page(ctx) {
   const { company } = ctx;
 
@@ -87,9 +100,11 @@ export default function page(ctx) {
         ${
           isSet(company.integrations?.analytics?.provider)
             ? `<p>
-          Web používa nástroj na meranie návštevnosti
-          (${esc(company.integrations.analytics.provider)}). Zbiera len súhrnné,
-          neosobné údaje o návštevnosti.
+          Web meria návštevnosť nástrojom ${esc(analyticsLabel(company))}. Zbiera len
+          súhrnné údaje — koľko ľudí stránku navštívilo, ktoré stránky si pozreli
+          a z akého typu zariadenia prišli. Nástroj <strong>neukladá do vášho
+          prehliadača žiadne cookies</strong>, nevytvára z vás profil a nesleduje
+          vás naprieč inými webmi.
         </p>`
             : `<p>
           Web nepoužíva analytické ani reklamné nástroje a neukladá do vášho prehliadača
@@ -103,7 +118,13 @@ export default function page(ctx) {
           sprostredkovatelia, ktorí zabezpečujú technickú prevádzku:
         </p>
         <ul>
-          <li><strong>Vercel Inc.</strong> — hosting webu a spracovanie odoslaného formulára.</li>
+          <li>
+            <strong>Vercel Inc.</strong> — hosting webu a spracovanie odoslaného formulára${
+              company.integrations?.analytics?.provider === 'vercel'
+                ? '; zároveň prevádzkuje meranie návštevnosti opísané vyššie'
+                : ''
+            }.
+          </li>
           <li><strong>Resend</strong> — doručenie dopytu do našej e-mailovej schránky.</li>
         </ul>
         <p>
