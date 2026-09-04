@@ -156,22 +156,22 @@ export const company = {
   /* ---- pozicioning --------------------------------------------------- */
   // Odpoveď klienta na otázku „Prečo si má zákazník vybrať práve vás".
   // Používa sa na stránke O nás. Sú to jeho tvrdenia, nie naše.
+  /* Zostávajú len tvrdenia, ktoré vieme doložiť potvrdenými údajmi
+     alebo rozsahom služieb. Odstránené boli „Reakcia do jednej hodiny"
+     (nepotvrdený záväzok) a „26 rokov na jednom mieste" (nepotvrdený
+     a nepresný údaj o dĺžke pôsobenia). */
   differentiators: [
-    {
-      title: 'Reakcia do jednej hodiny',
-      text: 'Nahlásenú poruchu začíname riešiť najneskôr do hodiny od nahlásenia.',
-    },
-    {
-      title: '26 rokov na jednom mieste',
-      text: 'Výťahom sa venujeme od roku, keď väčšina dnes servisovaných zariadení ešte len vznikala.',
-    },
-    {
-      title: 'Technici, ktorí závadu naozaj odstránia',
-      text: 'Ťažisko práce je v diagnostike a oprave, nie v odkladaní na ďalší výjazd.',
-    },
     {
       title: 'Nonstop havarijná linka',
       text: 'Jedno číslo, ktoré platí cez deň, v noci aj cez sviatky.',
+    },
+    {
+      title: 'Celý cyklus u jedného dodávateľa',
+      text: 'Servis, opravy, odborné prehliadky aj modernizácia — bez odovzdávania medzi firmami.',
+    },
+    {
+      title: 'Zápis z každého úkonu',
+      text: 'Z každého zásahu je záznam v dokumentácii zariadenia, takže je dohľadateľné, čo sa na výťahu dialo.',
     },
   ],
 };

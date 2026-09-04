@@ -266,6 +266,12 @@
   border-left: 3px solid;
 }
 
+/* Živá oblasť je v HTML vždy prítomná (kvôli čítačkám obrazovky),
+   takže sa prázdna skrýva až tu. */
+.form__status:empty {
+  display: none;
+}
+
 .form__status[hidden] {
   display: none;
 }

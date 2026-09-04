@@ -27,6 +27,7 @@ import { absoluteUrl, isSet } from './src/lib/html.js';
 
 import { company, productionRequirements } from './data/company.js';
 import { serviceArea, publishedLocations } from './data/locations.js';
+import { canPublishAsJobAd } from './data/careers.js';
 import { forms } from './data/forms.js';
 
 /* ---- stránky (poradie určuje aj poradie v sitemap.xml) ------------ */
@@ -278,6 +279,39 @@ function conditionalLeakPatterns() {
   if (!isSet(company.stats.servicedLifts)) {
     extra.push([/\b\d{3,}\s*\+?\s*výťahov/i, 'počet výťahov bez podkladu v dátach']);
   }
+  /* Tvrdenia, ktoré klient nepotvrdil. Kontrola je naviazaná na dáta:
+     keď údaj do dátovej vrstvy pribudne, poistka sa sama vypne.
+     Bez tohto by sa nepotvrdené tvrdenie mohlo vrátiť cez ktorúkoľvek
+     šablónu a build by ho ticho prepustil. */
+  if (!isSet(company.stats.yearsInBusiness)) {
+    extra.push([
+      /\b\d{1,3}\s*rok(ov|y|u)?\s+(na trhu|v odbore|skúseností)/i,
+      'dĺžka pôsobenia na trhu bez podkladu v dátach',
+    ]);
+  }
+  if (!isSet(company.emergency.responseTimeNote)) {
+    extra.push([
+      /reakci[ae][^.]{0,40}\bdo\s+(jednej|1|dvoch|2)\s*(hodin|hod)/i,
+      'sľúbený reakčný čas bez potvrdenia klientom',
+    ]);
+    extra.push([
+      /do\s+(\d+|jednej)\s*(hodiny|hodín)\s+od\s+nahlásenia/i,
+      'sľúbený reakčný čas bez potvrdenia klientom',
+    ]);
+  }
+  if (!isSet(company.certifications)) {
+    extra.push([
+      /\b\d\s+odborn\w+\s+oprávnen/i,
+      'počet odborných oprávnení bez podkladu v dátach',
+    ]);
+  }
+  if (!canPublishAsJobAd) {
+    extra.push([
+      /aktuálne\s+obsadzujeme/i,
+      'tvrdenie o obsadzovaní pozícií bez zverejniteľného inzerátu',
+    ]);
+  }
+
   return extra;
 }
 

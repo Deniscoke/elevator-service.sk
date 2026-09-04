@@ -189,7 +189,42 @@ function rateLimited(ip) {
   return hits.length > MAX_PER_WINDOW;
 }
 
-const clean = (v, max) => String(v == null ? '' : v).trim().slice(0, max);
+/**
+ * Orezanie vstupu + zahodenie riadiacich znakov.
+ *
+ * Bez toho by sa cez pole, ktoré ide do predmetu e-mailu (napr. mesto),
+ * dal zalomením riadku podstrčiť ďalší hlavičkový riadok — klasická
+ * CRLF injection. Nové riadky nechávame len tam, kde dávajú zmysel
+ * (`multiline: true` pre samotnú správu).
+ */
+/**
+ * Orezanie vstupu + zahodenie riadiacich znakov.
+ *
+ * Bez toho by sa cez pole, ktore ide do predmetu e-mailu (napr. mesto),
+ * dal zalomenim riadku podstrcit dalsi hlavickovy riadok - klasicka
+ * CRLF injection. Nove riadky sa nechavaju len tam, kde davaju zmysel
+ * (multiline: true pre samotnu spravu).
+ *
+ * Zamerne bez regulárneho výrazu s únikovými sekvenciami — filtruje sa
+ * priamo podľa kódu znaku, takže sa nedá nič pokaziť pri zápise súboru.
+ */
+function stripControl(value, multiline) {
+  let out = '';
+  for (const ch of String(value)) {
+    const code = ch.codePointAt(0);
+    const isNewline = code === 10 || code === 13;
+    if (isNewline) {
+      out += multiline ? String.fromCharCode(10) : ' ';
+      continue;
+    }
+    if (code < 32 || code === 127) continue;
+    out += ch;
+  }
+  return out;
+}
+
+const clean = (v, max, { multiline = false } = {}) =>
+  stripControl(v == null ? '' : v, multiline).trim().slice(0, max);
 
 function escapeHtml(value) {
   return String(value == null ? '' : value)
@@ -221,6 +256,15 @@ function validate(d, isCareer) {
   if (!isCareer) {
     if (!d.mesto) errors.push('mesto');
     if (!d.typPoziadavky) errors.push('typPoziadavky');
+  }
+
+  /* Hodnoty selectov musia pochádzať zo zoznamu v dátovej vrstve.
+     Klient posiela JSON, takže sa doň dá napísať čokoľvek. */
+  if (d.typPoziadavky && !inquiryTypes.some((o) => o.value === d.typPoziadavky)) {
+    errors.push('typPoziadavky');
+  }
+  if (d.typObjektu && !objectTypes.some((o) => o.value === d.typObjektu)) {
+    errors.push('typObjektu');
   }
 
   if (!d.telefon && !d.email) errors.push('kontakt');
@@ -487,6 +531,16 @@ export default async function handler(req, res) {
     return res.status(200).json({ ok: true });
   }
 
+  /* Čas vyplnenia. Hodnotu hlási klient, takže sa dá sfalšovať — zachytí
+     to skript, ktorý formulár odošle okamžite, nie cieleného útočníka.
+     Preto sa to nikde neopisuje ako spoľahlivá ochrana. Chýbajúcu hodnotu
+     netrestáme (staršia cache skriptu), príliš malú áno. */
+  const fillSeconds = Number(body._cas);
+  if (Number.isFinite(fillSeconds) && fillSeconds < forms.antispam.minFillSeconds) {
+    console.warn('[dopyt] odoslané za', fillSeconds, 's — pod minimom, vyhodnotené ako robot.');
+    return res.status(200).json({ ok: true });
+  }
+
   /* Konfigurácia. Chýbajúca premenná = čestné zlyhanie, nie tichá
      náhrada. Názov chýbajúcej premennej vraciame zámerne — nie je to
      tajomstvo a bez neho sa chyba ladí naslepo. */
@@ -518,7 +572,7 @@ export default async function handler(req, res) {
     typObjektu: clean(body.typObjektu, LIMITS.typObjektu),
     pocetVytahov: clean(body.pocetVytahov, LIMITS.pocetVytahov),
     typPoziadavky: clean(body.typPoziadavky, LIMITS.typPoziadavky),
-    sprava: clean(body.sprava, LIMITS.sprava),
+    sprava: clean(body.sprava, LIMITS.sprava, { multiline: true }),
     suhlas: body.suhlas === true || body.suhlas === 'true',
     _stranka: clean(body._stranka, 200),
   };

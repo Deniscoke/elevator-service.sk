@@ -43,6 +43,8 @@ export default function page(ctx) {
   <section class="hero on-dark">
     <div class="hero__bg" aria-hidden="true">
       <img src="/assets/foto/servis-rozvadzac.jpg" width="1400" height="1032"
+           srcset="/assets/foto/servis-rozvadzac-760.jpg 760w, /assets/foto/servis-rozvadzac.jpg 1400w"
+           sizes="100vw"
            alt="" fetchpriority="high" decoding="async">
     </div>
     <div class="container hero__inner">

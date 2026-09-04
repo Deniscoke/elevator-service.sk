@@ -204,7 +204,10 @@ export function inquiryForm(company, { preselect = '', context = 'dopyt', headin
         </div>
 
         <!-- Stavová správa. aria-live oznámi výsledok aj čítačke obrazovky. -->
-        <div class="form__status" data-form-status role="status" aria-live="polite" hidden></div>
+        <!-- Bez atribútu hidden: živá oblasť musí byť v strome prístupnosti už pri
+             načítaní, inak čítačka obrazovky neoznámi text, ktorý do nej
+             pribudne až po odoslaní. Prázdna sa skrýva cez .form__status:empty. -->
+        <div class="form__status" data-form-status role="status" aria-live="polite"></div>
 
         ${when(
           !configured && isDev,

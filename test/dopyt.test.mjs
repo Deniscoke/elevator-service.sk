@@ -207,6 +207,32 @@ async function run() {
     /<html lang="sk">/.test(confirm.html || '') && /<title>/.test(confirm.html || '')
   );
 
+  // 6c. vstup nesmie prepašovať riadiaci znak do hlavičiek e-mailu
+  sent = [];
+  const CRLF = String.fromCharCode(13) + String.fromCharCode(10);
+  await call(
+    { ...VALID, mesto: 'Zvolen' + CRLF + 'Bcc: utocnik@example.com' },
+    { env: FULL_ENV, ip: '9.9.9.20' }
+  );
+  const subj = sent[0]?.subject || '';
+  const hasControl = [...subj].some((c) => c.charCodeAt(0) === 10 || c.charCodeAt(0) === 13);
+  check(
+    'CRLF v poli mesto sa nedostane do predmetu',
+    !hasControl && subj.includes('Bcc'),
+    JSON.stringify(subj)
+  );
+
+  // 6d. hodnoty selectov musia byť zo zoznamu v dátovej vrstve
+  let rr = await call(
+    { ...VALID, typPoziadavky: 'vymysleny-typ' },
+    { env: FULL_ENV, ip: '9.9.9.21' }
+  );
+  check(
+    'neznáma hodnota selectu → 400',
+    rr.statusCode === 400 && rr.body.fields?.includes('typPoziadavky'),
+    JSON.stringify(rr.body)
+  );
+
   // 7. ochrana proti slučke
   sent = [];
   await call({ ...VALID, email: FULL_ENV.INQUIRY_TO }, { env: FULL_ENV, ip: '9.9.9.5' });

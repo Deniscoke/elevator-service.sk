@@ -7,6 +7,7 @@
  */
 
 import { esc, isSet, absoluteUrl, clampDescription, jsonLd, pruneEmpty } from './html.js';
+import { serviceArea } from '../../data/locations.js';
 
 const ORG_ID = '#organization';
 const SITE_ID = '#website';
@@ -125,38 +126,86 @@ export function organizationSchema(company) {
     identifier: company.legal.ico || undefined,
     sameAs: sameAs.length ? sameAs : undefined,
     address: addressSchema(company),
-    areaServed: {
-      '@type': 'AdministrativeArea',
-      name: company.address.region,
-    },
+    areaServed: areaServedSchema(company),
+    contactPoint: emergencyContactPoint(company),
   });
 }
 
-/** PostalAddress — len ak máme ulicu aj PSČ. Neúplná adresa sa nevypisuje. */
-function addressSchema(company) {
-  const a = company.address;
-  if (!isSet(a.street) || !isSet(a.postalCode)) return undefined;
+/**
+ * Havarijná linka. Nonstop dostupnosť aj číslo sú potvrdené klientom
+ * a sú viditeľne na webe, takže smú byť aj v štruktúrovaných dátach.
+ * Keď sa v dátach vypnú, uzol zmizne.
+ */
+function emergencyContactPoint(company) {
+  const e = company.emergency;
+  if (!e || !e.enabled || !isSet(company.contact.emergencyPhone)) return undefined;
   return {
-    '@type': 'PostalAddress',
-    streetAddress: a.street,
-    addressLocality: a.city,
-    postalCode: a.postalCode,
-    addressRegion: a.region,
-    addressCountry: a.countryCode,
+    '@type': 'ContactPoint',
+    contactType: 'emergency',
+    telephone: company.contact.emergencyPhone,
+    availableLanguage: 'sk',
+    hoursAvailable: {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
+      opens: '00:00',
+      closes: '23:59',
+    },
   };
 }
 
 /**
- * LocalBusiness — len keď máme adresu.
- * Bez adresy by šlo o prázdnu deklaráciu, ktorá SEO nepomôže a je nepravdivá.
+ * Obsluhovaná oblasť.
+ *
+ * Musí zodpovedať tomu, čo je napísané na stránke. Web hovorí o okolí
+ * Banskej Bystrice v danom polomere — deklarovať celý kraj by bolo
+ * širšie tvrdenie, než aké firma robí.
+ */
+function areaServedSchema(company) {
+  const label =
+    serviceArea.confirmed && isSet(serviceArea.radiusKm)
+      ? serviceArea.confirmedLabelTemplate.replace('{radius}', String(serviceArea.radiusKm))
+      : serviceArea.provisionalLabel;
+  return { '@type': 'Place', name: label };
+}
+
+/**
+ * PostalAddress.
+ *
+ * Ulicu ani PSČ zatiaľ nemáme, ale mesto a kraj áno a sú aj viditeľne na
+ * webe — vypustiť adresu úplne by znamenalo zamlčať pravdivý údaj.
+ * Vypisuje sa preto toľko, koľko naozaj vieme; chýbajúce polia sa
+ * nedopĺňajú. Po doplnení ulice a PSČ sa schéma rozšíri sama.
+ */
+function addressSchema(company) {
+  const a = company.address;
+  if (!isSet(a.city)) return undefined;
+  return pruneEmpty({
+    '@type': 'PostalAddress',
+    streetAddress: isSet(a.street) ? a.street : undefined,
+    addressLocality: a.city,
+    postalCode: isSet(a.postalCode) ? a.postalCode : undefined,
+    addressRegion: a.region,
+    addressCountry: a.countryCode,
+  });
+}
+
+/** Má schéma dosť údajov na to, aby dávala zmysel ako prevádzka? */
+function hasLocality(company) {
+  return isSet(company.address.city);
+}
+
+/**
+ * LocalBusiness — vykreslí sa, keď vieme aspoň mesto prevádzky.
+ * Podtyp HomeAndConstructionBusiness je najbližší tomu, čo firma robí
+ * (údržba a technické služby na budovách).
  */
 export function localBusinessSchema(company) {
   const address = addressSchema(company);
-  if (!address) return null;
+  if (!address || !hasLocality(company)) return null;
   const base = String(company.siteUrl).replace(/\/+$/, '');
 
   return pruneEmpty({
-    '@type': 'ProfessionalService',
+    '@type': 'HomeAndConstructionBusiness',
     '@id': base + '/#localbusiness',
     name: company.legalName,
     url: base + '/',
@@ -179,7 +228,7 @@ export function localBusinessSchema(company) {
           closes: h.closes,
         }))
       : undefined,
-    areaServed: { '@type': 'AdministrativeArea', name: company.address.region },
+    areaServed: areaServedSchema(company),
   });
 }
 
@@ -205,10 +254,7 @@ export function serviceSchema(company, service) {
     description: service.summary,
     url: absoluteUrl(company.siteUrl, service.path),
     provider: { '@id': orgId(company.siteUrl) },
-    areaServed: {
-      '@type': 'AdministrativeArea',
-      name: company.address.region,
-    },
+    areaServed: areaServedSchema(company),
   });
 }
 

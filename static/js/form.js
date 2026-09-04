@@ -225,6 +225,8 @@
     });
 
     data._kontext = form.dataset.context || 'dopyt';
+    // Čas vyplnenia — server ho použije ako druhú, hrubú antispam poistku.
+    data._cas = Math.round((Date.now() - mountedAt) / 1000);
     data._stranka = window.location.pathname;
     data._odoslane = new Date().toISOString();
     return data;
@@ -313,7 +315,7 @@
     if (!statusEl) return;
     statusEl.className = 'form__status form__status--' + type;
     statusEl.innerHTML = html;
-    statusEl.hidden = false;
+    statusEl.hidden = false;   // pre istotu, ak by prišlo staršie HTML
   }
 
   function setBusy(busy) {

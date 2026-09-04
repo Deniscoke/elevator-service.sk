@@ -22,6 +22,16 @@
   transform: none;
 }
 
+/* Obsah prvej obrazovky sa NIKDY neskrýva.
+   Inak by najväčší vykreslený prvok (LCP) čakal na spustenie odloženého
+   skriptu — a to je presne to, čo Core Web Vitals meria ako pomalé. */
+.js .hero [data-reveal],
+.js .page-hero [data-reveal],
+.js .trust [data-reveal] {
+  opacity: 1;
+  transform: none;
+}
+
 /* Postupné oneskorenie pre položky v mriežke. */
 .js [data-reveal][style*="--reveal-delay"] {
   transition-delay: var(--reveal-delay);

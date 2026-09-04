@@ -10,6 +10,7 @@ import { esc, isSet, when, map, telHref } from './html.js';
 import { icon } from './icons.js';
 import { services, serviceById } from '../../data/services.js';
 import { segments, references } from '../../data/references.js';
+import { canPublishAsJobAd } from '../../data/careers.js';
 
 /** Zoznam komponentov skrytých pre chýbajúce dáta — plní build report. */
 export const hidden = [];
@@ -141,6 +142,8 @@ export function acquisition({ index = '03' } = {}) {
       <div class="acquisition on-dark">
         <div class="acquisition__bg" aria-hidden="true">
           <img src="/assets/foto/servis-strojovna.jpg" width="1400" height="910"
+               srcset="/assets/foto/servis-strojovna-760.jpg 760w, /assets/foto/servis-strojovna.jpg 1400w"
+               sizes="(max-width: 60em) 100vw, 50vw"
                alt="" loading="lazy" decoding="async">
         </div>
         <div class="acquisition__content">
@@ -393,7 +396,10 @@ export function emergencyCta(company, { index = '07', compact = false } = {}) {
 /* ------------------------------------------------------------------ */
 
 export function careersTeaser(positions, { index = '08' } = {}) {
-  const open = isSet(positions);
+  /* Rovnaká poistka ako na /kariera/: kým pozície nemajú mzdu, nesmú sa
+     zverejniť ako inzerát (§ 62 ods. 2 zák. 5/2004 Z. z.) a web netvrdí,
+     koľko miest obsadzujeme. */
+  const open = isSet(positions) && canPublishAsJobAd;
   return `
   <section class="section section--alt" id="kariera">
     <div class="container">
@@ -407,7 +413,7 @@ export function careersTeaser(positions, { index = '08' } = {}) {
                 ? `Aktuálne obsadzujeme ${positions.length} ${
                     positions.length === 1 ? 'pozíciu' : positions.length < 5 ? 'pozície' : 'pozícií'
                   }. Pozrite si, čo práca obnáša a čo je potrebné.`
-                : 'Momentálne nemáme zverejnenú voľnú pozíciu. Na kariérnej stránke nájdete, čo o pozícii zverejníme, keď ju otvoríme.'
+                : 'Momentálne nemáme zverejnenú konkrétnu voľnú pozíciu. Ak máte skúsenosti so servisom, elektrotechnikou alebo vyhradenými technickými zariadeniami, ozvite sa nám aj tak.'
             }
           </p>
         </div>
