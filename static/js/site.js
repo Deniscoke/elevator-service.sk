@@ -288,10 +288,34 @@
         if (!observerFired) revealAll();
       }, 2000);
 
-      /* POISTKA 3 — tvrdý strop. Nech sa deje čokoľvek (throttling vo
-         vstavanom prehliadači aplikácie, šetrič batérie, prerender),
-         po 6 sekundách nesmie na stránke zostať neviditeľný obsah. */
-      window.setTimeout(revealAll, 6000);
+      /* POISTKA 3 — dorovnanie pri scrollovaní.
+         Observer sa niekedy ozve raz a potom stíchne (vstavané
+         prehliadače aplikácií, throttlovanie na pozadí). Vtedy poistka 2
+         nezaberie, lebo observer „fungoval". Preto pri scrollovaní
+         odhalíme všetko, čo už je v zábere. Keď nič nezostáva,
+         posluchač sa sám odstráni — bežný prípad ho teda nič nestojí. */
+      var syncing = false;
+      function syncOnScroll() {
+        if (syncing) return;
+        syncing = true;
+        window.requestAnimationFrame(function () {
+          syncing = false;
+          var pending = document.querySelectorAll('[data-reveal]:not(.is-visible)');
+          if (!pending.length) {
+            window.removeEventListener('scroll', syncOnScroll);
+            return;
+          }
+          var h = window.innerHeight || 0;
+          Array.prototype.forEach.call(pending, function (el) {
+            if (el.getBoundingClientRect().top < h) el.classList.add('is-visible');
+          });
+        });
+      }
+      window.addEventListener('scroll', syncOnScroll, { passive: true });
+
+      /* POISTKA 4 — tvrdý strop. Nech sa deje čokoľvek, po 4 sekundách
+         nesmie na stránke zostať neviditeľný obsah. */
+      window.setTimeout(revealAll, 4000);
     }
   }
 
