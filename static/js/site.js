@@ -240,10 +240,15 @@
       // Bez podpory alebo pri vypnutých animáciách zobrazíme všetko naraz.
       revealAll();
     } else {
+      /* Príznak, že observer naozaj beží. Bez neho sa nedá odlíšiť
+         „observer pracuje" od „niečo odhalila poistka 1". */
+      var observerFired = false;
+
       var observer = new IntersectionObserver(
         function (entries) {
           entries.forEach(function (entry) {
             if (!entry.isIntersecting) return;
+            observerFired = true;
             entry.target.classList.add('is-visible');
             observer.unobserve(entry.target);
           });
@@ -270,12 +275,23 @@
         observer.observe(el);
       });
 
-      /* POISTKA 2 — ak sa do 2 sekúnd nič neodhalilo, observer zjavne
-         nefunguje. Radšej zobrazíme všetko bez animácie, než aby si
-         niekto pozeral prázdnu stránku. */
+      /* POISTKA 2 — observer sa do 2 sekúnd ani raz neozval, hoci pod
+         ohybom niečo je. Nefunguje: odhalíme všetko.
+
+         POZOR na históriu tejto podmienky: pôvodne sa testovalo
+         `!document.querySelector('[data-reveal].is-visible')`, lenže
+         poistka 1 vždy odhalí obsah nad ohybom, takže niečo viditeľné
+         existovalo vždy a poistka sa NIKDY nespustila. Zvyšok stránky
+         potom zostal na opacity: 0. Preto sa dnes sleduje, či observer
+         sám niečo urobil, nie či je niečo viditeľné. */
       window.setTimeout(function () {
-        if (!document.querySelector('[data-reveal].is-visible')) revealAll();
+        if (!observerFired) revealAll();
       }, 2000);
+
+      /* POISTKA 3 — tvrdý strop. Nech sa deje čokoľvek (throttling vo
+         vstavanom prehliadači aplikácie, šetrič batérie, prerender),
+         po 6 sekundách nesmie na stránke zostať neviditeľný obsah. */
+      window.setTimeout(revealAll, 6000);
     }
   }
 

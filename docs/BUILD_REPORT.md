@@ -1,6 +1,6 @@
 # Build report
 
-Vygenerované: 2026-09-04 19:27
+Vygenerované: 2026-09-07 06:25
 Režim: PRODUKČNÝ (--prod)
 Doména: https://elevatorservis.sk
 Servisná oblasť: Banská Bystrica a okolie do 80 km
@@ -25,7 +25,7 @@ Servisná oblasť: Banská Bystrica a okolie do 80 km
 | /ochrana-osobnych-udajov/ | ochrana-osobnych-udajov/index.html | 21.4 kB | áno |
 | /404.html | 404.html | 20.8 kB | nie |
 
-CSS: 7 vrstiev → `css/main.css` (53.2 kB)
+CSS: 7 vrstiev → `css/main.css` (53.8 kB)
 Sitemap: 12 URL
 
 ## Komponenty skryté pre chýbajúce dáta

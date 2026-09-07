@@ -271,7 +271,12 @@
   margin-left: auto;
 }
 
-.site-header__cta {
+/* Na mobile sa CTA z hlavičky nezobrazuje — konverziu tam nesie spodná
+   sticky lišta. Selektor je zámerne špecifickejší než samotné `.btn`:
+   04-components.css sa zreťazuje AŽ ZA tento súbor, takže `.btn`
+   s `display: inline-flex` by inak toto pravidlo prebilo a tlačidlo by
+   na mobile vytlačilo hamburger za okraj obrazovky. */
+.site-header .site-header__cta {
   display: none;
 }
 
@@ -283,6 +288,8 @@
   gap: 5px;
   width: var(--tap-target);
   height: var(--tap-target);
+  /* Nikdy sa nesmie zmenšiť pod veľkosť dotykového cieľa. */
+  flex: 0 0 var(--tap-target);
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-md);
   transition: border-color var(--dur-fast) var(--ease-out);
@@ -505,9 +512,20 @@
 }
 
 .site-footer__list a {
+  display: inline-flex;
+  align-items: center;
+  /* Odkazy v pätičke sú na mobile hlavná navigácia — musia sa dať
+     trafiť prstom. 44 px je bežné minimum pre dotykový cieľ. */
+  min-height: 2.75rem;
   color: var(--text-invert);
   text-decoration: none;
   transition: color var(--dur-fast) var(--ease-out);
+}
+
+@media (min-width: 64em) {
+  .site-footer__list a {
+    min-height: 0;
+  }
 }
 
 .site-footer__list a:hover {
@@ -627,7 +645,7 @@
     display: block;
   }
 
-  .site-header__cta {
+  .site-header .site-header__cta {
     display: inline-flex;
   }
 

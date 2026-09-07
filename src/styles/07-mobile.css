@@ -302,3 +302,80 @@ body.is-locked {
     opacity: 0.35;
   }
 }
+
+/* ==================================================================
+   DOTYKOVÉ CIELE A ČITATEĽNOSŤ NA TELEFÓNE
+
+   Namerané na produkčnom webe pri šírke 375 px: odkazy pod kartami
+   mali výšku 20–25 px a popisky v trust bare 12 px. Karty samotné
+   sú v poriadku — `.card__link::after { inset: 0 }` z celej karty robí
+   jeden veľký cieľ, takže sa nižšie nezväčšuje samotný odkaz, ale len
+   odkazy, ktoré takú vrstvu nemajú.
+   ================================================================== */
+
+@media (max-width: 63.99em) {
+  /* Odkazy v texte sa zámerne nezväčšujú — min-height na inline prvku
+     nemá účinok a rozbil by riadkovanie. Riešia sa len samostatné,
+     tlačidlu podobné odkazy. */
+  .card__inline-link,
+  .related__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+  }
+
+  /* 12 px je na telefóne pod hranicou pohodlného čítania. */
+  .trust__label {
+    font-size: 0.8125rem;
+  }
+
+  /* Malé tlačidlo v hlavičke (Havária) má 38 px — na dotyk málo.
+     Na desktope zostáva kompaktné. */
+  .site-header__actions .btn--sm {
+    min-height: 2.75rem;
+  }
+
+  /* Právne odkazy v pätičke sú na mobile len 14 px vysoké. */
+  .site-footer__meta a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+  }
+
+  /* Telefón a e-mail na kontakte sú najdôležitejšie odkazy webu —
+     mali 30 px. Volať sa má dať na prvý pokus. */
+  .contact-list__value {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+  }
+
+  /* Drobinková navigácia mala 14 px. */
+  .breadcrumbs a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.25rem;
+  }
+}
+
+/* ==================================================================
+   NATÍVNE PRVKY FORMULÁRA A ÚZKE OBRAZOVKY
+
+   Namerané pri 320 px: súborový vstup má vlastnú minimálnu šírku
+   338 px a select 297 px. V grid stĺpci s implicitným `min-width: auto`
+   roztiahnu celý stĺpec nad šírku obrazovky — stránka potom vodorovne
+   pretekala. `minmax(0, 1fr)` a `min-width: 0` to dovolia zmenšiť.
+   ================================================================== */
+
+@media (max-width: 63.99em) {
+  .contact-layout,
+  .form__row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .input,
+  .input--file,
+  .input--select {
+    min-width: 0;
+  }
+}
