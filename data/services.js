@@ -14,10 +14,15 @@ export const services = [
     path: '/servis-vytahov/',
     navLabel: 'Servis výťahov',
     cardTitle: 'Pravidelný servis a údržba',
-    h1: 'Servis výťahov Banská Bystrica',
-    metaTitle: 'Servis výťahov Banská Bystrica | ELEVÁTOR SERVIS',
+    /* Titul a H1 sú zámerne odlíšené od domovskej stránky.
+       Obe predtým cielili na „servis výťahov Banská Bystrica" a brali si
+       navzájom relevanciu. Head term si drží domovská stránka (má najviac
+       odkazov a smeruje na ňu aj firemný profil), táto stránka pokrýva
+       konkrétnu službu — pravidelnú údržbu na zmluvu. */
+    h1: 'Pravidelný servis a údržba výťahov',
+    metaTitle: 'Pravidelný servis a údržba výťahov | ELEVÁTOR SERVIS',
     metaDescription:
-      'Pravidelný servis a údržba výťahov v Banskej Bystrici a okolí. Preventívne prehliadky, mazanie, nastavenie a kontrola bezpečnostných prvkov.',
+      'Pravidelná údržba výťahov na zmluvu — preventívne prehliadky v dohodnutých intervaloch, mazanie, nastavenie a kontrola bezpečnostných prvkov. Banská Bystrica a okolie.',
     summary:
       'Preventívne prehliadky v dohodnutých intervaloch, mazanie a nastavenie mechanických častí, kontrola bezpečnostných prvkov a vedenie servisnej dokumentácie.',
     schemaName: 'Servis a údržba výťahov',

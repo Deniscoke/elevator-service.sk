@@ -90,7 +90,14 @@ export function renderHead({ company, title, description, path, noindex = false,
   <meta property="og:title" content="${esc(title)}">
   <meta property="og:description" content="${esc(desc)}">
   <meta property="og:url" content="${esc(canonical)}">
-  ${ogImage ? `<meta property="og:image" content="${esc(ogImage)}">` : ''}
+  ${
+    ogImage
+      ? `<meta property="og:image" content="${esc(ogImage)}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="${esc(company.legalName)} — servis výťahov, Banská Bystrica">`
+      : ''
+  }
   <meta name="twitter:card" content="summary_large_image">
 
   <link rel="icon" href="/assets/favicon-32.png" sizes="32x32" type="image/png">

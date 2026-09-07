@@ -195,7 +195,7 @@ export default function page(ctx) {
     title: `Kariéra | ${company.legalName}`,
     description: open
       ? `Voľné pracovné pozície v ${company.legalName} — servis výťahov, Banská Bystrica a okolie.`
-      : `Kariéra v ${company.legalName}. Aktuálne nemáme zverejnenú voľnú pozíciu — pozrite si, čo zverejníme, keď ju otvoríme.`,
+      : 'Hľadáme ľudí so skúsenosťou so servisom výťahov, elektrotechnikou alebo vyhradenými technickými zariadeniami. Banská Bystrica a okolie — ozvite sa aj bez zverejneného inzerátu.',
     crumbs,
     bodyClass: 'page-careers',
     schemas: [organizationSchema(company), breadcrumbSchema(company, crumbs)],
