@@ -28,9 +28,11 @@ export const company = {
 
   /* ---- kontakt ----------------------------------------------------- */
   contact: {
-    phone: '+421 905 365 177',
+    // Hlavná linka pre bežné dopyty. POTVRDENÉ klientom 9. 9. 2026 —
+    // predtým bolo pre obe linky rovnaké číslo, teraz sú oddelené.
+    phone: '+421 907 811 934',
     phoneNote: 'Hlavná linka',
-    // Klient uviedol rovnaké číslo pre bežné dopyty aj havárie.
+    // Havarijná linka zostáva bez zmeny.
     emergencyPhone: '+421 905 365 177',
     email: 'elevator@elevatorservis.sk',
     emailCareers: null,     // ČAKÁ NA KLIENTA — zatiaľ sa použije hlavný e-mail

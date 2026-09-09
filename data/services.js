@@ -112,6 +112,7 @@ export const inquiryTypes = [
 export const objectTypes = [
   { value: 'bytovy-dom',    label: 'Bytový dom / SVB' },
   { value: 'sprava',        label: 'Správcovská spoločnosť' },
+  { value: 'druzstvo',      label: 'Bytové družstvo' },
   { value: 'administrativa',label: 'Administratívna budova' },
   { value: 'priemysel',     label: 'Priemyselný objekt' },
   { value: 'skola',         label: 'Škola alebo inštitúcia' },

@@ -8,7 +8,7 @@
 
 import { esc, isSet, when, map, telHref } from './html.js';
 import { icon } from './icons.js';
-import { services, serviceById } from '../../data/services.js';
+import { services, serviceById, objectTypes } from '../../data/services.js';
 import { segments, references } from '../../data/references.js';
 import { canPublishAsJobAd } from '../../data/careers.js';
 
@@ -290,6 +290,12 @@ export function segmentSection({ index = '05' } = {}) {
  * Referencie sa vykreslia len z reálnych dát so súhlasom klienta.
  * Prázdne pole = sekcia sa nevykreslí. Žiadne „ukážkové" realizácie.
  */
+/** Popiska hodnoty zo zoznamu v dátovej vrstve (napr. typ objektu). */
+function labelOf(list, value) {
+  const found = list.find((o) => o.value === value);
+  return found ? found.label : value;
+}
+
 export function referenceSection({ index = '06', limit = 3, showEmptyState = false } = {}) {
   const published = references.filter((r) => r.consent);
 
@@ -329,9 +335,17 @@ export function referenceSection({ index = '06', limit = 3, showEmptyState = fal
               )}" height="${esc(r.image.height)}" loading="lazy" decoding="async">`
           )}
           <div class="card__body">
-            <p class="card__meta">${esc([r.city, r.year].filter(Boolean).join(' · '))}</p>
-            <h3 class="card__title card__title--sm">${esc(r.title)}</h3>
-            <p class="card__text">${esc(r.summary)}</p>
+            <p class="card__meta">${esc(
+              [r.objectType ? labelOf(objectTypes, r.objectType) : null, r.city, r.year]
+                .filter(Boolean)
+                .join(' · ')
+            )}</p>
+            <h3 class="card__title card__title--sm">${esc(r.clientName || r.title)}</h3>
+            ${when(
+              isSet(r.clientName) && isSet(r.title),
+              () => `<p class="card__text">${esc(r.title)}</p>`
+            )}
+            ${when(isSet(r.summary), () => `<p class="card__text">${esc(r.summary)}</p>`)}
           </div>
         </li>`
         )}

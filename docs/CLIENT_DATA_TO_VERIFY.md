@@ -26,7 +26,7 @@ DIČ a IČ DPH zostávajú `null` — neboli overené a preto sa nezobrazujú.
 
 | Otázka | Dôsledok |
 |---|---|
-| **Súhlas jednotlivých zákazníkov so zverejnením referencie** | Bez neho zostáva `/referencie/` bez menovaných referencií. Meno sa do repozitára doplní až spolu so súhlasom — repozitár je verejný. |
+| ~~Súhlas so zverejnením referencií~~ | **Vyriešené 9. 9. 2026** — klient schválil zverejnenie. Publikované sú tri: SBD Banská Bystrica, REALBYT V. K., FILBYT Fiľakovo. Ďalšie sa pridajú do `data/references.js`, keď klient dodá zoznam. |
 | **Presný zoznam a rozsah odborných oprávnení firmy** (čísla osvedčení, rozsah) | Bez neho sa sekcia „Odborné oprávnenia" nevykresľuje. Počet oprávnení sa nezverejňuje. |
 | **Zverejniť dátum zápisu do registra?** | Dátum 22. 12. 2000 je overený a je v dátach (`legal.registeredSince`), ale na web sa nevypisuje. Ak má web uvádzať napríklad „od roku 2000", nech to klient odsúhlasí — je to marketingové tvrdenie, aj keď má oporu v registri. |
 | **Preplácame alebo spolufinancujeme školenia a certifikácie uchádzačov?** | Bez potvrdenia sa to na `/kariera/` netvrdí. |
@@ -56,7 +56,8 @@ Pre poriadok — tieto údaje sú overené a používajú sa:
 
 - 300+ servisovaných výťahov
 - havarijná služba nonstop, 24 hodín denne, 7 dní v týždni
-- telefón a havarijná linka `+421 905 365 177`
+- hlavná linka `+421 907 811 934` (potvrdené 9. 9. 2026)
+- havarijná linka `+421 905 365 177`
 - e-mail `elevator@elevatorservis.sk`
 - sídlo Banská Bystrica, servisná oblasť do 80 km
 - typy zariadení a najčastejšie značky
